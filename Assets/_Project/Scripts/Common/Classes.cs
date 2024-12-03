@@ -40,6 +40,8 @@ public partial class UserInfo
 
     public bool isShotPossible { get => shotCount < bbangCount; }
 
+    public bool isRerollPossible { get => true; }
+
     public int index { get => DataManager.instance.users.FindIndex(obj => obj.id == id); }
 
     static List<string> firstName = new List<string>() { "발빠른", "신중한", "개구진", "멋쟁이", "귀여운", "핸섬한", "맛있는", "재밌는" };

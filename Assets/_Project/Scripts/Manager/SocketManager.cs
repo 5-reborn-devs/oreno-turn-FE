@@ -594,5 +594,14 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         }
     }
 
-    
+    // 패 리롤
+    public void RerollResponse(GamePacket gamePacket)
+    {
+        var response = gamePacket.RerollResponse;
+        if (response.Success)
+        {
+            // Reroll 성공 화면에 카드를 다시 띄어줘야함 
+            Debug.Log("Reroll Active!");
+        }
+    }
 }
