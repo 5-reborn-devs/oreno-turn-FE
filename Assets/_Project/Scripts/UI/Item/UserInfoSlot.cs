@@ -11,8 +11,7 @@ public class UserInfoSlot : UIListItem
 {
     [SerializeField] private Image thumbnail;
     [SerializeField] private TMP_Text nickname;
-    [SerializeField] private List<GameObject> hpSlots;
-    [SerializeField] private List<GameObject> hpGauges;
+    [SerializeField] private Slider hpGauge;
     [SerializeField] private GameObject targetMark;
     [SerializeField] private TMP_Text index;
     [SerializeField] private Image weapon;
@@ -25,6 +24,7 @@ public class UserInfoSlot : UIListItem
     public UnityAction<int> callback;
     public bool isDeath { get => death.activeInHierarchy; }
 
+
     public async Task Init(UserInfo userinfo, int index, UnityAction<int> callback)
     {
         this.idx = index;
@@ -33,11 +33,8 @@ public class UserInfoSlot : UIListItem
         var data = DataManager.instance.GetData<CharacterDataSO>(userinfo.selectedCharacterRcode);
         thumbnail.sprite = await ResourceManager.instance.LoadAsset<Sprite>(data.rcode, eAddressableType.Thumbnail);
         targetMark.GetComponent<Image>().sprite = await ResourceManager.instance.LoadAsset<Sprite>("role_" + userinfo.roleType.ToString(), eAddressableType.Thumbnail);
-        for (int i = 0; i < 5; i++)
-        {
-            hpSlots[i].SetActive(userinfo.hp > i);
-            hpGauges[i].SetActive(userinfo.hp > i);
-        }
+        UpdateHp(userinfo.hp,userinfo.maxHp);
+
         targetMark.SetActive(userinfo.roleType == eRoleType.target);
         this.index.text = (index + 1).ToString();
         gameObject.SetActive(true);
@@ -54,13 +51,15 @@ public class UserInfoSlot : UIListItem
             debuffs.ForEach(obj => obj.gameObject.SetActive(false));
         }
     }
-
+    public void UpdateHp(int currentHp, int maxHp)
+    {
+        float currentHpClamped = Mathf.Clamp(currentHp, 0, maxHp); 
+        hpGauge.value = currentHpClamped / maxHp; 
+    }
     public async void UpdateData(UserInfo userinfo)
     {
-        for (int i = 0; i < 5; i++)
-        {
-            hpGauges[i].SetActive(userinfo.hp > i);
-        }
+        UpdateHp(userinfo.hp,userinfo.maxHp);
+
         if (weapon != null)
         {
             weapon.gameObject.SetActive(userinfo.weapon != null);
@@ -112,10 +111,7 @@ public class UserInfoSlot : UIListItem
 
     public void SetDeath()
     {
-        for (int i = 0; i < 5; i++)
-        {
-            hpGauges[i].SetActive(false);
-        }
+        hpGauge.gameObject.SetActive(false);
         death.SetActive(true);
         SetVisibleRole(true);
     }

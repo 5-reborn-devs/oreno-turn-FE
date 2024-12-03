@@ -10,7 +10,7 @@ public class ControlDayState : ControlState
         {
             if (character == GameManager.instance.userCharacter)
                 character.OnVisibleRange();
-            else if (Vector3.Distance(character.transform.position, GameManager.instance.userCharacter.transform.position) < 4.5f)
+            else if (Vector3.Distance(character.transform.position, GameManager.instance.userCharacter.transform.position) < 9.0f)
             {
                 if (character.characterType != eCharacterType.npc && character.IsState<CharacterStopState>()) return;
                 switch(character.tag)
@@ -52,6 +52,7 @@ public class ControlDayState : ControlState
                     default:
                         {
                             GameManager.instance.OnTargetSelect(character);
+
                         }
                         break;
                 }

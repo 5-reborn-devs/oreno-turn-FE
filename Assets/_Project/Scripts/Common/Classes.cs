@@ -3,6 +3,7 @@
 using Google.Protobuf.Collections;
 using Ironcow;
 using System.Collections.Generic;
+using UnityEngine;
 
 public partial class UserInfo
 {
@@ -101,6 +102,7 @@ public partial class UserInfo
             handCards.Clear();
             equips.Clear();
             debuffs.Clear();
+            weapon = null; // 웨폰 초기화 로직 추가
             foreach (var card in userData.Character.HandCards)
             {
                 for (int i = 0; i < card.Count; i++)

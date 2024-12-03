@@ -116,6 +116,10 @@ public class UIGame : UIBase
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space)&& buttonShot.interactable) // 버튼이 활성화상태이고 스페이스바를 누르면
+        {
+            OnClickBang(); // 카드 사용 해줘
+        }
         if (!GameManager.instance.isPlaying) return;
         timer -= Time.deltaTime;
         time.text = string.Format("{0:00}:{1:00}", Mathf.Floor(timer / 60), timer % 60);

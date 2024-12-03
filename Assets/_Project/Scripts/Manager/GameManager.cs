@@ -296,6 +296,7 @@ public class GameManager : MonoSingleton<GameManager>
                             else
                             {
                                 userinfo.hp--;
+                                //userinfo.hp = userinfo.hp - 5;
                             }
                         }
                     }
@@ -539,6 +540,34 @@ public class GameManager : MonoSingleton<GameManager>
     public void UnselectCard()
     {
         selectedCard = null;
+    }
+
+    public class UserCharacter : MonoBehaviour
+    {
+        public float speed = 5f; // 이동 속도
+
+        private void Update()
+        {
+            // 캐릭터 이동 (현재 목표 위치가 있으면 이동)
+            if (targetPosition.HasValue)
+            {
+                Vector3 direction = (targetPosition.Value - transform.position).normalized;
+                transform.position += direction * speed * Time.deltaTime;
+
+                // 목표 위치에 도달하면 정지
+                if (Vector3.Distance(transform.position, targetPosition.Value) < 0.1f)
+                {
+                    targetPosition = null;
+                }
+            }
+        }
+
+        private Vector3? targetPosition;
+
+        public void MoveToPosition(Vector3 position)
+        {
+            targetPosition = position;
+        }
     }
 
 }

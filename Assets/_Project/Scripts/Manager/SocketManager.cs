@@ -194,8 +194,8 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
             if (UIManager.IsOpened<PopupBattle>())
                 UIManager.Hide<PopupBattle>();
             UIGame.instance.SetSelectCard(null);
-            GameManager.instance.targetCharacter.OnSelect();
-            GameManager.instance.targetCharacter = null;
+            //GameManager.instance.targetCharacter.OnSelect(); // 카드썻어 상태 true 에서 false로 바꿔
+            //GameManager.instance.targetCharacter = null; // false상태 -> 다시 선택할때 캐릭터 지정해주기 위해서 null로 설정                                                          
         }
     }
 
