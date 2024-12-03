@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 
 namespace Ironcow
-{
-    public abstract class FSMController<S, F, D> : WorldBase<D> where S : BaseState where F : FSM<S> where D : BaseDataSO
+{   public abstract class FSMController<S, F, D> : WorldBase<D> where S : BaseState where F : FSM<S> where D : BaseDataSO
     {
         protected F fsm;
         public Dictionary<string, S> states = new Dictionary<string, S>();
@@ -40,5 +39,4 @@ namespace Ironcow
             return (T)states[typeof(T).ToString()];
         }
     }
-
 }

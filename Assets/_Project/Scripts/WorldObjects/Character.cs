@@ -23,7 +23,7 @@ public class Character : FSMController<CharacterState, CharacterFSM, CharacterDa
     [SerializeField] private CircleCollider2D collider;
     [SerializeField] public GameObject stop;
 
-    [SerializeField] private float speed = 3;
+    [SerializeField] private float speed = 6;
 
     [HideInInspector] public UserInfo userInfo;
 
@@ -31,6 +31,7 @@ public class Character : FSMController<CharacterState, CharacterFSM, CharacterDa
     public Vector2 dir;
     public float Speed { get => speed; }
     public bool isInside;
+    public Vector2 targetPosition; // 내가 처음에 찍은 마우스 좌표 추가한 거
 
     private void Awake()
     {
@@ -75,7 +76,7 @@ public class Character : FSMController<CharacterState, CharacterFSM, CharacterDa
     public void SetMovePosition(Vector3 pos)
     {
         if (characterType == eCharacterType.playable) return;
-        //rig.MovePosition(pos);
+        rig.MovePosition(pos);
         agent.SetDestination(pos);
         var isLeft = agent.velocity.x < 0;
         isLeft = data.isLeft ? !isLeft : isLeft;
@@ -127,18 +128,28 @@ public class Character : FSMController<CharacterState, CharacterFSM, CharacterDa
         range.SetActive(!range.activeInHierarchy);
     }
 
-    float syncFrame = 0;
-    public void MoveCharacter(Vector2 dir)
+    public void MoveCharacter(Vector2 Vecotr2tranPos)
     {
         if (fsm.IsState<CharacterStopState>() || fsm.IsState<CharacterPrisonState>() || fsm.IsState<CharacterDeathState>()) return;
+        // 캐릭터의 현재 위치와 목표 위치 간의 방향 벡터 계산
+        Vector2 currentPos = GameManager.instance.userCharacter.transform.position; // 내 캐릭터의 현재 위치 
+
+
+        this.targetPosition = Vecotr2tranPos; // 내가 찍은 월드 좌표 character.targetPosition 으로 접근 가능하게 만듬
+        //정규화한 dir 생성 방향 20,13  1,1 우상단이냐 우하단이냐 좌상단이냐 좌하단이냐 정보만알수있게 만들어줍니다.
+        Vector2 dir = new Vector2(Vecotr2tranPos.x - currentPos.x, Vecotr2tranPos.y - currentPos.y).normalized; 
         this.dir = dir;
         var isLeft = dir.x < 0;
         isLeft = data.isLeft ? !isLeft : isLeft;
         if (dir.x != 0)
             anim.SetFlip(isLeft);
-        if (dir == Vector2.zero) ChangeState<CharacterIdleState>().SetElement(anim, rig, this);
-        else ChangeState<CharacterWalkState>().SetElement(anim, rig, this);
+        if (dir == Vector2.zero) ChangeState<CharacterIdleState>().SetElement(anim, rig, this); // 정지
+        else
+        {
+            ChangeState<CharacterWalkState>().SetElement(anim, rig, this); // 걷는
+        }
     }
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
