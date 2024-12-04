@@ -81,6 +81,7 @@ public class GameManager : MonoSingleton<GameManager>
             chara.userInfo = userinfo;
             var data = DataManager.instance.GetData<CharacterDataSO>(userinfo.selectedCharacterRcode);
             userinfo.maxHp = data.health + (userinfo.roleType == eRoleType.target ? 1 : 0);
+            
             for(int j = 0; j < userinfo.hp; j++)
             {
                 OnDrawCard(userinfo);
