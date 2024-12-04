@@ -69,10 +69,11 @@ public class Card : UIListItem
         cardDesc.text = cardData.description;
     }
 
-    public void OnClickCard()
+    public void OnClickCard() //진수s 카드 온클릭 - 카드 클릭시 idx, cardData, this 반환
     {
         callback?.Invoke(idx);
         dataCallback?.Invoke(cardData);
+        Debug.Log("들어오냐구!!!! : " + this.cardData);
         cardCallback?.Invoke(this);
 	}
 
