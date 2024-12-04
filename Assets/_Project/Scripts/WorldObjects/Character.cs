@@ -31,7 +31,7 @@ public class Character : FSMController<CharacterState, CharacterFSM, CharacterDa
     public Vector2 dir;
     public float Speed { get => speed; }
     public bool isInside;
-    public Vector2 targetPosition; // ³»°¡ Ã³À½¿¡ ÂïÀº ¸¶¿ì½º ÁÂÇ¥ Ãß°¡ÇÑ °Å
+    public Vector2 targetPosition; // ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ì½º ï¿½ï¿½Ç¥ ï¿½ß°ï¿½ï¿½ï¿½ ï¿½ï¿½
 
     private void Awake()
     {
@@ -139,22 +139,22 @@ public class Character : FSMController<CharacterState, CharacterFSM, CharacterDa
     public void MoveCharacter(Vector2 Vecotr2tranPos)
     {
         if (fsm.IsState<CharacterStopState>() || fsm.IsState<CharacterPrisonState>() || fsm.IsState<CharacterDeathState>()) return;
-        // Ä³¸¯ÅÍÀÇ ÇöÀç À§Ä¡¿Í ¸ñÇ¥ À§Ä¡ °£ÀÇ ¹æÇâ º¤ÅÍ °è»ê
-        Vector2 currentPos = GameManager.instance.userCharacter.transform.position; // ³» Ä³¸¯ÅÍÀÇ ÇöÀç À§Ä¡ 
+        // Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½Ç¥ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+        Vector2 currentPos = GameManager.instance.userCharacter.transform.position; // ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ 
 
 
-        this.targetPosition = Vecotr2tranPos; // ³»°¡ ÂïÀº ¿ùµå ÁÂÇ¥ character.targetPosition À¸·Î Á¢±Ù °¡´ÉÇÏ°Ô ¸¸µë
-        //Á¤±ÔÈ­ÇÑ dir »ý¼º ¹æÇâ 20,13  1,1 ¿ì»ó´ÜÀÌ³Ä ¿ìÇÏ´ÜÀÌ³Ä ÁÂ»ó´ÜÀÌ³Ä ÁÂÇÏ´ÜÀÌ³Ä Á¤º¸¸¸¾Ë¼öÀÖ°Ô ¸¸µé¾îÁÝ´Ï´Ù.
+        this.targetPosition = Vecotr2tranPos; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ character.targetPosition ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½
+        //ï¿½ï¿½ï¿½ï¿½È­ï¿½ï¿½ dir ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 20,13  1,1 ï¿½ï¿½ï¿½ï¿½ï¿½Ì³ï¿½ ï¿½ï¿½ï¿½Ï´ï¿½ï¿½Ì³ï¿½ ï¿½Â»ï¿½ï¿½ï¿½Ì³ï¿½ ï¿½ï¿½ï¿½Ï´ï¿½ï¿½Ì³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë¼ï¿½ï¿½Ö°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý´Ï´ï¿½.
         Vector2 dir = new Vector2(Vecotr2tranPos.x - currentPos.x, Vecotr2tranPos.y - currentPos.y).normalized; 
         this.dir = dir;
         var isLeft = dir.x < 0;
         isLeft = data.isLeft ? !isLeft : isLeft;
         if (dir.x != 0)
             anim.SetFlip(isLeft);
-        if (dir == Vector2.zero) ChangeState<CharacterIdleState>().SetElement(anim, rig, this); // Á¤Áö
+        if (dir == Vector2.zero) ChangeState<CharacterIdleState>().SetElement(anim, rig, this); // ï¿½ï¿½ï¿½ï¿½
         else
         {
-            ChangeState<CharacterWalkState>().SetElement(anim, rig, this); // °È´Â
+            ChangeState<CharacterWalkState>().SetElement(anim, rig, this); // ï¿½È´ï¿½
         }
     }
 
@@ -170,7 +170,7 @@ public class Character : FSMController<CharacterState, CharacterFSM, CharacterDa
             isInside = true;
             if (userInfo != null)
                 OnVisibleMinimapIcon(Util.GetDistance(UserInfo.myInfo.index, userInfo.index, DataManager.instance.users.Count)
-                    + userInfo.slotFar <= UserInfo.myInfo.slotRange && userInfo.id != UserInfo.myInfo.id); // °¡´ÉÇÑ °Å¸®¿¡ ÀÖ´Â À¯Àú ¾ÆÀÌÄÜ¸¸ Ç¥½Ã
+                    + userInfo.slotFar <= UserInfo.myInfo.slotRange && userInfo.id != UserInfo.myInfo.id); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ü¸ï¿½ Ç¥ï¿½ï¿½
 
         }
     }
@@ -186,7 +186,7 @@ public class Character : FSMController<CharacterState, CharacterFSM, CharacterDa
             isInside = false;
             if (userInfo != null)
                 OnVisibleMinimapIcon(Util.GetDistance(UserInfo.myInfo.index, userInfo.index, DataManager.instance.users.Count)
-                    + userInfo.slotFar <= UserInfo.myInfo.slotRange && userInfo.id != UserInfo.myInfo.id); // °¡´ÉÇÑ °Å¸®¿¡ ÀÖ´Â À¯Àú ¾ÆÀÌÄÜ¸¸ Ç¥½Ã
+                    + userInfo.slotFar <= UserInfo.myInfo.slotRange && userInfo.id != UserInfo.myInfo.id); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ü¸ï¿½ Ç¥ï¿½ï¿½
         }
     }
 
@@ -209,7 +209,8 @@ public class Character : FSMController<CharacterState, CharacterFSM, CharacterDa
     }
 
     public async void SetDeath()
-    {
+    {   
+        // GameManager.instance.characters.Remove(id);
         death.SetActive(true);
         collider.enabled = false;
         targetMark.SetActive(true);
