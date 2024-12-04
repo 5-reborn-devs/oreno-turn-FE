@@ -65,6 +65,63 @@ public class UIManager : MonoSingleton<UIManager>
         return (T)ui;
     }
 
+// public static async Task<T> Show<T>(params object[] param) where T : UIBase
+// {
+//     var ui = instance.uiList.Find(obj => obj.name == typeof(T).ToString());
+//     if (ui == null)
+//     {
+// #if USE_COROUTINE
+//         T prefab = null;
+//         ResourceManager.instance.LoadAsset<T>(typeof(T).ToString(), eAddressableType.UI, obj =>
+//         {
+//             prefab = obj;
+//         });
+//         await UniTask.WaitUntil(() => prefab != null);
+// #elif USE_ASYNC
+//         var prefab = await ResourceManager.instance.LoadAsset<T>(typeof(T).ToString(), eAddressableType.UI);
+//         if (prefab == null)
+//         {
+//             Debug.LogError("Failed to load UI prefab: " + typeof(T).ToString());
+//             return null;
+//         }
+// #else
+//         var prefab = await ResourceManager.instance.LoadAsset<T>(typeof(T).ToString(), eAddressableType.UI);
+//         if (prefab == null)
+//         {
+//             Debug.LogError("Failed to load UI prefab: " + typeof(T).ToString());
+//             return null;
+//         }
+// #endif
+//         ui = Instantiate(prefab, instance.parents[(int)prefab.uiPosition]);
+//         if (ui == null)
+//         {
+//             Debug.LogError("Failed to instantiate UI prefab: " + typeof(T).ToString());
+//             return null;
+//         }
+//         ui.name = ui.name.Replace("(Clone)", "");
+//         if (ui.uiPosition == eUIPosition.UI)
+//         {
+//             instance.uiList.ForEach(obj =>
+//             {
+//                 if (obj.uiPosition == eUIPosition.UI) obj.gameObject.SetActive(false);
+//             });
+//         }
+//         instance.uiList.Add(ui);
+//     }
+//     ui.SetActive(ui.uiOptions.isActiveOnLoad);
+//     if (!ui.gameObject.activeSelf) // 수정된 부분
+//     {
+//         Debug.LogError("UI is not active after loading: " + typeof(T).ToString());
+//     }
+//     ui.opened?.Invoke(param);
+//     // if (!ui.isInitCards)
+//     // {
+//     //     Debug.LogError("UI cards are not initialized.");
+//     // }
+//     ui.uiOptions.isActiveOnLoad = true;
+//     return (T)ui;
+// }
+
     public static void Hide<T>(params object[] param) where T : UIBase
     {
         var ui = instance.uiList.Find(obj => obj.name == typeof(T).ToString());
@@ -93,6 +150,8 @@ public class UIManager : MonoSingleton<UIManager>
     {
         return (T)instance.uiList.Find(obj => obj.name == typeof(T).ToString());
     }
+
+
 
     public static bool IsOpened<T>() where T : UIBase
     {

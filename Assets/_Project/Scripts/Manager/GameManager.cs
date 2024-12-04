@@ -53,7 +53,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     public async void Init()
     {
-        // Ä«µå µ¦À» ¸ÕÀú ±¸¼º
+        // Ä«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         var deckDatas = DataManager.instance.GetDatas<DeckData>();
         var cards = new List<CardDataSO>();
         foreach (var deckData in deckDatas)
@@ -65,7 +65,7 @@ public class GameManager : MonoSingleton<GameManager>
         }
         worldDeck = new Queue<CardDataSO>(cards.Shuffle());
 
-        //À¯Àú Ä³¸¯ÅÍ ¼¼ÆÃ
+        //ï¿½ï¿½ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         var bounds = tilemapRenderer.bounds;
         var myIndex = DataManager.instance.users.FindIndex(obj => obj == UserInfo.myInfo); 
         spawns = new List<Transform>(spawnPoints);
@@ -77,7 +77,7 @@ public class GameManager : MonoSingleton<GameManager>
             chara.OnChangeState<CharacterStopState>();
             if (userinfo.roleType == eRoleType.target)
                 chara.SetTargetMark();
-            chara.OnVisibleMinimapIcon(Util.GetDistance(myIndex, i, DataManager.instance.users.Count) + userinfo.slotFar <= UserInfo.myInfo.slotRange && myIndex != i); // °¡´ÉÇÑ °Å¸®¿¡ ÀÖ´Â À¯Àú ¾ÆÀÌÄÜ¸¸ Ç¥½Ã
+            chara.OnVisibleMinimapIcon(Util.GetDistance(myIndex, i, DataManager.instance.users.Count) + userinfo.slotFar <= UserInfo.myInfo.slotRange && myIndex != i); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ü¸ï¿½ Ç¥ï¿½ï¿½
             chara.userInfo = userinfo;
             var data = DataManager.instance.GetData<CharacterDataSO>(userinfo.selectedCharacterRcode);
             userinfo.maxHp = data.health + (userinfo.roleType == eRoleType.target ? 1 : 0);
@@ -114,7 +114,7 @@ public class GameManager : MonoSingleton<GameManager>
 
         foreach (var key in characters.Keys)
         {
-            if (PhaseType == PhaseType.Day)
+           if (PhaseType == PhaseType.Day || PhaseType == PhaseType.End)
                 characters[key].OnChangeState<CharacterIdleState>();
             else
                 characters[key].OnChangeState<CharacterStopState>();
@@ -125,12 +125,12 @@ public class GameManager : MonoSingleton<GameManager>
 
         if (PhaseType == PhaseType.End)
         {
-            if(UserInfo.myInfo.handCards.Count > UserInfo.myInfo.hp)
-                UIManager.Show<PopupRemoveCardSelection>();
+            // if(UserInfo.myInfo.handCards.Count > UserInfo.myInfo.hp)
+            //     UIManager.Show<PopupRemoveCardSelection>();
         }
         else
         {
-            UIManager.Hide<PopupRemoveCardSelection>();
+            // UIManager.Hide<PopupRemoveCardSelection>();
         }
         
         isPlaying = true;
@@ -168,7 +168,7 @@ public class GameManager : MonoSingleton<GameManager>
         chara.OnChangeState<CharacterStopState>();
         if (userinfo.roleType == eRoleType.target)
             chara.SetTargetMark();
-        chara.OnVisibleMinimapIcon(Util.GetDistance(myIndex, idx, DataManager.instance.users.Count) <= UserInfo.myInfo.slotRange && myIndex != idx); // °¡´ÉÇÑ °Å¸®¿¡ ÀÖ´Â À¯Àú ¾ÆÀÌÄÜ¸¸ Ç¥½Ã
+        chara.OnVisibleMinimapIcon(Util.GetDistance(myIndex, idx, DataManager.instance.users.Count) <= UserInfo.myInfo.slotRange && myIndex != idx); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ü¸ï¿½ Ç¥ï¿½ï¿½
         chara.userInfo = userinfo;
     }
 
@@ -183,6 +183,15 @@ public class GameManager : MonoSingleton<GameManager>
     }
 
     public void SetPleaMarketCards()
+    {
+        for (int i = 0; i < DataManager.instance.users.Count; i++)
+        {
+            pleaMarketCards.Add(worldDeck.Dequeue());
+        }
+    }
+
+        //ì§„ìˆ˜: ì¼ë‹¨ ë³µì œ
+        public void SetEveningDrawCards()
     {
         for (int i = 0; i < DataManager.instance.users.Count; i++)
         {
@@ -502,7 +511,7 @@ public class GameManager : MonoSingleton<GameManager>
                 }
                 break;
             case "CAD00010":
-                {
+                {   //ì§„ìˆ˜: ì‹¤ì§ˆì  í´ë¼ì´ì–¸íŠ¸ ì¹´ë“œ ìˆ˜ê¸‰ êµ¬ë¬¸ ë¼ì¸ 
                     var card = pleaMarketCards.Find(obj => obj.rcode == rcode);
                     userinfo.AddHandCard(card);
                     var index = DataManager.instance.users.IndexOf(useUserInfo);
@@ -545,18 +554,16 @@ public class GameManager : MonoSingleton<GameManager>
 
     public class UserCharacter : MonoBehaviour
     {
-        public float speed = 5f; // ÀÌµ¿ ¼Óµµ
+        public float speed = 5f; // ï¿½Ìµï¿½ ï¿½Óµï¿½
 
         private void Update()
         {
-            UIManager.Show<CardManager>();
-            // Ä³¸¯ÅÍ ÀÌµ¿ (ÇöÀç ¸ñÇ¥ À§Ä¡°¡ ÀÖÀ¸¸é ÀÌµ¿)
             if (targetPosition.HasValue)
             {
                 Vector3 direction = (targetPosition.Value - transform.position).normalized;
                 transform.position += direction * speed * Time.deltaTime;
 
-                // ¸ñÇ¥ À§Ä¡¿¡ µµ´ÞÇÏ¸é Á¤Áö
+                // ï¿½ï¿½Ç¥ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½ï¿½ï¿½ï¿½
                 if (Vector3.Distance(transform.position, targetPosition.Value) < 0.1f)
                 {
                     targetPosition = null;

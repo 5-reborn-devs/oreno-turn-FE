@@ -74,11 +74,12 @@ public class Card : UIListItem
         idx = index;
     }
 
-    // д╚╣Е ╪╠ец ╫ц Ё╙©ю╢б ╦ч╪╜╣Е
+    // д╚О©╫О©╫ О©╫О©╫О©╫О©╫ О©╫О©╫ О©╫О©╫О©╫О©╫О©╫О©╫ О©╫ч╪О©╫О©╫О©╫
     public void OnClickCard()
     {
         callback?.Invoke(idx);
         dataCallback?.Invoke(cardData);
+        Debug.Log("К⌠╓Л√╢Л≤╓К┐░Й╣╛!!!! : " + this.cardData);
         cardCallback?.Invoke(this);
 	}
 
