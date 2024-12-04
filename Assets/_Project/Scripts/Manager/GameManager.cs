@@ -59,7 +59,7 @@ public class GameManager : MonoSingleton<GameManager>
         foreach (var deckData in deckDatas)
         {
             for (int i = 0; i < deckData.count; i++)
-            {
+            {   
                 cards.Add(DataManager.instance.GetData<CardDataSO>(deckData.targetRcode).Clone());
             }
         }
@@ -558,7 +558,6 @@ public class GameManager : MonoSingleton<GameManager>
 
         private void Update()
         {
-            // ĳ���� �̵� (���� ��ǥ ��ġ�� ������ �̵�)
             if (targetPosition.HasValue)
             {
                 Vector3 direction = (targetPosition.Value - transform.position).normalized;

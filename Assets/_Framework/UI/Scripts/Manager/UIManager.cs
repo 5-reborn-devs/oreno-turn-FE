@@ -48,7 +48,8 @@ public class UIManager : MonoSingleton<UIManager>
             var prefab = await ResourceManager.instance.LoadAsset<T>(typeof(T).ToString(), eAddressableType.UI);
 #endif
             ui = Instantiate(prefab, instance.parents[(int)prefab.uiPosition]);
-            ui.name = ui.name.Replace("(Clone)", "");
+            Debug.Log("유아이매니저ㅓㅓㅓㅓ : " + ui);
+            ui.name = ui.name.Replace("(Clone)", ""); 
             if (ui.uiPosition == eUIPosition.UI)
             {
                 instance.uiList.ForEach(obj =>

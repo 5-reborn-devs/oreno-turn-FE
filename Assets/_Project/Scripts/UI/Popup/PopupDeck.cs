@@ -38,7 +38,8 @@ public class PopupDeck : UIListBase<Card>
 
     public void OnChangeValue(int idx)
     {
-        use.interactable = UserInfo.myInfo.handCards[idx].isUsable;
+        Debug.Log("여긴가..??" + UserInfo.myInfo.handCards[idx].isUsable);
+        use.interactable = UserInfo.myInfo.handCards[idx].isUsable; // user.interactable이 true면 버튼이 활성화되어 사용자가 클릭 가능
     }
 
     public override void HideDirect()
@@ -81,14 +82,19 @@ public class PopupDeck : UIListBase<Card>
 
     public override void SetList()
     {
-        ClearList();
-        ClearEquips();
-        ClearWeapon();
-        var datas = UserInfo.myInfo.handCards;
-        foreach (var data in datas)
+        ClearList(); // 카드 리스트를 초기화
+        ClearEquips(); // 장비 초기화
+        ClearWeapon(); // 무기 초기화
+        var datas = UserInfo.myInfo.handCards; // 내 손에 있는 카드들
+        Debug.Log("PopupDeck 에서 카드 데이터 개수: " + datas.Count);
+        for (int i = 0; i < datas.Count; i++)
         {
+            var data = datas[i];
+            // Debug.Log("PopupDeck에서 보험용 카드 한 장 씩 : " + data);
             var item = AddItem();
             item.Init(data, OnClickItem);
+            // Debug.Log($"PopupDeck에서 카드데이터 idx값 확인: {item.idx}");
+            // Debug.Log($"PopupDeck에서 카드가공 후 item {i} : {items[i]}");
         }
         if(UserInfo.myInfo.weapon != null)
         {

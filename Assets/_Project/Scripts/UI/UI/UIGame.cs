@@ -26,6 +26,8 @@ public class UIGame : UIBase
     [SerializeField] private Transform noticeLogParent;
     [SerializeField] public VirtualStick stick;
     [SerializeField] private Image bombButton;
+    [SerializeField] private CardManager cardManager;
+
     private float timer = 180;
     Dictionary<long, UserInfoSlot> userslots = new Dictionary<long, UserInfoSlot>();
     private bool isBombTargetSelect = false;
@@ -44,6 +46,7 @@ public class UIGame : UIBase
                 var item = Instantiate(anotherSlotPrefab, userInfoParent);
                 yield return item.Init(DataManager.instance.users[i], i, OnClickCharacterSlot);
                 userslots.Add(DataManager.instance.users[i].id, item);
+                cardManager.SetList();
             }
             else
             {
@@ -105,9 +108,12 @@ public class UIGame : UIBase
     public void SetDeckCount()
     {
         deckCount.text = UserInfo.myInfo.handCards.Count.ToString();
+        cardManager.SetList();
     }
     void Update()
     {
+        Debug.Log("나지금 업데이트");
+        
         if (Input.GetKeyDown(KeyCode.Space) && buttonShot.interactable) // ????? ??????????? ?????????? ??????
         {
             OnClickBang(); // ??? ??? ????
