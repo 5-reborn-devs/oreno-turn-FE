@@ -20,6 +20,8 @@ public partial class UserInfo
     public int handcardCount { get => characterData.HandCardsCount; }
     public int hp { get => characterData.Hp; set => characterData.Hp = value; }
     public int maxHp;
+    public int mp { get => characterData.Mp; set => characterData.Mp = value; }
+    public int maxMp;
 
     public bool isStelth { get => equips.Find(obj => obj.rcode == "CAD00020") != null; }
     public bool isRaider { get => equips.Find(obj => obj.rcode == "CAD00018") != null; }
@@ -58,6 +60,7 @@ public partial class UserInfo
         if (characterData != null)
         {
             this.maxHp = userData.Character.Hp;
+            this.maxMp = userData.Character.Mp;
             foreach (var card in userData.Character.HandCards)
             {
                 for (int i = 0; i < card.Count; i++)

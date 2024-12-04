@@ -7,7 +7,6 @@ using TMPro;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
 using System;
-
 public class UIGame : UIBase
 {
     public static UIGame instance { get => UIManager.Get<UIGame>(); }
@@ -31,16 +30,14 @@ public class UIGame : UIBase
     Dictionary<long, UserInfoSlot> userslots = new Dictionary<long, UserInfoSlot>();
     private bool isBombTargetSelect = false;
     bool isBombAlert = false;
-
     public override void Opened(object[] param)
     {
         StartCoroutine(Init());
     }
-
     public IEnumerator Init()
     {
         yield return new WaitUntil(() => GameManager.instance.isInit);
-        for(int i = 0; i < DataManager.instance.users.Count; i++)
+        for (int i = 0; i < DataManager.instance.users.Count; i++)
         {
             if (DataManager.instance.users[i].id != UserInfo.myInfo.id)
             {
@@ -56,7 +53,6 @@ public class UIGame : UIBase
         }
         SetShotButton(false);
     }
-
     public void OnClickCharacterSlot(int idx)
     {
         if (GameManager.instance.SelectedCard == null && !GameManager.instance.isSelectBombTarget) return;
@@ -67,7 +63,7 @@ public class UIGame : UIBase
             GameManager.instance.SendSocketUseCard(target, UserInfo.myInfo, card.rcode);
             SetSelectCard(null);
         }
-        if(GameManager.instance.isSelectBombTarget)
+        if (GameManager.instance.isSelectBombTarget)
         {
             GameManager.instance.isSelectBombTarget = false;
             if (SocketManager.instance.isConnected)
@@ -85,10 +81,9 @@ public class UIGame : UIBase
         }
         UIGame.instance.OnSelectDirectTarget(false);
     }
-
     public void UpdateUserSlot(List<UserInfo> users)
     {
-        for(int i = 0; i < users.Count; i++)
+        for (int i = 0; i < users.Count; i++)
         {
             if (userslots.ContainsKey(users[i].id))
             {
@@ -101,44 +96,38 @@ public class UIGame : UIBase
         }
         SetDeckCount();
     }
-
     public void SetShotButton(bool isActive)
     {
         buttonShot.interactable = isActive;
         selectCard.SetActive(isActive);
         shotCount.transform.parent.gameObject.SetActive(isActive);
     }
-
     public void SetDeckCount()
     {
         deckCount.text = UserInfo.myInfo.handCards.Count.ToString();
     }
-
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space)&& buttonShot.interactable) // 버튼이 활성화상태이고 스페이스바를 누르면
+        if (Input.GetKeyDown(KeyCode.Space) && buttonShot.interactable) // ????? ??????????? ?????????? ??????
         {
-            OnClickBang(); // 카드 사용 해줘
+            OnClickBang(); // ??? ??? ????
         }
         if (!GameManager.instance.isPlaying) return;
         timer -= Time.deltaTime;
         time.text = string.Format("{0:00}:{1:00}", Mathf.Floor(timer / 60), timer % 60);
         if (timer <= 0 && !SocketManager.instance.isConnected) GameManager.instance.OnTimeEnd();
     }
-
     public override void HideDirect()
     {
         UIManager.Hide<UIGame>();
     }
-
     public void OnDaySetting(int day, PhaseType phase, long nextAt)
     {
         dayInfo.text = string.Format("Day {0} {1}", day, phase == PhaseType.Day ? "Afternoon" : phase == PhaseType.Evening ? "Evening" : "Night");
         var dt = DateTimeOffset.FromUnixTimeMilliseconds(nextAt) - DateTime.UtcNow;
-        timer = (float) dt.TotalSeconds;
+        timer = (float)dt.TotalSeconds;
         //timer = phase == 1 ? 180 : 60;
     }
-
     public void OnClickDeck()
     {
         if (!GameManager.instance.userCharacter.IsState<CharacterStopState>() &&
@@ -147,13 +136,11 @@ public class UIGame : UIBase
             UIManager.Show<PopupDeck>();
         }
     }
-
     public void OnClickBang()
     {
         if (UserInfo.myInfo.isShotPossible || GameManager.instance.SelectedCard.cardType != CardType.Bbang)
             GameManager.instance.OnUseCard();
     }
-
     public void SetSelectCard(CardDataSO card = null)
     {
         if (card == null)
@@ -188,7 +175,6 @@ public class UIGame : UIBase
             SetShotButton(false);
         }
     }
-
     public int SetShotCount()
     {
         var card = GameManager.instance.SelectedCard;
@@ -201,17 +187,14 @@ public class UIGame : UIBase
         }
         return count;
     }
-
     public void OnClickNotice()
     {
         noticeLog.SetActive(true);
     }
-
     public void OnClickCloseNotice()
     {
         noticeLog.SetActive(false);
     }
-
     public void SetNotice(string notice)
     {
         noticeText.text = notice;
@@ -219,21 +202,18 @@ public class UIGame : UIBase
         item.text = notice;
         noticeLogItem.rectTransform.sizeDelta = new Vector2(item.preferredWidth, item.preferredHeight);
     }
-
     public void SetBombButton(bool isActive)
     {
         bombButton.gameObject.SetActive(isActive);
     }
-
     public void OnClickBomb()
     {
-        if(GameManager.instance.targetCharacter != null && GameManager.instance.targetCharacter.tag == "Bomb")
+        if (GameManager.instance.targetCharacter != null && GameManager.instance.targetCharacter.tag == "Bomb")
         {
             GameManager.instance.isSelectBombTarget = true;
             OnSelectDirectTarget(true);
         }
     }
-
     public void SetBombAlert(bool isAlert)
     {
         if (isAlert)
@@ -246,7 +226,6 @@ public class UIGame : UIBase
             bombButton.color = Color.white;
         }
     }
-
     public IEnumerator BombAlert()
     {
         var col = 1f;
@@ -260,7 +239,6 @@ public class UIGame : UIBase
             if (col >= 1) isDown = false;
         }
     }
-
     public void OnSelectDirectTarget(bool isActive)
     {
         foreach (var key in userslots.Keys)
@@ -269,7 +247,6 @@ public class UIGame : UIBase
                 userslots[key].SetSelectVisible(isActive);
         }
     }
-
     public void SetDeath(long id)
     {
         if (userslots.ContainsKey(id))

@@ -19,6 +19,8 @@ public class UserInfoSlot : UIListItem
     [SerializeField] private List<Image> debuffs;
     [SerializeField] private GameObject select;
     [SerializeField] private GameObject death;
+    [SerializeField] private List<GameObject> mpSlots;
+    [SerializeField] private List<GameObject> mpGauges;
 
     public int idx;
     public UnityAction<int> callback;
@@ -33,6 +35,12 @@ public class UserInfoSlot : UIListItem
         var data = DataManager.instance.GetData<CharacterDataSO>(userinfo.selectedCharacterRcode);
         thumbnail.sprite = await ResourceManager.instance.LoadAsset<Sprite>(data.rcode, eAddressableType.Thumbnail);
         targetMark.GetComponent<Image>().sprite = await ResourceManager.instance.LoadAsset<Sprite>("role_" + userinfo.roleType.ToString(), eAddressableType.Thumbnail);
+        for (int i = 0; i < 10; i++)
+        {
+            mpSlots[i].SetActive(userinfo.mp > i);
+            mpGauges[i].SetActive(userinfo.mp > i);
+        }
+        
         UpdateHp(userinfo.hp,userinfo.maxHp);
 
         targetMark.SetActive(userinfo.roleType == eRoleType.target);
@@ -58,6 +66,13 @@ public class UserInfoSlot : UIListItem
     }
     public async void UpdateData(UserInfo userinfo)
     {
+        Debug.Log("사용한유저" + userinfo.nickname);
+        Debug.Log("유저의 마나확인용" + userinfo.mp);
+        for (int i = 0; i < 10; i++)
+        {
+            mpGauges[i].SetActive(userinfo.mp > i);
+        }
+        
         UpdateHp(userinfo.hp,userinfo.maxHp);
 
         if (weapon != null)
@@ -112,6 +127,10 @@ public class UserInfoSlot : UIListItem
     public void SetDeath()
     {
         hpGauge.gameObject.SetActive(false);
+        for (int i = 0; i < 10; i++)
+        {
+            mpGauges[i].SetActive(false);
+        }
         death.SetActive(true);
         SetVisibleRole(true);
     }
