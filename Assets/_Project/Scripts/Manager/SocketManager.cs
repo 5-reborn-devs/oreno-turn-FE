@@ -207,6 +207,7 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         {
             await UIManager.Show<PopupCardSelection>(response.TargetUserId, card.rcode);
         }
+
         var use = DataManager.instance.users.Find(obj => obj.id == response.UserId);
         var target = DataManager.instance.users.Find(obj => obj.id == response.TargetUserId);
         var text = string.Format(response.TargetUserId != 0 ? "{0}유저가 {1}카드를 사용했습니다." : "{0}유저가 {1}카드를 {2}유저에게 사용했습니다.",
@@ -282,10 +283,10 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         while (isAnimationPlaying)
         {
             await Task.Delay(100);
-        }
+        };
         var response = gamePacket.UserUpdateNotification;
         var users = DataManager.instance.users.UpdateUserData(response.User);
-        if (!GameManager.isInstance || GameManager.instance.characters == null || GameManager.instance.characters.Count == 0) return;
+        if (!GameManager.isInstance || GameManager.instance.characters == null || GameManager.instance.characters.Count == 0) return;         
         var myIndex = users.FindIndex(obj => obj.id == UserInfo.myInfo.id);
         for (int i = 0; i < users.Count; i++)
         {
@@ -519,6 +520,7 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         for(int i = 0; i < response.CharacterPositions.Count; i++)
         {
             GameManager.instance.characters[DataManager.instance.users[i].id].SetPosition(response.CharacterPositions[i].ToVector3());
+            
         }
     }
 

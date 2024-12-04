@@ -59,7 +59,7 @@ public class GameManager : MonoSingleton<GameManager>
         foreach (var deckData in deckDatas)
         {
             for (int i = 0; i < deckData.count; i++)
-            {
+            {   
                 cards.Add(DataManager.instance.GetData<CardDataSO>(deckData.targetRcode).Clone());
             }
         }
@@ -549,6 +549,7 @@ public class GameManager : MonoSingleton<GameManager>
 
         private void Update()
         {
+            UIManager.Show<CardManager>();
             // 캐릭터 이동 (현재 목표 위치가 있으면 이동)
             if (targetPosition.HasValue)
             {

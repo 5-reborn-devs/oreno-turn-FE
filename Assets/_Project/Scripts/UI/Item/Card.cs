@@ -69,6 +69,12 @@ public class Card : UIListItem
         cardDesc.text = cardData.description;
     }
 
+    public void SetCardIndex(int index)
+    {
+        idx = index;
+    }
+
+    // 카드 선택 시 나오는 메서드
     public void OnClickCard()
     {
         callback?.Invoke(idx);

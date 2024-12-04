@@ -66,8 +66,6 @@ public class UserInfoSlot : UIListItem
     }
     public async void UpdateData(UserInfo userinfo)
     {
-        Debug.Log("사용한유저" + userinfo.nickname);
-        Debug.Log("유저의 마나확인용" + userinfo.mp);
         for (int i = 0; i < 10; i++)
         {
             mpGauges[i].SetActive(userinfo.mp > i);
