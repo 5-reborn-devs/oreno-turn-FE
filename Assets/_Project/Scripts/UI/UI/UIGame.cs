@@ -112,6 +112,10 @@ public class UIGame : UIBase
         {
             OnClickBang(); // ??? ??? ????
         }
+        if (Input.GetKeyDown(KeyCode.CapsLock))
+        {
+            OnClickReroll();
+        }
         if (!GameManager.instance.isPlaying) return;
         timer -= Time.deltaTime;
         time.text = string.Format("{0:00}:{1:00}", Mathf.Floor(timer / 60), timer % 60);
@@ -141,6 +145,17 @@ public class UIGame : UIBase
         if (UserInfo.myInfo.isShotPossible || GameManager.instance.SelectedCard.cardType != CardType.Bbang)
             GameManager.instance.OnUseCard();
     }
+
+    public void OnClickReroll()
+    {
+        if (UserInfo.myInfo.isRerollPossible || SocketManager.instance.isConnected)
+        {
+            GamePacket packet = new GamePacket();
+            packet.RerollRequest = new C2SRerollRequest() {};
+            SocketManager.instance.Send(packet);
+        }
+    }
+
     public void SetSelectCard(CardDataSO card = null)
     {
         if (card == null)
