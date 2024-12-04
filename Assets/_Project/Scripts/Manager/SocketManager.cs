@@ -269,24 +269,13 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
     public async void EveningDistributionNotification(GamePacket gamePacket) { 
 
          var response = gamePacket.EveningDistributionNotification;
-        var ui = UIManager.Get<PopupPleaMarket>();
+         var ui = UIManager.Get<PopupPleaMarket>();
         if(ui == null)
         {
             ui = await UIManager.Show<PopupPleaMarket>();
         }
         if (!ui.isInitCards)
             ui.SetCards(response.CardType);
-        // if (response.CardTypes.Count > response.PickIndex.Count)
-        //     ui.OnSelectedCard(response.PickIndex);
-        // else
-        // {
-        //     UIManager.Hide<PopupPleaMarket>();
-        //     for (int i = 0; i < DataManager.instance.users.Count; i++)
-        //     {
-        //         var targetCharacter = GameManager.instance.characters[DataManager.instance.users[i].id];
-        //         targetCharacter.OnChangeState<CharacterIdleState>();
-        //     }
-        // }
     }
 
     public void ReactionResponse(GamePacket gamePacket)
@@ -294,8 +283,13 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         var response = gamePacket.ReactionResponse;
         if(response.Success)
         {
-            if (UIManager.IsOpened<PopupBattle>())
-                UIManager.Hide<PopupBattle>();
+            // if (UIManager.IsOpened<PopupBattle>())
+            //     UIManager.Hide<PopupBattle>();
+                if(UIManager.IsOpened<PopupPleaMarket>()){
+                     UIManager.Hide<PopupPleaMarket>();
+                }
+                UIManager.Show<PopupRemoveCardSelection>();
+
         }
     }
 
@@ -532,6 +526,11 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         UIGame.instance.SetSelectCard();
         UIGame.instance.SetDeckCount();
     }
+
+    //   public void DestroyCardResponse(GamePacket gamePacket)
+    // {
+
+    // }
 
     // ������ ������Ʈ
     public void PhaseUpdateNotification(GamePacket gamePacket)

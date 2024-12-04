@@ -23,7 +23,7 @@ public class PopupRemoveCardSelection : UIListBase<Card>
     public override void Opened(object[] param)
     {
         targetUserInfo = UserInfo.myInfo;
-        count.text = string.Format("¼±ÅÃ °³¼ö : {0} ÇÊ¿ä °³¼ö : {1}", selectCards.Count, Mathf.Max(0, UserInfo.myInfo.handCards.Count - UserInfo.myInfo.hp));
+        count.text = string.Format("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ : {0} ï¿½Ê¿ï¿½ ï¿½ï¿½ï¿½ï¿½ : {1}", selectCards.Count, Mathf.Max(0, UserInfo.myInfo.handCards.Count - UserInfo.myInfo.hp));
         SetList();
     }
 
@@ -108,22 +108,59 @@ public class PopupRemoveCardSelection : UIListBase<Card>
         }
     }
 
+    // public void OnClickItem(Card card)
+    // {
+    //     if (selectCards.Contains(card))
+    //     {
+    //         selectCards.Remove(card);
+    //         card.OnSelect(false);
+    //     }
+    //     else
+    //     {
+    //         selectCards.Add(card);
+    //         card.OnSelect(true);
+    //     }
+    //     count.text = string.Format("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ : {0} ï¿½Ê¿ï¿½ ï¿½ï¿½ï¿½ï¿½ : {1}", selectCards.Count, Mathf.Max(0, UserInfo.myInfo.handCards.Count - UserInfo.myInfo.hp));
+    //     use.gameObject.SetActive(UserInfo.myInfo.handCards.Count - selectCards.Count == UserInfo.myInfo.hp);
+    //     count.gameObject.SetActive(UserInfo.myInfo.handCards.Count - selectCards.Count != UserInfo.myInfo.hp);
+    // }
+
     public void OnClickItem(Card card)
+{
+    if (SocketManager.instance.isConnected)
     {
-        if (selectCards.Contains(card))
-        {
-            selectCards.Remove(card);
-            card.OnSelect(false);
-        }
-        else
-        {
-            selectCards.Add(card);
-            card.OnSelect(true);
-        }
-        count.text = string.Format("¼±ÅÃ °³¼ö : {0} ÇÊ¿ä °³¼ö : {1}", selectCards.Count, Mathf.Max(0, UserInfo.myInfo.handCards.Count - UserInfo.myInfo.hp));
-        use.gameObject.SetActive(UserInfo.myInfo.handCards.Count - selectCards.Count == UserInfo.myInfo.hp);
-        count.gameObject.SetActive(UserInfo.myInfo.handCards.Count - selectCards.Count != UserInfo.myInfo.hp);
+        // ì„œë²„ë¡œ ë°ì´í„° ì „ì†¡
+        SendCardDataToServer(card);
+        
+        // ì¹´ë“œ ë°ì´í„° í´ë¼ì´ì–¸íŠ¸ íŒ¨ì—ì„œ ì œê±°
+        RemoveCardFromClientHand(card);
+
+        // íŒì—… ì¢…ë£Œ
+        UIManager.Hide<PopupRemoveCardSelection>();
     }
+    else
+    {
+        // ì„œë²„ì™€ ì—°ê²°ë˜ì§€ ì•Šì€ ê²½ìš°ì˜ ì²˜ë¦¬ (ì˜µì…˜)
+    }
+}
+
+private void SendCardDataToServer(Card card)
+{
+    GamePacket packet = new GamePacket();
+    packet.DestroyCardRequest = new C2SDestroyCardRequest();
+    packet.DestroyCardRequest.DestroyCards.Add(new CardData() { Type = card.cardData.cardType, Count = 1 });
+    SocketManager.instance.Send(packet);
+}
+
+private void RemoveCardFromClientHand(Card card)
+{
+    if (selectCards.Contains(card))
+    {
+        selectCards.Remove(card);
+        UserInfo.myInfo.handCards.Remove(card.cardData);
+    }
+}
+
 
     public List<CardData> CreateField()
     {
@@ -151,9 +188,11 @@ public class PopupRemoveCardSelection : UIListBase<Card>
             packet.DestroyCardRequest = new C2SDestroyCardRequest();
             packet.DestroyCardRequest.DestroyCards.AddRange(CreateField());
             SocketManager.instance.Send(packet);
+            //  UIManager.Hide<PopupRemoveCardSelection>();
+            //  ClearList();
         }
-        else
-        {
+        
+        else{
         }
-    }
+}
 }
