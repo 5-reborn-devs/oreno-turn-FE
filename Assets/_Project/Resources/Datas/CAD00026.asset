@@ -19,7 +19,7 @@ MonoBehaviour:
   type: 3
   isUsable: 1
   defCard: 
-  isDirectUse: 1
+  isDirectUse: 0
   isTargetSelect: 0
   isTargetCardSelection: 0
   useTag: 
