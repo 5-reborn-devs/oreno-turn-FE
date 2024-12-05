@@ -16,7 +16,7 @@ MonoBehaviour:
   rcode: CAD00024
   displayName: "\uBC29\uC5B4"
   description: "\uBC29\uC5B4\uB3C4\uB97C 10\uB9CC\uD07C \uD68D\uB4DD\uD55C\uB2E4."
-  type: 3
+  type: 0
   isUsable: 1
   defCard: 
   isDirectUse: 1
