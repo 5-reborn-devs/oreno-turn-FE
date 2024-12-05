@@ -27,7 +27,6 @@ public class PopupEveningDraw : UIBase
 
     public async void Init(long id)
     { 
-        Debug.Log("들어오냐구!!!! : ");
         this.id = id;
         GameManager.instance.SetPleaMarketCards();
         cardObjects.ForEach(obj => obj.SetActive(false));

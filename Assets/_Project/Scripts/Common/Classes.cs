@@ -178,7 +178,7 @@ public partial class UserInfo
 
     public CardDataSO OnUseCard(CardDataSO card)
     {
-        switch(card.type)
+        switch (card.type)
         {
             case eCardType.active:
                 {

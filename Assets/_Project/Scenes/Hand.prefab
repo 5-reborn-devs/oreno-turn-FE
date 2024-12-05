@@ -51,6 +51,7 @@ MonoBehaviour:
     isDestroyOnHide: 1
   listParent: {fileID: 4481831033555234185}
   itemPrefab: {fileID: 4969428835485593973, guid: b8cb95a41f7d3454799f902cc41a3f1a, type: 3}
+  select: {fileID: 6691524975024277542}
 --- !u!1 &5239141186622446907
 GameObject:
   m_ObjectHideFlags: 0
