@@ -79,7 +79,6 @@ public class Card : UIListItem
     {
         callback?.Invoke(idx);
         dataCallback?.Invoke(cardData);
-        Debug.Log("들어오냐구!!!! : " + this.cardData);
         cardCallback?.Invoke(this);
 	}
 

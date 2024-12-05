@@ -48,7 +48,6 @@ public class UIManager : MonoSingleton<UIManager>
             var prefab = await ResourceManager.instance.LoadAsset<T>(typeof(T).ToString(), eAddressableType.UI);
 #endif
             ui = Instantiate(prefab, instance.parents[(int)prefab.uiPosition]);
-            Debug.Log("À¯¾ÆÀÌ¸Å´ÏÀú¤Ã¤Ã¤Ã¤Ã : " + ui);
             ui.name = ui.name.Replace("(Clone)", ""); 
             if (ui.uiPosition == eUIPosition.UI)
             {
@@ -109,7 +108,7 @@ public class UIManager : MonoSingleton<UIManager>
 //         instance.uiList.Add(ui);
 //     }
 //     ui.SetActive(ui.uiOptions.isActiveOnLoad);
-//     if (!ui.gameObject.activeSelf) // ìˆ˜ì •ëœ ë¶€ë¶„
+//     if (!ui.gameObject.activeSelf) // ?˜ì •??ë¶€ë¶?
 //     {
 //         Debug.LogError("UI is not active after loading: " + typeof(T).ToString());
 //     }

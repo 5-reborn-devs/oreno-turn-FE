@@ -19,7 +19,7 @@ public class CardManager : UIListBase<Card>
     {
         ClearList();
         var datas = UserInfo.myInfo.handCards; // 내 손에 있는 카드들
-        Debug.Log("CardManager에서 카드 데이터 개수: " + datas.Count);
+        // Debug.Log("CardManager에서 카드 데이터 개수: " + datas.Count);
         for (int i =0; i< datas.Count;i++)
         {
             var data = datas[i];
@@ -31,24 +31,27 @@ public class CardManager : UIListBase<Card>
             // Debug.Log($"CardManager에서 카드가공 후 item {i} : {items[i]}");
         }
         selectedCard = -1;
-        select.SetActive(false);    
+        //select.SetActive(false);    
     }
 
     // 여기서 카드선택가능하게 해야함
     public void SelectCard(int index)
     {
-        if (selectedCard != -1 && selectedCard < items.Count) 
+        if (GameManager.instance.userCharacter.IsState<CharacterIdleState>() ||
+            GameManager.instance.userCharacter.IsState<CharacterWalkState>())
         {
-            items[selectedCard].OnSelect(false); // 이전 카드 선택 해제
-        }
-        selectedCard = index;
-        if (items.Count >= selectedCard)
-        {
-            var selectedItem = items[selectedCard];
-            GameManager.instance.SelectedCard = selectedItem.cardData;
-            selectedItem.OnSelect(true); 
-        }
-        
+            if (selectedCard != -1 && selectedCard < items.Count)
+            {
+                items[selectedCard].OnSelect(false); // 이전 카드 선택 해제
+            }
+            selectedCard = index;
+            if (items.Count >= selectedCard)
+            {
+                var selectedItem = items[selectedCard];
+                GameManager.instance.SelectedCard = selectedItem.cardData;
+                selectedItem.OnSelect(true);
+            }
+        }            
     }
 
     public void CardUse() 
@@ -59,7 +62,7 @@ public class CardManager : UIListBase<Card>
             return; 
         }
 
-        var card = UserInfo.myInfo.handCards[selectedCard]; // 선택된 카드 정보
+        var card = UserInfo.myInfo.handCards[selectedCard]; // 선택된 카드 정보]
         if (card.rcode == "CAD00005")
         {
             UIManager.ShowAlert("누구에게 사용 하시겠습니까?", "119 호출", "나에게", "모두에게", () =>
@@ -85,13 +88,11 @@ public class CardManager : UIListBase<Card>
             Debug.LogWarning("UseCard: 선택된 카드가 유효하지 않습니다.");
             return; // 선택된 카드가 유효하지 않으면 종료
         }
-
-        var card = UserInfo.myInfo.OnUseCard(selectedCard);
-        if (selectedCard == -1) return; // 카드 미선택 상황 시 return.
-
-        GameManager.instance.OnUseCard(card.rcode);
-        selectedCard = -1; // 선택 초기화
+        Debug.Log($"카드썼당 : {UserInfo.myInfo.OnUseCard(selectedCard)}");
+        UserInfo.myInfo.OnUseCard(selectedCard);
+   
         SetList();
+        selectedCard = -1; // 선택 초기화
     }
 
     public void OnClickItem(CardDataSO data)
@@ -100,15 +101,21 @@ public class CardManager : UIListBase<Card>
     }
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1)) SelectCard(0);
-        if (Input.GetKeyDown(KeyCode.Alpha2)) SelectCard(1);
-        if (Input.GetKeyDown(KeyCode.Alpha3)) SelectCard(2);
-        if (Input.GetKeyDown(KeyCode.Alpha4)) SelectCard(3);
-        if (Input.GetKeyDown(KeyCode.Alpha5)) SelectCard(4);
-
-        if (Input.GetKeyDown(KeyCode.Space) && selectedCard != -1)
+        if (GameManager.instance.userCharacter == null)
+            return;
+        if (GameManager.instance.userCharacter.IsState<CharacterIdleState>() ||
+            GameManager.instance.userCharacter.IsState<CharacterWalkState>())
         {
-            CardUse();  
-        }
+            if (Input.GetKeyDown(KeyCode.Alpha1)) SelectCard(0);
+            if (Input.GetKeyDown(KeyCode.Alpha2)) SelectCard(1);
+            if (Input.GetKeyDown(KeyCode.Alpha3)) SelectCard(2);
+            if (Input.GetKeyDown(KeyCode.Alpha4)) SelectCard(3);
+            if (Input.GetKeyDown(KeyCode.Alpha5)) SelectCard(4);
+
+            if (Input.GetKeyDown(KeyCode.Space) && selectedCard != -1)
+            {
+                CardUse();
+            }
+        }      
     }
 }
