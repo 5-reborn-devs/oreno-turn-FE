@@ -126,6 +126,20 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         }
     }
 
+    public void GameServerSwitchNotification(GamePacket gamePacket)
+    {
+        var response = gamePacket.GameServerSwitchNotification;
+        // 게임 서버로 연결
+        string gameServerIp = response.Ip;  // 게임 서버 IP (서버에서 받은 데이터)
+        int gameServerPort = response.Port;  // 게임 서버 Port (서버에서 받은 데이터)
+
+        // 게임 서버로 연결
+        SocketManager.instance.ConnectToGameServer(gameServerIp, gameServerPort, () =>
+        {
+            Debug.Log("게임 서버에 연결되었습니다!");
+        });
+    }
+
     public void GameStartResponse(GamePacket gamePacket)
     {
         var response = gamePacket.GameStartResponse;
@@ -135,6 +149,8 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
             Debug.Log("GameStartResponse Failcode : " + response.FailCode.ToString());
         }
     }
+
+    
 
     // 占쏙옙占쏙옙 占쏙옙占쏙옙
     public async void GameStartNotification(GamePacket gamePacket)
@@ -290,7 +306,6 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
                      UIManager.Hide<PopupPleaMarket>();
                 }
                 UIManager.Show<PopupRemoveCardSelection>();
-
         }
     }
 
