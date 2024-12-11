@@ -21,12 +21,26 @@ public class UIRoom : UIBase
     private int maxUserCount;
     RoomData roomData;
 
+    // public override void Opened(object[] param)
+    // {
+    //     UIManager.Hide<UIGnb>();
+    //     roomData = (RoomData)param[0];
+    //     SetRoomInfo(roomData);
+    // }
     public override void Opened(object[] param)
+{
+    UIManager.Hide<UIGnb>();
+    roomData = (RoomData)param[0];
+
+    // 슬롯 초기화: 모든 슬롯 비활성화
+    foreach (var slot in slots)
     {
-        UIManager.Hide<UIGnb>();
-        roomData = (RoomData)param[0];
-        SetRoomInfo(roomData);
+        slot.gameObject.SetActive(false);
     }
+
+    SetRoomInfo(roomData);
+}
+
 
     public void SetRoomInfo(RoomData roomData)
     {
@@ -59,28 +73,58 @@ public class UIRoom : UIBase
         buttonStart.gameObject.SetActive(roomData.OwnerId == UserInfo.myInfo.id);
     }
 
+    // public void AddUserInfo(UserInfo userinfo)
+    // {
+    //     users.Add(userinfo);
+    //     for (int i = 0; i < slots.Count; i++)
+    //     {
+    //         var userInfo = users.Count > i ? users[i] : null;
+    //         slots[i].SetItem(userInfo, userInfo != null ? null : (!SocketManager.instance.isConnected ? OnClickTestAddUser : null));
+    //     }
+    //     buttonStart.interactable = users.Count > 1;
+    //     roomCount.text = string.Format("{0}/{1}", users.Count, maxUserCount);
+    // }
     public void AddUserInfo(UserInfo userinfo)
+{
+    users.Add(userinfo);
+    for (int i = 0; i < slots.Count; i++)
     {
-        users.Add(userinfo);
-        for (int i = 0; i < slots.Count; i++)
-        {
-            var userInfo = users.Count > i ? users[i] : null;
-            slots[i].SetItem(userInfo, userInfo != null ? null : (!SocketManager.instance.isConnected ? OnClickTestAddUser : null));
-        }
-        buttonStart.interactable = users.Count > 1;
-        roomCount.text = string.Format("{0}/{1}", users.Count, maxUserCount);
+        var userInfo = users.Count > i ? users[i] : null;
+        slots[i].SetItem(userInfo, userInfo != null ? null : (!SocketManager.instance.isConnected ? OnClickTestAddUser : null));
+
+        // 슬롯 활성화
+        slots[i].gameObject.SetActive(true);
     }
+    buttonStart.interactable = users.Count > 1;
+    roomCount.text = string.Format("{0}/{1}", users.Count, maxUserCount);
+}
+
+
+    // public void RemoveUserInfo(long userId)
+    // {
+    //     users.RemoveAll(obj => obj.id == userId);
+    //     for (int i = 0; i < slots.Count; i++)
+    //     {
+    //         var userInfo = users.Count > i ? users[i] : null;
+    //         slots[i].SetItem(userInfo, userInfo != null ? null : (!SocketManager.instance.isConnected ? OnClickTestAddUser : null));
+    //     }
+    //     roomCount.text = string.Format("{0}/{1}", users.Count, maxUserCount);
+    // }
 
     public void RemoveUserInfo(long userId)
+{
+    users.RemoveAll(obj => obj.id == userId);
+    for (int i = 0; i < slots.Count; i++)
     {
-        users.RemoveAll(obj => obj.id == userId);
-        for (int i = 0; i < slots.Count; i++)
-        {
-            var userInfo = users.Count > i ? users[i] : null;
-            slots[i].SetItem(userInfo, userInfo != null ? null : (!SocketManager.instance.isConnected ? OnClickTestAddUser : null));
-        }
-        roomCount.text = string.Format("{0}/{1}", users.Count, maxUserCount);
+        var userInfo = users.Count > i ? users[i] : null;
+        slots[i].SetItem(userInfo, userInfo != null ? null : (!SocketManager.instance.isConnected ? OnClickTestAddUser : null));
+
+        // 슬롯 비활성화 (유저가 없을 때)
+        slots[i].gameObject.SetActive(userInfo != null);
     }
+    roomCount.text = string.Format("{0}/{1}", users.Count, maxUserCount);
+}
+
 
     public void OnClickTestAddUser(int slot)
     {
@@ -146,11 +190,11 @@ public class UIRoom : UIBase
     public async void OnPrepare(List<UserInfo> userDatas)
     {
         users = userDatas;
-        //Ÿ�� ǥ��
+        //Ÿ�� ǥ��
         var idx = users.FindIndex(obj => obj.roleType == eRoleType.target);
         if(idx >= 0)
             slots[idx].OnTargetMark();
-        //�� ���� ǥ��
+        //�� ���� ǥ��
         var myIdx = users.FindIndex(obj => obj.id == UserInfo.myInfo.id);
         slots[myIdx].SetRoleIcon(users[myIdx].roleType);
 

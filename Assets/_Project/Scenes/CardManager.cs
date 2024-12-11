@@ -35,29 +35,69 @@ public class CardManager : UIListBase<Card>
     }
 
     // ���⼭ ī�弱�ð����ϰ� �ؾ���
-    public void SelectCard(int index)
-    {
-        if (GameManager.instance.userCharacter.IsState<CharacterIdleState>() ||
-            GameManager.instance.userCharacter.IsState<CharacterWalkState>())
-        {
-            if (selectedCard != -1 && selectedCard < items.Count)
-            {
-                items[selectedCard].OnSelect(false); // ���� ī�� ���� ����
-            }
-            selectedCard = index;
-            if (items.Count >= selectedCard)
-            {
-                var selectedItem = items[selectedCard];
-                GameManager.instance.SelectedCard = selectedItem.cardData;
-                selectedItem.OnSelect(true);
-                Debug.Log("여기다!!");
+    // public void SelectCard(int index)
+    // {
+    //     if (GameManager.instance.userCharacter.IsState<CharacterIdleState>() ||
+    //         GameManager.instance.userCharacter.IsState<CharacterWalkState>())
+    //     {
+    //         if (selectedCard != -1 && selectedCard < items.Count)
+    //         {
+    //             items[selectedCard].OnSelect(false); // ���� ī�� ���� ����
+    //         }
+    //         selectedCard = index;
+    //         if (items.Count >= selectedCard)
+    //         {
+    //             var selectedItem = items[selectedCard];
+    //             GameManager.instance.SelectedCard = selectedItem.cardData;
+    //             selectedItem.OnSelect(true);
+    //             Debug.Log("여기다!!");
 
-                // 파티클 시스템 활성화 및 재생 
-                // select.SetActive(true); 
-                // GetComponent<ParticleSystem>().Play();
-            }
-        }            
-    }
+    //             // 파티클 시스템 활성화 및 재생 
+    //             // select.SetActive(true); 
+    //             // GetComponent<ParticleSystem>().Play();
+    //         }
+    //     }            
+    // }
+
+    public void SelectCard(int index)
+{
+    if (GameManager.instance.userCharacter.IsState<CharacterIdleState>() ||
+        GameManager.instance.userCharacter.IsState<CharacterWalkState>())
+    {
+        if (selectedCard != -1 && selectedCard < items.Count)
+        {
+            items[selectedCard].OnSelect(false); // 이전 카드 선택 해제
+
+            // 이전에 선택된 카드의 y값을 원래대로 되돌리기
+            var previousSelectedItem = items[selectedCard];
+            previousSelectedItem.transform.position = new Vector3(
+                previousSelectedItem.transform.position.x,
+                previousSelectedItem.originalYPosition, // 원래 y값으로 되돌리기 위해 추가
+                previousSelectedItem.transform.position.z);
+        }
+
+        selectedCard = index;
+        if (items.Count > selectedCard)
+        {
+            var selectedItem = items[selectedCard];
+            GameManager.instance.SelectedCard = selectedItem.cardData;
+            selectedItem.OnSelect(true);
+            Debug.Log("여기다!!");
+
+            // 선택한 카드의 y값을 20만큼 올리기
+            selectedItem.originalYPosition = selectedItem.transform.position.y; // 원래 y값 저장
+            selectedItem.transform.position = new Vector3(
+                selectedItem.transform.position.x,
+                selectedItem.transform.position.y + 20f,
+                selectedItem.transform.position.z);
+
+            // 파티클 시스템 활성화 및 재생 
+            // select.SetActive(true); 
+            // GetComponent<ParticleSystem>().Play();
+        }
+    }            
+}
+
 
     public void CardUse() 
     {
