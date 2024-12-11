@@ -135,7 +135,7 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         var response = gamePacket.GameServerSwitchNotification;
         // 게임 서버로 연결
         string gameServerIp = response.Ip;  // 게임 서버 IP (서버에서 받은 데이터)
-        int gameServerPort = response.Port;  // 게임 서버 Port (서버에서 받은 데이터)
+        int gameServerPort = (int)response.Port;  // 게임 서버 Port (서버에서 받은 데이터)
 
         // 게임 서버로 연결
         SocketManager.instance.ConnectToGameServer(gameServerIp, gameServerPort, () =>
