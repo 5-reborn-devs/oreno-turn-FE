@@ -21,11 +21,15 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
     public void LoginResponse(GamePacket gamePacket)
     {
         var response = gamePacket.LoginResponse;
+        var Token = response.Token;
         if (response.Success)
         {
             if (response.MyInfo != null)
             {
-                UserInfo.myInfo = new UserInfo(response.MyInfo);
+                UserInfo.myInfo = new UserInfo(response.MyInfo)
+                {
+                    token = Token
+                };        
             }
             UIManager.Get<PopupLogin>().OnLoginEnd(response.Success);
         }
