@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Events;
 using System.Threading.Tasks;
+using System;
 
 public class UserInfoSlot : UIListItem
 {
@@ -25,6 +26,9 @@ public class UserInfoSlot : UIListItem
     public int idx;
     public UnityAction<int> callback;
     public bool isDeath { get => death.activeInHierarchy; }
+
+    // 디버그 로그 추가 
+    //Debug.Log($"Init Slot: {nickname.text}, Index: {index}");
 
 
     public async Task Init(UserInfo userinfo, int index, UnityAction<int> callback)

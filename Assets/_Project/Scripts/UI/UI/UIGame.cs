@@ -27,6 +27,9 @@ public class UIGame : UIBase
     [SerializeField] public VirtualStick stick;
     [SerializeField] private Image bombButton;
     [SerializeField] private CardManager cardManager;
+    [SerializeField] public OppoInfoSlot oppoInfoSlot;
+
+    private Coroutine oppoInfoSlotCoroutine;
 
     private float timer = 180;
     Dictionary<long, UserInfoSlot> userslots = new Dictionary<long, UserInfoSlot>();
@@ -56,6 +59,39 @@ public class UIGame : UIBase
         }
         SetShotButton(false);
     }
+
+    // 선택된 상대의 정보를 oppoInfoSlot에 업데이트하는 메서드
+    public void OnClickOpponents(Character targetCharacter){
+
+        Debug.Log("OnClickOpponents 호출됨"); // 디버그 로그 추가
+
+        // GameManager의 targetCharacter를 가져옴 
+        //  Character targetCharacter = GameManager.instance.targetCharacter;
+
+        if (targetCharacter != null) { UserInfo targetUserInfo = targetCharacter.userInfo; 
+
+        Debug.Log($"Target User: {targetUserInfo?.nickname}, ID: {targetUserInfo?.id}"); 
+        Debug.Log($"OppoInfoSlot: {oppoInfoSlot != null}");
+
+        // 이전 코루틴이 실행 중이라면 중지 
+        if (oppoInfoSlotCoroutine != null) {
+            StopCoroutine(oppoInfoSlotCoroutine); 
+        }
+
+        // oppoInfoSlot에 선택된 상대의 정보를 업데이트 
+        oppoInfoSlot.Init(targetUserInfo, (int)targetUserInfo.id, null);
+        // oppoInfoSlot을 활성화하여 화면에 표시 
+        oppoInfoSlot.gameObject.SetActive(true); 
+        
+        // 5초 후 비활성화하는 코루틴 시작 
+        oppoInfoSlotCoroutine = StartCoroutine(DisableOppoInfoSlotAfterDelay(5f));
+        }
+        else{
+            Debug.Log("targetCharacter가 null입니다.");
+        }
+        
+    }
+
     public void OnClickCharacterSlot(int idx)
     {
         if (GameManager.instance.SelectedCard == null && !GameManager.instance.isSelectBombTarget) return;
@@ -276,5 +312,10 @@ public class UIGame : UIBase
         {
             userInfoSlot.SetDeath();
         }
+    }
+
+    private IEnumerator DisableOppoInfoSlotAfterDelay(float delay) { 
+        yield return new WaitForSeconds(delay); 
+        oppoInfoSlot.gameObject.SetActive(false); 
     }
 }
