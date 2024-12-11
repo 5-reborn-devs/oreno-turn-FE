@@ -10,6 +10,8 @@ public partial class UserInfo
     public long id;
     public string nickname;
     public int coin;
+    public string token;
+
     public string selectedCharacterRcode { get => characterData.GetRcode(); set => characterData.CharacterType = (CharacterType)int.Parse(value.Substring(3, 5)); }
     public eRoleType roleType { get => (eRoleType)characterData.RoleType; set => characterData.RoleType = (RoleType)value; }
     public CharacterData characterData = new CharacterData();

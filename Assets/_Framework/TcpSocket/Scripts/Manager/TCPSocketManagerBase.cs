@@ -139,8 +139,10 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
             OnReceive(); 
             StartCoroutine(OnSendQueue()); 
             StartCoroutine(OnReceiveQueue());
-            StartCoroutine(Ping()); 
-
+            StartCoroutine(Ping());
+            GamePacket packet = new GamePacket();
+            packet.VerifyTokenRequest = new C2SVerifyTokenRequest() { Token = UserInfo.myInfo.token };
+            SocketManager.instance.Send(packet);
             callback?.Invoke();
         }
         catch (Exception e)
