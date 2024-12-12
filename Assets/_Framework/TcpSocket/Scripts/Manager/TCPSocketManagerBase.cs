@@ -121,18 +121,18 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
         }
 
         Debug.Log("Tcp Ip : " + ipAddress.MapToIPv4().ToString() + ", Port : " + gameServerPort);
+        // 기존 연결을 끊고 새로운 게임 서버로 연결 시도
+        if (socket.Connected)
+        {
+            socket.Shutdown(SocketShutdown.Both);
+            socket.Close();
+            socket = null;
+            Debug.Log("연결끊고 재시도");
+        }
         socket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
         try
         {
-            // 기존 연결을 끊고 새로운 게임 서버로 연결 시도
-            if (socket.Connected)
-            {
-                Debug.Log("연결끊고 재시도");
-                socket.Shutdown(SocketShutdown.Both);
-                socket.Close();
-            }
-
             await socket.ConnectAsync(endPoint); 
             isConnected = socket.Connected;
             Debug.Log("연결성공");
