@@ -10,6 +10,7 @@ public class CardManager : UIListBase<Card>
 
     [SerializeField] private GameObject select;
     private int selectedCard = -1;
+    [SerializeField] private GameObject hand; // Hand GameObject 추가
     public override void Opened(object[] param)
     {
         SetList();
@@ -34,6 +35,15 @@ public class CardManager : UIListBase<Card>
         //select.SetActive(false);    
     }
 
+    public void DisableHand() {
+         hand.SetActive(false); 
+    // Hand 비활성화 
+    } 
+    public void EnableHand() { 
+        hand.SetActive(true); 
+    // Hand 활성화 
+    }
+    
     // ���⼭ ī�弱�ð����ϰ� �ؾ���
     // public void SelectCard(int index)
     // {

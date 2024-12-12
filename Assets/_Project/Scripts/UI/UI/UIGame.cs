@@ -7,6 +7,7 @@ using TMPro;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
 using System;
+
 public class UIGame : UIBase
 {
     public static UIGame instance { get => UIManager.Get<UIGame>(); }
@@ -28,6 +29,12 @@ public class UIGame : UIBase
     [SerializeField] private Image bombButton;
     [SerializeField] private CardManager cardManager;
     [SerializeField] public OppoInfoSlot oppoInfoSlot;
+
+    [SerializeField] public Image dayImage; 
+    [SerializeField] public Image eveningImage; 
+    [SerializeField] public Image nightImage;
+
+
 
     private Coroutine oppoInfoSlotCoroutine;
 
@@ -171,7 +178,30 @@ public class UIGame : UIBase
         var dt = DateTimeOffset.FromUnixTimeMilliseconds(nextAt) - DateTime.UtcNow;
         timer = (float)dt.TotalSeconds;
         //timer = phase == 1 ? 180 : 60;
+
+        // 이미지 변경 로직 
+        switch (phase) { 
+        case PhaseType.Day: SetPhaseImage(dayImage); break; 
+        case PhaseType.Evening: SetPhaseImage(eveningImage); 
+        cardManager.DisableHand(); // PhaseType.Evening일 때 hand 비활성화
+        break; 
+        case PhaseType.End: SetPhaseImage(nightImage); 
+        cardManager.EnableHand();
+        break; 
+        }
+
     }
+    public void SetPhaseImage(Image activeImage) { 
+        
+        // 모든 이미지를 비활성화 
+        dayImage.gameObject.SetActive(false); 
+        eveningImage.gameObject.SetActive(false); 
+        nightImage.gameObject.SetActive(false); 
+        
+        // 현재 페이즈에 해당하는 이미지를 활성화 
+        activeImage.gameObject.SetActive(true); 
+        
+        }
     public void OnClickDeck()
     {
         if (!GameManager.instance.userCharacter.IsState<CharacterStopState>() &&
