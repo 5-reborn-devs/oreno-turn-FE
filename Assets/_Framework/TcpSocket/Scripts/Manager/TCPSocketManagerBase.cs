@@ -121,29 +121,32 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
         }
 
         Debug.Log("Tcp Ip : " + ipAddress.MapToIPv4().ToString() + ", Port : " + gameServerPort);
-        socket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
         try
         {
             // 기존 연결을 끊고 새로운 게임 서버로 연결 시도
-            if (socket.Connected)
+            if (isConnected)
             {
                 Debug.Log("연결끊고 재시도");
-                socket.Shutdown(SocketShutdown.Both);
-                socket.Close();
+                //socket.Shutdown(SocketShutdown.Both);
+                //socket.Close();
+                //StopAllCoroutines();
+                socket.Disconnect(false);
             }
 
+            socket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             await socket.ConnectAsync(endPoint); 
             isConnected = socket.Connected;
             Debug.Log("연결성공");
-            OnReceive(); 
-            StartCoroutine(OnSendQueue()); 
-            StartCoroutine(OnReceiveQueue());
-            StartCoroutine(Ping());
+            //OnReceive(); 
+            //StartCoroutine(OnSendQueue()); 
+            //StartCoroutine(OnReceiveQueue());
+            //StartCoroutine(Ping());
             GamePacket packet = new GamePacket();
             packet.VerifyTokenRequest = new C2SVerifyTokenRequest() { Token = UserInfo.myInfo.token };
             SocketManager.instance.Send(packet);
             callback?.Invoke();
+
         }
         catch (Exception e)
         {
