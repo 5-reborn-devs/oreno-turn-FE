@@ -7,6 +7,7 @@ using TMPro;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
 using System;
+
 public class UIGame : UIBase
 {
     public static UIGame instance { get => UIManager.Get<UIGame>(); }
@@ -27,11 +28,23 @@ public class UIGame : UIBase
     [SerializeField] public VirtualStick stick;
     [SerializeField] private Image bombButton;
     [SerializeField] private CardManager cardManager;
+    [SerializeField] public OppoInfoSlot oppoInfoSlot;
+
+    [SerializeField] public Image dayImage; 
+    [SerializeField] public Image eveningImage; 
+    [SerializeField] public Image nightImage;
+
+
+
+    private Coroutine oppoInfoSlotCoroutine;
 
     private float timer = 180;
     Dictionary<long, UserInfoSlot> userslots = new Dictionary<long, UserInfoSlot>();
     private bool isBombTargetSelect = false;
     bool isBombAlert = false;
+
+    public bool isOn = false;
+
     public override void Opened(object[] param)
     {
         StartCoroutine(Init());
@@ -56,6 +69,39 @@ public class UIGame : UIBase
         }
         SetShotButton(false);
     }
+
+    // 선택된 상대의 정보를 oppoInfoSlot에 업데이트하는 메서드
+    public async void OnClickOpponents(Character targetCharacter){
+
+        Debug.Log("OnClickOpponents 호출됨"); // 디버그 로그 추가
+
+        if (targetCharacter != null) { UserInfo targetUserInfo = targetCharacter.userInfo; 
+
+        Debug.Log($"Target User: {targetUserInfo?.nickname}, ID: {targetUserInfo?.id}"); 
+        Debug.Log($"OppoInfoSlot: {oppoInfoSlot != null}");
+
+        // 이전 코루틴이 실행 중이라면 중지 
+        if (oppoInfoSlotCoroutine != null) {
+            StopCoroutine(oppoInfoSlotCoroutine); 
+        }
+
+        // oppoInfoSlot에 선택된 상대의 정보를 업데이트 
+        await oppoInfoSlot.Init(targetUserInfo, (int)targetUserInfo.id, null);
+        // oppoInfoSlot을 활성화하여 화면에 표시 
+        oppoInfoSlot.gameObject.SetActive(true); 
+        
+        // //5초 후 비활성화하는 코루틴 시작 
+         oppoInfoSlotCoroutine = StartCoroutine(DisableOppoInfoSlotAfterDelay(targetUserInfo,5f));
+
+        // 5초 동안 활성화 상태 유지하면서 체력 정보 갱신 
+        // oppoInfoSlotCoroutine = StartCoroutine(DisableOppoInfoSlotAfterDelay(targetUserInfo,5f));
+        }
+        else{
+            Debug.Log("targetCharacter가 null입니다.");
+        }
+        
+    }
+
     public void OnClickCharacterSlot(int idx)
     {
         if (GameManager.instance.SelectedCard == null && !GameManager.instance.isSelectBombTarget) return;
@@ -120,6 +166,11 @@ public class UIGame : UIBase
         {
             OnClickReroll();
         }
+
+        if(isOn == true){
+
+        }
+
         if (!GameManager.instance.isPlaying) return;
         timer -= Time.deltaTime;
         time.text = string.Format("{0:00}:{1:00}", Mathf.Floor(timer / 60), timer % 60);
@@ -135,7 +186,30 @@ public class UIGame : UIBase
         var dt = DateTimeOffset.FromUnixTimeMilliseconds(nextAt) - DateTime.UtcNow;
         timer = (float)dt.TotalSeconds;
         //timer = phase == 1 ? 180 : 60;
+
+        // 이미지 변경 로직 
+        switch (phase) { 
+        case PhaseType.Day: SetPhaseImage(dayImage); break; 
+        case PhaseType.Evening: SetPhaseImage(eveningImage); 
+        cardManager.DisableHand(); // PhaseType.Evening일 때 hand 비활성화
+        break; 
+        case PhaseType.End: SetPhaseImage(nightImage); 
+        cardManager.EnableHand();
+        break; 
+        }
+
     }
+    public void SetPhaseImage(Image activeImage) { 
+        
+        // 모든 이미지를 비활성화 
+        dayImage.gameObject.SetActive(false); 
+        eveningImage.gameObject.SetActive(false); 
+        nightImage.gameObject.SetActive(false); 
+        
+        // 현재 페이즈에 해당하는 이미지를 활성화 
+        activeImage.gameObject.SetActive(true); 
+        
+        }
     public void OnClickDeck()
     {
         if (!GameManager.instance.userCharacter.IsState<CharacterStopState>() &&
@@ -277,4 +351,56 @@ public class UIGame : UIBase
             userInfoSlot.SetDeath();
         }
     }
+
+     private IEnumerator DisableOppoInfoSlotAfterDelay(UserInfo targetUserInfo, float delay) { 
+
+        float elapsed = 0f;
+        int initialHp = targetUserInfo.hp; // 초기 체력 저장
+
+            while (elapsed < delay){
+
+                oppoInfoSlot.UpdateData(targetUserInfo);
+
+                if (targetUserInfo.hp != initialHp){
+                     StopCoroutine(oppoInfoSlotCoroutine); // 현재 코루틴 종료
+                     
+                     Debug.Log("체력 변경 감지, OnClickOpponents 호출");
+                     OnClickOpponents(GameManager.instance.targetCharacter); //이부분 게임매니저에서 부를 필요 없이 targetUserInfo로 끝낼수 있는거 아니야?
+                     yield break;
+                }
+                elapsed += 0.01f; // 0.1초마다 갱신
+                yield return new WaitForSeconds(0.01f); 
+            }
+        oppoInfoSlot.gameObject.SetActive(false); 
+    }
+
+// private IEnumerator DisableOppoInfoSlotAfterDelay(UserInfo targetUserInfo, float delay)
+// {
+//     float elapsed = 0f;
+//     int initialHp = targetUserInfo.hp; // 초기 체력 저장
+
+//     while (elapsed < delay)
+//     {
+//         // 현재 체력 정보를 갱신
+//         if (targetUserInfo != null)
+//         {
+//             oppoInfoSlot.UpdateData(targetUserInfo);
+
+//             // 체력이 변경되었는지 확인
+//             if (targetUserInfo.hp != initialHp)
+//             {
+//                 Debug.Log("체력 변경 감지, OnClickOpponents 호출");
+//                 // 체력 변경 시 OnClickOpponents 다시 호출
+//                 StopCoroutine(oppoInfoSlotCoroutine); // 현재 코루틴 종료
+//                 OnClickOpponents(GameManager.instance.targetCharacter); // GameManager의 targetCharacter 사용
+//                 yield break;
+//             }
+//         }
+//         elapsed += 0.1f; // 0.1초마다 갱신
+//     }
+//     oppoInfoSlot.gameObject.SetActive(false); // 5초 후 비활성화
+// }
+
+
+
 }

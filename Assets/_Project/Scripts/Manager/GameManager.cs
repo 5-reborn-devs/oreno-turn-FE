@@ -246,7 +246,8 @@ public class GameManager : MonoSingleton<GameManager>
     }
 
     public void OnTargetSelect(Character character)
-    {
+    {   
+        Debug.Log("선택했음!!");
         if (targetCharacter == character)
         {
             character.OnSelect();
@@ -259,7 +260,18 @@ public class GameManager : MonoSingleton<GameManager>
             targetCharacter = character;
             character.OnSelect();
         }
+        // UIGame의 OnClickOpponets 메서드를 호출하여 character 인자를 넘김 
+        UIGame.instance.OnClickOpponents(character);
     }
+
+    // private void UpdateUserInfoSlot(UserInfo userinfo) { 
+    //     if (userinfo != null) { 
+    //         int idx = DataManager.instance.users.FindIndex(obj => obj.id == userinfo.id); 
+    //         if (idx >= 0 && idx < userInfoSlots.Count) { 
+    //             userInfoSlots[idx].UpdateData(userinfo); 
+    //             userInfoSlots[idx].SetSelectVisible(true); } 
+    //             } 
+    //         }
 
     public void OnUseCard(string rcode = "", UserInfo target = null)
     {

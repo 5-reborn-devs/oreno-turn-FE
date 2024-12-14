@@ -20,6 +20,8 @@ public class Card : UIListItem
     UnityAction<Card> cardCallback;
     public int idx;
 
+    public float originalYPosition; // 원래 y값을 저장하기 위한 변수
+
     public async void Init(CardDataSO cardData)
     {
         select.gameObject.SetActive(false);

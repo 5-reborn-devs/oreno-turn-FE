@@ -10,6 +10,9 @@ public class CardManager : UIListBase<Card>
 
     [SerializeField] private GameObject select;
     private int selectedCard = -1;
+    [SerializeField] private GameObject hand; // Hand GameObject ì¶”ê°€
+
+
     public override void Opened(object[] param)
     {
         SetList();
@@ -18,54 +21,108 @@ public class CardManager : UIListBase<Card>
     public override void SetList()
     {
         ClearList();
-        var datas = UserInfo.myInfo.handCards; // ³» ¼Õ¿¡ ÀÖ´Â Ä«µåµé
-        // Debug.Log("CardManager¿¡¼­ Ä«µå µ¥ÀÌÅÍ °³¼ö: " + datas.Count);
+        var datas = UserInfo.myInfo.handCards; // ï¿½ï¿½ ï¿½Õ¿ï¿½ ï¿½Ö´ï¿½ Ä«ï¿½ï¿½ï¿½
+        // Debug.Log("CardManagerï¿½ï¿½ï¿½ï¿½ Ä«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½: " + datas.Count);
         for (int i =0; i< datas.Count;i++)
         {
             var data = datas[i];
-            // Debug.Log("CardManager¿¡¼­ º¸Çè¿ë Ä«µå ÇÑ Àå ¾¿ : " + data);
+            // Debug.Log("CardManagerï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ : " + data);
             var item = AddItem();
             item.Init(data, OnClickItem);
-            // Debug.Log($"CardManager¿¡¼­ Ä«µåµ¥ÀÌÅÍ idx°ª È®ÀÎ: {item.idx}");
+            // Debug.Log($"CardManagerï¿½ï¿½ï¿½ï¿½ Ä«ï¿½åµ¥ï¿½ï¿½ï¿½ï¿½ idxï¿½ï¿½ È®ï¿½ï¿½: {item.idx}");
             item.SetCardIndex(i);
-            // Debug.Log($"CardManager¿¡¼­ Ä«µå°¡°ø ÈÄ item {i} : {items[i]}");
+            // Debug.Log($"CardManagerï¿½ï¿½ï¿½ï¿½ Ä«ï¿½å°¡ï¿½ï¿½ ï¿½ï¿½ item {i} : {items[i]}");
         }
         selectedCard = -1;
         //select.SetActive(false);    
     }
 
-    // ¿©±â¼­ Ä«µå¼±ÅÃ°¡´ÉÇÏ°Ô ÇØ¾ßÇÔ
-    public void SelectCard(int index)
-    {
-        if (GameManager.instance.userCharacter.IsState<CharacterIdleState>() ||
-            GameManager.instance.userCharacter.IsState<CharacterWalkState>())
-        {
-            if (selectedCard != -1 && selectedCard < items.Count)
-            {
-                items[selectedCard].OnSelect(false); // ÀÌÀü Ä«µå ¼±ÅÃ ÇØÁ¦
-            }
-            selectedCard = index;
-            if (items.Count >= selectedCard)
-            {
-                var selectedItem = items[selectedCard];
-                GameManager.instance.SelectedCard = selectedItem.cardData;
-                selectedItem.OnSelect(true);
-            }
-        }            
+    public void DisableHand() {
+         hand.SetActive(false); 
+    // Hand ë¹„í™œì„±í™” 
+    } 
+    public void EnableHand() { 
+        hand.SetActive(true); 
+    // Hand í™œì„±í™” 
     }
+    
+    // ï¿½ï¿½ï¿½â¼­ Ä«ï¿½å¼±ï¿½Ã°ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½Ø¾ï¿½ï¿½ï¿½
+    // public void SelectCard(int index)
+    // {
+    //     if (GameManager.instance.userCharacter.IsState<CharacterIdleState>() ||
+    //         GameManager.instance.userCharacter.IsState<CharacterWalkState>())
+    //     {
+    //         if (selectedCard != -1 && selectedCard < items.Count)
+    //         {
+    //             items[selectedCard].OnSelect(false); // ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    //         }
+    //         selectedCard = index;
+    //         if (items.Count >= selectedCard)
+    //         {
+    //             var selectedItem = items[selectedCard];
+    //             GameManager.instance.SelectedCard = selectedItem.cardData;
+    //             selectedItem.OnSelect(true);
+    //             Debug.Log("ì—¬ê¸°ë‹¤!!");
+
+    //             // íŒŒí‹°í´ ì‹œìŠ¤í…œ í™œì„±í™” ë° ì¬ìƒ 
+    //             // select.SetActive(true); 
+    //             // GetComponent<ParticleSystem>().Play();
+    //         }
+    //     }            
+    // }
+
+    public void SelectCard(int index)
+{
+    if (GameManager.instance.userCharacter.IsState<CharacterIdleState>() ||
+        GameManager.instance.userCharacter.IsState<CharacterWalkState>())
+    {
+        if (selectedCard != -1 && selectedCard < items.Count)
+        {
+            items[selectedCard].OnSelect(false); // ì´ì „ ì¹´ë“œ ì„ íƒ í•´ì œ
+
+            // ì´ì „ì— ì„ íƒëœ ì¹´ë“œì˜ yê°’ì„ ì›ë˜ëŒ€ë¡œ ë˜ëŒë¦¬ê¸°
+            var previousSelectedItem = items[selectedCard];
+            previousSelectedItem.transform.position = new Vector3(
+                previousSelectedItem.transform.position.x,
+                previousSelectedItem.originalYPosition, // ì›ë˜ yê°’ìœ¼ë¡œ ë˜ëŒë¦¬ê¸° ìœ„í•´ ì¶”ê°€
+                previousSelectedItem.transform.position.z);
+        }
+
+        selectedCard = index;
+        if (items.Count > selectedCard)
+        {
+            var selectedItem = items[selectedCard];
+            GameManager.instance.SelectedCard = selectedItem.cardData;
+            selectedItem.OnSelect(true);
+            Debug.Log("ì—¬ê¸°ë‹¤!!");
+
+            // ì„ íƒí•œ ì¹´ë“œì˜ yê°’ì„ 20ë§Œí¼ ì˜¬ë¦¬ê¸°
+            selectedItem.originalYPosition = selectedItem.transform.position.y; // ì›ë˜ yê°’ ì €ì¥
+            selectedItem.transform.position = new Vector3(
+                selectedItem.transform.position.x,
+                selectedItem.transform.position.y + 20f,
+                selectedItem.transform.position.z);
+
+            // íŒŒí‹°í´ ì‹œìŠ¤í…œ í™œì„±í™” ë° ì¬ìƒ 
+            // select.SetActive(true); 
+            // GetComponent<ParticleSystem>().Play();
+        }
+    }            
+}
+
 
     public void CardUse() 
     {
         if (selectedCard < 0 || selectedCard >= UserInfo.myInfo.handCards.Count)
         {
-            Debug.LogWarning("CardUse: ¼±ÅÃµÈ Ä«µå°¡ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.");
+            Debug.LogWarning("CardUse: ï¿½ï¿½ï¿½Ãµï¿½ Ä«ï¿½å°¡ ï¿½ï¿½È¿ï¿½ï¿½ï¿½ï¿½ ï¿½Ê½ï¿½ï¿½Ï´ï¿½.");
             return; 
         }
 
-        var card = UserInfo.myInfo.handCards[selectedCard]; // ¼±ÅÃµÈ Ä«µå Á¤º¸]
+        var card = UserInfo.myInfo.handCards[selectedCard]; // ï¿½ï¿½ï¿½Ãµï¿½ Ä«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½]
         if (card.rcode == "CAD00005")
         {
-            UIManager.ShowAlert("´©±¸¿¡°Ô »ç¿ë ÇÏ½Ã°Ú½À´Ï±î?", "119 È£Ãâ", "³ª¿¡°Ô", "¸ğµÎ¿¡°Ô", () =>
+            UIManager.ShowAlert("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ï½Ã°Ú½ï¿½ï¿½Ï±ï¿½?", "119 È£ï¿½ï¿½", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", "ï¿½ï¿½Î¿ï¿½ï¿½ï¿½", () =>
             {
                 UserInfo.myInfo.OnUseCard(selectedCard);
                 GameManager.instance.SendSocketUseCard(UserInfo.myInfo, UserInfo.myInfo, card.rcode);
@@ -81,18 +138,19 @@ public class CardManager : UIListBase<Card>
         }
     }
 
-    public void UseCard() // Ä«µå¸¦ Ã³¸®ÇÔ
+    public void UseCard() // Ä«ï¿½å¸¦ Ã³ï¿½ï¿½ï¿½ï¿½
     {
         if (selectedCard < 0 || selectedCard >= UserInfo.myInfo.handCards.Count)
         {
-            Debug.LogWarning("UseCard: ¼±ÅÃµÈ Ä«µå°¡ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.");
-            return; // ¼±ÅÃµÈ Ä«µå°¡ À¯È¿ÇÏÁö ¾ÊÀ¸¸é Á¾·á
+            Debug.LogWarning("UseCard: ï¿½ï¿½ï¿½Ãµï¿½ Ä«ï¿½å°¡ ï¿½ï¿½È¿ï¿½ï¿½ï¿½ï¿½ ï¿½Ê½ï¿½ï¿½Ï´ï¿½.");
+            return; // ï¿½ï¿½ï¿½Ãµï¿½ Ä«ï¿½å°¡ ï¿½ï¿½È¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         }
-        Debug.Log($"Ä«µå½è´ç : {UserInfo.myInfo.OnUseCard(selectedCard)}");
+        Debug.Log($"Ä«ï¿½ï¿½ï¿½ï¿½ : {UserInfo.myInfo.OnUseCard(selectedCard)}");
         UserInfo.myInfo.OnUseCard(selectedCard);
    
         SetList();
-        selectedCard = -1; // ¼±ÅÃ ÃÊ±âÈ­
+        selectedCard = -1; // ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­
+
     }
 
     public void OnClickItem(CardDataSO data)

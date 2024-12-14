@@ -25,6 +25,10 @@ public class PopupPleaMarket : UIBase
     public GamePacket fleaMarketNotificationData; // FleaMarketNotification 데이터를 저장할 변수 
     public GamePacket eveningDistributionNotificationData; // EveningDistributionNotification 데이터를 저장할 변수 
 
+    [SerializeField] public GameObject objectForThreeCards;
+    [SerializeField] public GameObject objectForFiveCards;
+
+
     // public bool isInitCards { get => cards.Count > 0; }
     // public override async void Opened(object[] param)
     // {
@@ -159,9 +163,22 @@ public class PopupPleaMarket : UIBase
         for (int i = 0; i < cards.Count; i++)
         {
             var cardData = cards[i].GetCardData();
+            if (cardData != null) {
             var card = Instantiate(await ResourceManager.instance.LoadAsset<Card>("Card", eAddressableType.Prefabs), grid);
             card.Init(cardData, i, OnClickItem);
             this.cards.Add(card);
+            }else { Debug.LogWarning("Card data for is missing and will not be displayed."); }
+        }
+        // 카드 장수에 따라 다른 오브젝트 활성화 
+        if (cards.Count == 3) { 
+        objectForThreeCards.SetActive(true); 
+        objectForFiveCards.SetActive(false);
+        } else if (cards.Count > 3) { 
+        objectForThreeCards.SetActive(false); 
+        objectForFiveCards.SetActive(true); 
+        } else { 
+        objectForThreeCards.SetActive(false); 
+        objectForFiveCards.SetActive(false); 
         }
     }
 
