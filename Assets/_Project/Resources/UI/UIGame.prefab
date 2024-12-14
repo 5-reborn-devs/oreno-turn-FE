@@ -8508,7 +8508,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   thumbnail: {fileID: 8929181937928110226}
   nickname: {fileID: 3067967212767396930}
-  hpGauge: {fileID: 0}
+  hpGauge: {fileID: 4015477101663325112}
   targetMark: {fileID: 8727433662065065230}
   index: {fileID: 7711094608383005622}
   weapon: {fileID: 0}
@@ -13552,6 +13552,14 @@ PrefabInstance:
       propertyPath: select
       value: 
       objectReference: {fileID: 6236572944750378759}
+    - target: {fileID: 6695109674397912175, guid: 3f46921561fa0bf438f8b102ab227f58, type: 3}
+      propertyPath: uiGame
+      value: 
+      objectReference: {fileID: 6400901464007864104}
+    - target: {fileID: 6695109674397912175, guid: 3f46921561fa0bf438f8b102ab227f58, type: 3}
+      propertyPath: oppoInfoSlot
+      value: 
+      objectReference: {fileID: 6989002727691930752}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 6691524975024277542, guid: 3f46921561fa0bf438f8b102ab227f58, type: 3}

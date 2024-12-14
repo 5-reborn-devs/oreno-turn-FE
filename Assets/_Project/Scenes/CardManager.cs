@@ -11,6 +11,8 @@ public class CardManager : UIListBase<Card>
     [SerializeField] private GameObject select;
     private int selectedCard = -1;
     [SerializeField] private GameObject hand; // Hand GameObject 추가
+
+
     public override void Opened(object[] param)
     {
         SetList();
@@ -148,6 +150,7 @@ public class CardManager : UIListBase<Card>
    
         SetList();
         selectedCard = -1; // ���� �ʱ�ȭ
+
     }
 
     public void OnClickItem(CardDataSO data)

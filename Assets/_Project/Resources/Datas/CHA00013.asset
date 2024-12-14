@@ -17,5 +17,6 @@ MonoBehaviour:
   displayName: "\uD551\uD06C\uC2AC\uB77C\uC784"
   description: "\uD53C\uACA9 \uC2DC \uAC00\uD574\uC790\uC758 \uCE74\uB4DC\uB97C \uD55C\uC7A5
     \uAC00\uC838\uC634."
-  health: 3
+  health: 100
+  Mp: 0
   isLeft: 0
