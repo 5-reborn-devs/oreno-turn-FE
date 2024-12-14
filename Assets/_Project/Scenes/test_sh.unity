@@ -347,6 +347,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1419323162786944663, guid: 014b8ad480a230e41ba60470383eab99, type: 3}
+      propertyPath: m_Resource
+      value: 
+      objectReference: {fileID: 8300000, guid: 0012f3657989e6d4b833f93956b2c2a2, type: 3}
+    - target: {fileID: 1419323162786944663, guid: 014b8ad480a230e41ba60470383eab99, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 0012f3657989e6d4b833f93956b2c2a2, type: 3}
     - target: {fileID: 1439669396947333283, guid: 014b8ad480a230e41ba60470383eab99, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -1664,6 +1672,22 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6400901464007864104, guid: 014b8ad480a230e41ba60470383eab99, type: 3}
+      propertyPath: daybgm
+      value: 
+      objectReference: {fileID: 8300000, guid: 9f04767331a22304ba6a180fefadd076, type: 3}
+    - target: {fileID: 6400901464007864104, guid: 014b8ad480a230e41ba60470383eab99, type: 3}
+      propertyPath: nightbgm
+      value: 
+      objectReference: {fileID: 8300000, guid: 9f04767331a22304ba6a180fefadd076, type: 3}
+    - target: {fileID: 6400901464007864104, guid: 014b8ad480a230e41ba60470383eab99, type: 3}
+      propertyPath: eveningbgm
+      value: 
+      objectReference: {fileID: 8300000, guid: 0012f3657989e6d4b833f93956b2c2a2, type: 3}
+    - target: {fileID: 6400901464007864104, guid: 014b8ad480a230e41ba60470383eab99, type: 3}
+      propertyPath: audioSource
+      value: 
+      objectReference: {fileID: 1089896266}
+    - target: {fileID: 6400901464007864104, guid: 014b8ad480a230e41ba60470383eab99, type: 3}
       propertyPath: cardManager
       value: 
       objectReference: {fileID: 0}
@@ -2329,6 +2353,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!82 &1089896266 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 1419323162786944663, guid: 014b8ad480a230e41ba60470383eab99, type: 3}
+  m_PrefabInstance: {fileID: 1089896263}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1366803878
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2403,6 +2432,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5074397042923573952, guid: 3f46921561fa0bf438f8b102ab227f58, type: 3}
       propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5074397042923573952, guid: 3f46921561fa0bf438f8b102ab227f58, type: 3}
+      propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5074397042923573952, guid: 3f46921561fa0bf438f8b102ab227f58, type: 3}
