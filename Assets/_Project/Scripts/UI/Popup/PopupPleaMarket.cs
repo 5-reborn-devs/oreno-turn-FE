@@ -27,7 +27,7 @@ public class PopupPleaMarket : UIBase
 
     [SerializeField] public GameObject objectForThreeCards;
     [SerializeField] public GameObject objectForFiveCards;
-
+    [SerializeField] public GameObject objectForTwoCards;
 
     // public bool isInitCards { get => cards.Count > 0; }
     // public override async void Opened(object[] param)
@@ -170,16 +170,25 @@ public class PopupPleaMarket : UIBase
             }else { Debug.LogWarning("Card data for is missing and will not be displayed."); }
         }
         // 카드 장수에 따라 다른 오브젝트 활성화 
+        // if (cards.Count < 3) { 
+        // objectForTwoCards.SetActive(true);
+        // objectForThreeCards.SetActive(false); 
+        // objectForFiveCards.SetActive(false);
+
         if (cards.Count == 3) { 
+        objectForTwoCards.SetActive(false);
         objectForThreeCards.SetActive(true); 
         objectForFiveCards.SetActive(false);
         } else if (cards.Count > 3) { 
+        objectForTwoCards.SetActive(false);
         objectForThreeCards.SetActive(false); 
         objectForFiveCards.SetActive(true); 
         } else { 
+        objectForTwoCards.SetActive(true);
         objectForThreeCards.SetActive(false); 
         objectForFiveCards.SetActive(false); 
         }
+        
     }
 
 

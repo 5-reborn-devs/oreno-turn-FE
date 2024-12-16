@@ -32,15 +32,16 @@ public class UIGame : UIBase
     [SerializeField] public Image dayImage; 
     [SerializeField] public Image eveningImage; 
     [SerializeField] public Image nightImage;
+    [SerializeField] private GameObject nightOrb;
     [SerializeField] public AudioSource audioSource;
     [SerializeField] public AudioClip daybgm;
     [SerializeField] public AudioClip eveningbgm;
     [SerializeField] public AudioClip nightbgm;
 
 
-
     private Coroutine oppoInfoSlotCoroutine;
 
+    //private MoveUpAndDown moveUpAndDown;
     private float timer = 180;
     Dictionary<long, UserInfoSlot> userslots = new Dictionary<long, UserInfoSlot>();
     private bool isBombTargetSelect = false;
@@ -52,6 +53,17 @@ public class UIGame : UIBase
     {
         StartCoroutine(Init());
     }
+
+    public void start(){
+        nightOrb = GameObject.FindWithTag("NightOrbTag"); // 태그로 찾기
+
+        if (nightOrb != null) { nightOrb.SetActive(false); 
+        Debug.Log("nightOrb 오브젝트가 설정되었습니다: " + nightOrb.name); } 
+        else { Debug.LogError("nightOrb 오브젝트를 찾을 수 없습니다."); }
+
+    }
+
+
     public IEnumerator Init()
     {
         yield return new WaitUntil(() => GameManager.instance.isInit);
@@ -207,6 +219,9 @@ public class UIGame : UIBase
             cardManager.EnableHand();
             break; 
         }
+        // if (moveUpAndDown != null) { 
+        //     Debug.Log("UIGame OnDaySetting: PhaseType 설정 - " + phase); 
+        //     moveUpAndDown.SetPhase(phase); } else { Debug.LogError("MoveUpAndDown 컴포넌트가 설정되지 않았습니다."); }
 
     }
     public void SetPhaseImage(Image activeImage) { 
