@@ -293,10 +293,10 @@ public class GameManager : MonoSingleton<GameManager>
         {
             SendSocketUseCard(target == null ? UserInfo.myInfo : target, UserInfo.myInfo, rcode);
         }
-        else if(targetCharacter != null && SelectedCard != null)
+        else if (SelectedCard != null)
         {
             UserInfo.myInfo.handCards.Remove(SelectedCard);
-            SendSocketUseCard(targetCharacter.userInfo, UserInfo.myInfo, SelectedCard.rcode);
+            SendSocketUseCard(targetCharacter?.userInfo, UserInfo.myInfo, SelectedCard.rcode);
         }
     }
 
@@ -309,7 +309,7 @@ public class GameManager : MonoSingleton<GameManager>
             var cardIdx = useUserInfo.handCards.FindIndex(obj => obj.rcode == rcode);
             GamePacket packet = new GamePacket();
             //packet.UseCardRequest = new C2SUseCardRequest() { CardType = cardIdx, TargetUserId = userinfo == null ? "" : userinfo.id };
-            packet.UseCardRequest = new C2SUseCardRequest() { CardType = card.cardType, TargetUserId = userinfo == null ? 0 : userinfo.id };
+            packet.UseCardRequest = new C2SUseCardRequest() { CardType = card.cardType, TargetUserId = userinfo == null ? useUserInfo.id : userinfo.id };
             SocketManager.instance.Send(packet);
         }
         else

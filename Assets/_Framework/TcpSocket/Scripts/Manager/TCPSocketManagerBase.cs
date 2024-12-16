@@ -108,6 +108,52 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
         }
     }
 
+    public async void ConnectToGameServer(string gameServerIp, int gameServerPort, UnityAction callback = null)
+    {
+        IPEndPoint endPoint;
+        if (IPAddress.TryParse(gameServerIp, out IPAddress ipAddress))
+        {
+            endPoint = new IPEndPoint(ipAddress, gameServerPort);
+        }
+        else
+        {
+            endPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), gameServerPort); // 기본 IP 주소
+        }
+
+        Debug.Log("Tcp Ip : " + ipAddress.MapToIPv4().ToString() + ", Port : " + gameServerPort);
+
+        try
+        {
+            // 기존 연결을 끊고 새로운 게임 서버로 연결 시도
+            if (isConnected)
+            {
+                Debug.Log("연결끊고 재시도");
+                //socket.Shutdown(SocketShutdown.Both);
+                //socket.Close();
+                //StopAllCoroutines();
+                socket.Disconnect(false);
+            }
+
+            socket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            await socket.ConnectAsync(endPoint); 
+            isConnected = socket.Connected;
+            Debug.Log("연결성공");
+            //OnReceive(); 
+            //StartCoroutine(OnSendQueue()); 
+            //StartCoroutine(OnReceiveQueue());
+            //StartCoroutine(Ping());
+            GamePacket packet = new GamePacket();
+            packet.VerifyTokenRequest = new C2SVerifyTokenRequest() { Token = UserInfo.myInfo.token };
+            SocketManager.instance.Send(packet);
+            callback?.Invoke();
+
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("게임 서버 연결 실패: " + e.ToString());
+        }
+    }
+
     /// <summary>
     /// 실제로 데이터를 받는 메소드. 받아서 receiveQueue에 등록
     /// </summary>

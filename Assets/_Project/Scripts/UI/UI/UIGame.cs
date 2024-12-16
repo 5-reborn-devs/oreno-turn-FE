@@ -29,13 +29,14 @@ public class UIGame : UIBase
     [SerializeField] private Image bombButton;
     [SerializeField] private CardManager cardManager;
     [SerializeField] public OppoInfoSlot oppoInfoSlot;
-
     [SerializeField] public Image dayImage; 
     [SerializeField] public Image eveningImage; 
     [SerializeField] public Image nightImage;
     [SerializeField] private GameObject nightOrb;
-
-    
+    [SerializeField] public AudioSource audioSource;
+    [SerializeField] public AudioClip daybgm;
+    [SerializeField] public AudioClip eveningbgm;
+    [SerializeField] public AudioClip nightbgm;
 
 
     private Coroutine oppoInfoSlotCoroutine;
@@ -203,14 +204,20 @@ public class UIGame : UIBase
 
         // 이미지 변경 로직 
         switch (phase) { 
-        case PhaseType.Day: SetPhaseImage(dayImage); break; 
-        case PhaseType.Evening: SetPhaseImage(eveningImage); 
-        cardManager.DisableHand(); // PhaseType.Evening일 때 hand 비활성화
-        break; 
+        case PhaseType.Day: 
+            SetPhaseImage(dayImage);
+            SetPhasebgm(daybgm);
+            break; 
+        case PhaseType.Evening: 
+            SetPhaseImage(eveningImage);
+            SetPhasebgm(eveningbgm);
+            cardManager.DisableHand(); // PhaseType.Evening일 때 hand 비활성화
+            break; 
         case PhaseType.End: 
-        SetPhaseImage(nightImage); 
-        cardManager.EnableHand();   
-        break;
+            SetPhaseImage(nightImage);
+            SetPhasebgm(nightbgm);
+            cardManager.EnableHand();
+            break; 
         }
         // if (moveUpAndDown != null) { 
         //     Debug.Log("UIGame OnDaySetting: PhaseType 설정 - " + phase); 
@@ -228,6 +235,12 @@ public class UIGame : UIBase
         activeImage.gameObject.SetActive(true); 
         
         }
+    public void SetPhasebgm(AudioClip clip)
+    {
+        audioSource.Stop();
+        audioSource.clip = clip;
+        audioSource.Play();
+    }
     public void OnClickDeck()
     {
         if (!GameManager.instance.userCharacter.IsState<CharacterStopState>() &&
