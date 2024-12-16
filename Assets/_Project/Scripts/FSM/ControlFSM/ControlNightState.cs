@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class ControlNightState : ControlState
 {
+    public float range = 9.0f;
     public override void OnClickScreen(RaycastHit2D hit)
     {
+        
         if (hit.collider.TryGetComponent<Character>(out var character))
         {
             if (character == GameManager.instance.userCharacter)

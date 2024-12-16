@@ -54,7 +54,7 @@ public class UIGame : UIBase
         StartCoroutine(Init());
     }
 
-    public void start(){
+    public void Start(){
         nightOrb = GameObject.FindWithTag("NightOrbTag"); // 태그로 찾기
 
         if (nightOrb != null) { nightOrb.SetActive(false); 
