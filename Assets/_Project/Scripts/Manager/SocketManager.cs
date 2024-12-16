@@ -18,6 +18,11 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
     public int level = 1;
     public bool isAnimationPlaying = false;
 
+    // ìƒì„±ì ì¶”ê°€ 
+    public SocketManager() { 
+        // ìƒì„±ì ë‚´ìš©ì„ í•„ìš”ì— ë”°ë¼ ì´ˆê¸°í™”í•©ë‹ˆë‹¤. 
+    }
+
     public void LoginResponse(GamePacket gamePacket)
     {
         var response = gamePacket.LoginResponse;
@@ -45,7 +50,7 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         UIManager.Get<PopupRoomCreate>().OnRoomCreateResult(response.Success, response.Room);
     }
 
-    // ï¿½ï¿½ ï¿½ï¿½ï¿?ï¿½ï¿½È¸
+    // ï¿½ï¿½ ï¿½ï¿½ï¿½?ï¿½ï¿½È¸
     public void GetRoomListResponse(GamePacket gamePacket)
     {
         var response = gamePacket.GetRoomListResponse;
@@ -108,7 +113,7 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         var response = gamePacket.GamePrepareResponse;
         if(response.FailCode != 0)
         {
-            UIManager.ShowAlert(response.FailCode.ToString(), "¿À·ù");
+            UIManager.ShowAlert(response.FailCode.ToString(), "ï¿½ï¿½ï¿½ï¿½");
             Debug.Log("GamePrepareResponse Failcode : " + response.FailCode.ToString());
         }
     }
@@ -131,7 +136,7 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         var response = gamePacket.GameStartResponse;
         if (response.FailCode != 0)
         {
-            UIManager.ShowAlert(response.FailCode.ToString(), "¿À·ù");
+            UIManager.ShowAlert(response.FailCode.ToString(), "ï¿½ï¿½ï¿½ï¿½");
             Debug.Log("GameStartResponse Failcode : " + response.FailCode.ToString());
         }
     }
@@ -183,7 +188,7 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         }
     }
 
-    // Ä«ï¿½ï¿½ ï¿½ï¿½ï¿?
+    // Ä«ï¿½ï¿½ ï¿½ï¿½ï¿½?
     public void UseCardResponse(GamePacket gamePacket)
     {
         var response = gamePacket.UseCardResponse;
@@ -210,7 +215,7 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
 
         var use = DataManager.instance.users.Find(obj => obj.id == response.UserId);
         var target = DataManager.instance.users.Find(obj => obj.id == response.TargetUserId);
-        var text = string.Format(response.TargetUserId != 0 ? "{0}À¯Àú°¡ {1}Ä«µå¸¦ »ç¿ëÇß½À´Ï´Ù." : "{0}À¯Àú°¡ {1}Ä«µå¸¦ {2}À¯Àú¿¡°Ô »ç¿ëÇß½À´Ï´Ù.",
+        var text = string.Format(response.TargetUserId != 0 ? "{0}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ {1}Ä«ï¿½å¸¦ ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½." : "{0}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ {1}Ä«ï¿½å¸¦ {2}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½.",
             use.nickname, response.CardType.GetCardData().displayName, target.nickname);
         UIGame.instance.SetNotice(text);
         if(response.UserId == UserInfo.myInfo.id && card.cardType == CardType.Bbang)
@@ -233,7 +238,7 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         var response = gamePacket.UseCardNotification;
         var use = DataManager.instance.users.Find(obj => obj.id == response.UserId);
         var target = DataManager.instance.users.Find(obj => obj.id == response.TargetUserId);
-        var text = string.Format(response.TargetUserId != 0 ? "{0}À¯Àú°¡ {1}Ä«µå¸¦ »ç¿ëÇß½À´Ï´Ù." : "{0}À¯Àú°¡ {1}Ä«µå¸¦ {2}À¯Àú¿¡°Ô »ç¿ëÇß½À´Ï´Ù.",
+        var text = string.Format(response.TargetUserId != 0 ? "{0}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ {1}Ä«ï¿½å¸¦ ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½." : "{0}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ {1}Ä«ï¿½å¸¦ {2}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿½.",
             use.nickname, response.CardType.GetCardData().displayName, target.nickname);
         UIGame.instance.SetNotice(text);
     }
@@ -252,19 +257,19 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         {
             ui = await UIManager.Show<PopupPleaMarket>();
         }
-        if (!ui.isInitCards)
+        // if (!ui.isInitCards)
             ui.SetCards(response.CardTypes);
-        if (response.CardTypes.Count > response.PickIndex.Count)
+        // if (response.CardTypes.Count > response.PickIndex.Count)
             ui.OnSelectedCard(response.PickIndex);
-        else
-        {
-            UIManager.Hide<PopupPleaMarket>();
-            for (int i = 0; i < DataManager.instance.users.Count; i++)
-            {
-                var targetCharacter = GameManager.instance.characters[DataManager.instance.users[i].id];
-                targetCharacter.OnChangeState<CharacterIdleState>();
-            }
-        }
+        // else
+        // {
+        //     UIManager.Hide<PopupPleaMarket>();
+        //     for (int i = 0; i < DataManager.instance.users.Count; i++)
+        //     {
+        //         var targetCharacter = GameManager.instance.characters[DataManager.instance.users[i].id];
+        //         targetCharacter.OnChangeState<CharacterIdleState>();
+        //     }
+        // }
     }
 
     public async void EveningDistributionNotification(GamePacket gamePacket) { 
@@ -294,7 +299,7 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         }
     }
 
-    // Ä«ï¿½ï¿½ ï¿½ï¿½ï¿?ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
+    // Ä«ï¿½ï¿½ ï¿½ï¿½ï¿½?ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     public async void UserUpdateNotification(GamePacket gamePacket)
     {
         while (isAnimationPlaying)
@@ -346,7 +351,7 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
                 }
                 switch ((eCharacterState)users[i].characterData.StateInfo.State)
                 {
-                    case eCharacterState.BBANG_SHOOTER: // ï¿½ï¿½ ï¿½ï¿½ï¿?ï¿½ï¿½ ï¿½ï¿½ï¿?
+                    case eCharacterState.BBANG_SHOOTER: // ï¿½ï¿½ ï¿½ï¿½ï¿½?ï¿½ï¿½ ï¿½ï¿½ï¿½?
                         {
                             targetCharacter.OnChangeState<CharacterStopState>();
                         }
@@ -365,7 +370,7 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
                             }
                         }
                         break;
-                    case eCharacterState.DEATH_MATCH: // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿?
+                    case eCharacterState.DEATH_MATCH: // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½?
                         {
                             var card = DataManager.instance.GetData<CardDataSO>("CAD00006");
                             if (user.handCards.Find(obj => obj.rcode == card.defCard))
@@ -404,7 +409,7 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
                             ui.SetUserSelectTurn((int)dt.TotalSeconds);
                         }
                         break;
-                    case eCharacterState.FLEA_MARKET_WAIT: // ï¿½Ã¶ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿?
+                    case eCharacterState.FLEA_MARKET_WAIT: // ï¿½Ã¶ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½?
                         {
                             targetCharacter.OnChangeState<CharacterStopState>();
                             var ui = UIManager.Get<PopupPleaMarket>();
@@ -518,7 +523,7 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
             UIGame.instance.UpdateUserSlot(users);
     }
 
-    // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿?(phaseType 3) Ä«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½?(phaseType 3) Ä«ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     public void DestroyCardResponse(GamePacket gamePacket)
     {
         var response = gamePacket.DestroyCardResponse;
@@ -568,7 +573,7 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         }
     }
 
-    // ï¿½ï¿½Åº ï¿½Ñ±ï¿½ï¿?
+    // ï¿½ï¿½Åº ï¿½Ñ±ï¿½ï¿½?
     public void PassDebuffResponse(GamePacket gamePacket)
     {
         var response = gamePacket.PassDebuffResponse;
@@ -618,13 +623,13 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         }
     }
 
-    // ÆĞ ¸®·Ñ
+    // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public void RerollResponse(GamePacket gamePacket)
     {
         var response = gamePacket.RerollResponse;
         if (response.Success)
         {
-            // Reroll ¼º°ø È­¸é¿¡ Ä«µå¸¦ ´Ù½Ã ¶ç¾îÁà¾ßÇÔ 
+            // Reroll ï¿½ï¿½ï¿½ï¿½ È­ï¿½é¿¡ Ä«ï¿½å¸¦ ï¿½Ù½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
             Debug.Log("Reroll Active!");
         }
     }
