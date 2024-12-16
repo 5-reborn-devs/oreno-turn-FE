@@ -650,7 +650,6 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: map
-=======
   m_GameObject: {fileID: 465515174684199678}
   m_Enabled: 1
   serializedVersion: 4
