@@ -18,9 +18,6 @@ public class PopupLogin : UIBase
     [SerializeField] private TMP_InputField regNickname;
     [SerializeField] private TMP_InputField regPassword;
     [SerializeField] private TMP_InputField regPasswordRe;
-    [SerializeField] private AudioSource audioSource;
-    [SerializeField] private AudioClip clickSound;
-
     public override void Opened(object[] param)
     {
         register.SetActive(false);
@@ -40,13 +37,8 @@ public class PopupLogin : UIBase
         UIManager.Hide<PopupLogin>();
     }
 
-    public void ClickSound()
-    {       
-            audioSource.PlayOneShot(clickSound);
-    }
     public void OnClickLogin()
     {
-        ClickSound();
         if (!SocketManager.instance.isConnected)
         {
             var ip = PlayerPrefs.GetString("ip", "127.0.0.1");
@@ -68,7 +60,6 @@ public class PopupLogin : UIBase
 
     public void OnClickRegister()
     {
-        ClickSound();
         if (!SocketManager.instance.isConnected)
         {
             var ip = PlayerPrefs.GetString("ip", "127.0.0.1");
@@ -89,7 +80,6 @@ public class PopupLogin : UIBase
 
     public void OnClickSendLogin()
     {
-        ClickSound();
         GamePacket packet = new GamePacket();
         packet.LoginRequest = new C2SLoginRequest() { Email = loginId.text, Password = loginPassword.text };
         var tags = CurrentPlayer.ReadOnlyTags();
@@ -105,8 +95,7 @@ public class PopupLogin : UIBase
 
     public void OnClickSendRegister()
     {
-        ClickSound();
-        if (regPassword.text != regPasswordRe.text)
+        if(regPassword.text != regPasswordRe.text)
         {
             UIManager.ShowAlert("비밀번호가 다릅니다.");
             return;
@@ -125,14 +114,12 @@ public class PopupLogin : UIBase
 
     public void OnClickCancelRegister()
     {
-        ClickSound();
         buttonSet.SetActive(true);
         register.SetActive(false);
     }
 
     public void OnClickCancelLogin()
     {
-        ClickSound();
         buttonSet.SetActive(true);
         login.SetActive(false);
     }
@@ -145,7 +132,6 @@ public class PopupLogin : UIBase
 
     public async void OnLoginEnd(bool isSuccess)
     {
-        ClickSound();
         if (isSuccess)
         {
             await UIManager.Show<UIMain>();
@@ -162,7 +148,6 @@ public class PopupLogin : UIBase
 
     public void OnRegisterEnd(bool isSuccess)
     {
-        ClickSound();
         if (isSuccess)
         {
             register.SetActive(false);
@@ -184,7 +169,6 @@ public class PopupLogin : UIBase
 
     public void OnClickChangeServer()
     {
-        ClickSound();
         UIManager.Show<PopupConnection>();
     }
 }

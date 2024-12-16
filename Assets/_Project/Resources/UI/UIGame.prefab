@@ -563,6 +563,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+<<<<<<< HEAD
 --- !u!1 &437750720454543837
 GameObject:
   m_ObjectHideFlags: 0
@@ -742,6 +743,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+=======
+>>>>>>> parent of 7a514f60 (feat : 게임 bgm 추가, 버튼클릭시 효과음 추가)
 --- !u!1 &469854837002459878
 GameObject:
   m_ObjectHideFlags: 0
@@ -4727,7 +4730,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4804556765718102901}
   - {fileID: 2272596058737743699}
   - {fileID: 4088627747968600228}
   - {fileID: 4881509911405502998}
@@ -4787,12 +4789,16 @@ MonoBehaviour:
   oppoInfoSlot: {fileID: 6989002727691930752}
   dayImage: {fileID: 949802639191295688}
   eveningImage: {fileID: 2884511871687487924}
+<<<<<<< HEAD
   nightImage: {fileID: 6472712752701498224
   nightOrb: {fileID: 0}
   audioSource: {fileID: 1419323162786944663}
   daybgm: {fileID: 8300000, guid: 57baf8bcc5ca669489c0381869add239, type: 3}
   eveningbgm: {fileID: 8300000, guid: 9f04767331a22304ba6a180fefadd076, type: 3}
   nightbgm: {fileID: 8300000, guid: 0012f3657989e6d4b833f93956b2c2a2, type: 3}
+=======
+  nightImage: {fileID: 6472712752701498224}
+>>>>>>> parent of 7a514f60 (feat : 게임 bgm 추가, 버튼클릭시 효과음 추가)
   isOn: 0
 --- !u!1 &3431539316160016430
 GameObject:
