@@ -23,7 +23,7 @@ public class Character : FSMController<CharacterState, CharacterFSM, CharacterDa
     [SerializeField] private CircleCollider2D collider;
     [SerializeField] public GameObject stop;
 
-    [SerializeField] private float speed = 6;
+    [SerializeField] private float speed = 4.5f;
 
     [HideInInspector] public UserInfo userInfo;
 

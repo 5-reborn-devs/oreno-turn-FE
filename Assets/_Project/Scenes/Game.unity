@@ -21552,28 +21552,8 @@ PrefabInstance:
     - {fileID: 5751250410830795814, guid: 0a76ceef7b60c4ca690de9f3bdbf2028, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 828371658579040717, guid: 0a76ceef7b60c4ca690de9f3bdbf2028, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 970429121}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0a76ceef7b60c4ca690de9f3bdbf2028, type: 3}
---- !u!1 &970429120 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 828371658579040717, guid: 0a76ceef7b60c4ca690de9f3bdbf2028, type: 3}
-  m_PrefabInstance: {fileID: 970429119}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &970429121
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 970429120}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: efb1b5fb4124844668055d0b06b72a44, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!198 &970429122 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 2034052430663310226, guid: 0a76ceef7b60c4ca690de9f3bdbf2028, type: 3}
@@ -21654,7 +21634,7 @@ Camera:
   far clip plane: 5000
   field of view: 40
   orthographic: 1
-  orthographic size: 14
+  orthographic size: 8
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -67947,7 +67927,7 @@ MonoBehaviour:
     CustomLookAtTarget: 0
   Lens:
     FieldOfView: 40
-    OrthographicSize: 14
+    OrthographicSize: 8
     NearClipPlane: 0.1
     FarClipPlane: 5000
     Dutch: 0
@@ -68002,7 +67982,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6338492884183835352, guid: b47e91df583acb24b9abf68293dece41, type: 3}
       propertyPath: speed
-      value: 6
+      value: 4.5
       objectReference: {fileID: 0}
     - target: {fileID: 6512819015095306320, guid: b47e91df583acb24b9abf68293dece41, type: 3}
       propertyPath: m_LocalScale.x
@@ -68059,6 +68039,10 @@ PrefabInstance:
     - target: {fileID: 7822708395715656810, guid: b47e91df583acb24b9abf68293dece41, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8274568985187514604, guid: b47e91df583acb24b9abf68293dece41, type: 3}
+      propertyPath: m_Speed
+      value: 4.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
