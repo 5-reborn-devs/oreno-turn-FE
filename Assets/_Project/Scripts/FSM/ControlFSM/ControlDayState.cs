@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ControlDayState : ControlState
 {
+    private Character targetCharacter = null;  // 선택된 캐릭터
+    private float range = 9.2f;  // 범위 설정
     public override void OnClickScreen(RaycastHit2D hit)
     {
         if (hit.collider.TryGetComponent<Character>(out var character))
@@ -13,7 +15,8 @@ public class ControlDayState : ControlState
             else if (Vector3.Distance(character.transform.position, GameManager.instance.userCharacter.transform.position) < 9.0f)
             {
                 if (character.characterType != eCharacterType.npc && character.IsState<CharacterStopState>()) return;
-                switch(character.tag)
+                targetCharacter = character;
+                switch (character.tag)
                 {/*
                     case "Bank":
                         {
@@ -60,17 +63,26 @@ public class ControlDayState : ControlState
         }
     }
 
+    // 매 프레임마다 호출되어, 선택된 캐릭터가 범위 밖으로 벗어나면 선택을 해제
+    public override void OnStateUpdate()
+    {
+        if (targetCharacter != null)
+        {
+            float distance = Vector3.Distance(targetCharacter.transform.position, GameManager.instance.userCharacter.transform.position);
+            // 선택된 캐릭터가 범위 밖에 있으면 선택 해제
+            if (distance > range)
+            {
+                targetCharacter.OnSelect();  // 선택 해제
+                targetCharacter = null;      // targetCharacter 초기화
+            }
+        }
+    }
     public override void OnStateEnter()
     {
         
     }
 
     public override void OnStateExit()
-    {
-        
-    }
-
-    public override void OnStateUpdate()
     {
         
     }

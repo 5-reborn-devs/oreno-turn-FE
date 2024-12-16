@@ -33,6 +33,8 @@ public class Character : FSMController<CharacterState, CharacterFSM, CharacterDa
     public bool isInside;
     public Vector2 targetPosition; // ���� ó���� ���� ���콺 ��ǥ �߰��� ��
 
+    public float attackRange = 5f;
+
     private void Awake()
     {
         agent.updateRotation = false;
@@ -200,6 +202,13 @@ public class Character : FSMController<CharacterState, CharacterFSM, CharacterDa
                 GameManager.instance.SendSocketUseCard(character.userInfo, userInfo, "CAD00001");
             }
         }
+    }
+
+    public bool IsTargetInRange(Vector2 targetPosition)
+    {
+        // 타겟과의 거리를 계산하여 사정거리 내에 있는지 확인
+        float distance = Vector2.Distance(transform.position, targetPosition);
+        return distance <= attackRange;
     }
 
     private void Update()
