@@ -99,14 +99,6 @@ public class GameManager : MonoSingleton<GameManager>
         isInit = true;
     }
 
-    public GameObject FindInactiveObjectByName(string name) { 
-        Transform[] allObjects = Resources.FindObjectsOfTypeAll<Transform>(); 
-        foreach (Transform obj in allObjects) { 
-            if (obj.hideFlags == HideFlags.None && obj.name == name) { 
-                return obj.gameObject; } } 
-                return null; 
-            }
-
     public void SetGameState(GameStateData gameStateData)
     {
         SetGameState(gameStateData.PhaseType, gameStateData.NextPhaseAt);
@@ -133,14 +125,8 @@ public class GameManager : MonoSingleton<GameManager>
 
         if (PhaseType == PhaseType.End)
         {
-            // 비활성화된 nightOrb 오브젝트를 찾습니다 
-            GameObject nightOrb = FindInactiveObjectByName("nightOrb"); 
-            if (nightOrb != null) { nightOrb.SetActive(true); 
-            MoveUpAndDown moveUpAndDown = nightOrb.GetComponent<MoveUpAndDown>(); 
-            if (moveUpAndDown != null) { moveUpAndDown.SetPhase(PhaseType); 
-            Debug.Log("MoveUpAndDown 컴포넌트의 SetPhase 호출 완료"); } 
-            else { Debug.LogError("MoveUpAndDown 컴포넌트를 찾을 수 없습니다."); } } 
-            else { Debug.LogError("nightOrb 오브젝트를 찾을 수 없습니다."); }
+            // if(UserInfo.myInfo.handCards.Count > UserInfo.myInfo.hp)
+            //     UIManager.Show<PopupRemoveCardSelection>();
         }
         else
         {
