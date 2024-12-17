@@ -10,6 +10,8 @@ public class UIMain : UIListBase<ItemRoom>
 {
     float time = 0;
     List<RoomData> rooms;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip clickSound;
     public override void Opened(object[] param)
     {
 
@@ -30,7 +32,10 @@ public class UIMain : UIListBase<ItemRoom>
         this.rooms = rooms;
         SetList();
     }
-
+    public void ClickSound()
+    {
+        audioSource.PlayOneShot(clickSound);
+    }
     public void OnRefreshRoomList()
     {
         if (SocketManager.instance.isConnected)
@@ -43,6 +48,7 @@ public class UIMain : UIListBase<ItemRoom>
 
     public override void HideDirect()
     {
+        ClickSound();
         UIManager.Hide<UIMain>();
     }
 
@@ -58,6 +64,7 @@ public class UIMain : UIListBase<ItemRoom>
 
     public void OnClickRandomMatch()
     {
+        ClickSound();
         if (SocketManager.instance.isConnected)
         {
             GamePacket packet = new GamePacket();
@@ -68,11 +75,13 @@ public class UIMain : UIListBase<ItemRoom>
 
     public void OnClickCreateRoom()
     {
+        ClickSound();
         UIManager.Show<PopupRoomCreate>();
     }
 
     public void OnJoinRoom(int idx)
     {
+        ClickSound();
         if (SocketManager.instance.isConnected)
         {
             GamePacket packet = new GamePacket();

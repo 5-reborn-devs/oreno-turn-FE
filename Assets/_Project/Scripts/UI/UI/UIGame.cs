@@ -37,6 +37,7 @@ public class UIGame : UIBase
     [SerializeField] public AudioClip daybgm;
     [SerializeField] public AudioClip eveningbgm;
     [SerializeField] public AudioClip nightbgm;
+    [SerializeField] public AudioClip rerollSound;
 
 
     private Coroutine oppoInfoSlotCoroutine;
@@ -180,6 +181,7 @@ public class UIGame : UIBase
         if (Input.GetKeyDown(KeyCode.CapsLock))
         {
             OnClickReroll();
+            audioSource.PlayOneShot(rerollSound);
         }
 
         if(isOn == true){

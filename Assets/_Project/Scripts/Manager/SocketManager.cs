@@ -212,6 +212,7 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
     public void UseCardResponse(GamePacket gamePacket)
     {
         var response = gamePacket.UseCardResponse;
+        GameManager.instance.OnUseCardResponse(response.Success);
         if (response.Success)
         {
             if (UIManager.IsOpened<PopupDeck>())
@@ -219,6 +220,7 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
             if (UIManager.IsOpened<PopupBattle>())
                 UIManager.Hide<PopupBattle>();
             UIGame.instance.SetSelectCard(null);
+            
             //GameManager.instance.targetCharacter.OnSelect(); // ī�囧�� ���� true ���� false�� �ٲ�
             //GameManager.instance.targetCharacter = null; // false���� -> �ٽ� �����Ҷ� ĳ���� �������ֱ� ���ؼ� null�� ����                                                          
         }
