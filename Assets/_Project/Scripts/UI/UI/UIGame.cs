@@ -241,6 +241,7 @@ public class UIGame : UIBase
     {
         audioSource.Stop();
         audioSource.clip = clip;
+        audioSource.loop = true;
         audioSource.Play();
     }
     public void OnClickDeck()
