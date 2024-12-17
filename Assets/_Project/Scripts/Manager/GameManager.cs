@@ -16,6 +16,16 @@ public class GameManager : MonoSingleton<GameManager>
     public Character userCharacter;
     public Character targetCharacter;
     private CardDataSO selectedCard;
+    public AudioSource audioSource;
+    public AudioClip bbangSound;
+    public AudioClip healSound;
+    public AudioClip HitSound;
+    public AudioClip Strength;
+    public AudioClip Vulnerable;
+    public AudioClip Weakened;
+    public AudioClip Mana_Rcovery;
+    public AudioClip Armor;
+    public AudioClip failSound;
     public CardDataSO SelectedCard
     {
         get => selectedCard;
@@ -44,6 +54,7 @@ public class GameManager : MonoSingleton<GameManager>
     List<Transform> spawns;
     public bool isSelectBombTarget = false;
 
+    public string rcode1;
     private void Start()
     {
         if (!SocketManager.instance.isConnected) Init();
@@ -263,7 +274,6 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void OnTargetSelect(Character character)
     {   
-        Debug.Log("선택했음!!");
         if (targetCharacter == character)
         {
             character.OnSelect();
@@ -302,8 +312,56 @@ public class GameManager : MonoSingleton<GameManager>
         }
     }
 
+    public void OnUseCardResponse(bool response)
+    {
+        if (response)
+        {
+            switch (rcode1)
+            {
+                case "CAD00001":
+                    {
+                        audioSource.PlayOneShot(bbangSound);
+                    }
+                    break;
+                case "CAD00024":
+                    {
+                        audioSource.PlayOneShot(Armor);
+                    }
+                    break;
+                case "CAD00025":
+                    {
+                        //audioSource.PlayOneShot(HitSound);
+                    }
+                    break;
+                case "CAD00026":
+                    {
+                        audioSource.PlayOneShot(Vulnerable);
+                    }
+                    break;
+                case "CAD00027":
+                    {
+                        audioSource.PlayOneShot(Weakened);
+                    }
+                    break;
+                case "CAD00028":
+                    {
+                        audioSource.PlayOneShot(Mana_Rcovery);
+                    }
+                    break;
+                default:
+                    {
+                        audioSource.PlayOneShot(failSound);
+                    }
+                    break;
+            
+            }
+        }
+
+    }
+
     public void SendSocketUseCard(UserInfo userinfo, UserInfo useUserInfo,  string rcode)
     {
+        rcode1 = rcode;
         var card = DataManager.instance.GetData<CardDataSO>(rcode);
         if (!string.IsNullOrEmpty(card.useTag) && card.useTag != targetCharacter.tag) return;
         if (SocketManager.instance.isConnected)
@@ -312,7 +370,7 @@ public class GameManager : MonoSingleton<GameManager>
             GamePacket packet = new GamePacket();
             //packet.UseCardRequest = new C2SUseCardRequest() { CardType = cardIdx, TargetUserId = userinfo == null ? "" : userinfo.id };
             packet.UseCardRequest = new C2SUseCardRequest() { CardType = card.cardType, TargetUserId = userinfo == null ? useUserInfo.id : userinfo.id };
-            SocketManager.instance.Send(packet);
+            SocketManager.instance.Send(packet);  
         }
         else
         {
@@ -320,21 +378,30 @@ public class GameManager : MonoSingleton<GameManager>
             {
                 case "CAD00001":
                     {
+
                         if (userinfo.id == UserInfo.myInfo.id)
                         {
                             UIManager.Show<PopupBattle>(rcode, useUserInfo.id);
+
+                            // 빵야 쏜 사람 소리
                         }
                         else
                         {
+
                             var defCard = userinfo.handCards.Find(obj => obj.rcode == card.defCard);
                             if (defCard != null)
                             {
+
                                 userinfo.handCards.Remove(defCard);
                             }
                             else
                             {
+
+                                audioSource.PlayOneShot(HitSound);
+                                // 카드 효과음 설정 해주면 될듯
                                 userinfo.hp--;
                                 //userinfo.hp = userinfo.hp - 5;
+                                // 여기서 피격 소리 재생
                             }
                         }
                     }

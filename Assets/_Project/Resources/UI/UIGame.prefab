@@ -3441,7 +3441,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.092
+  m_Volume: 0.01
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -5037,6 +5037,7 @@ MonoBehaviour:
   daybgm: {fileID: 8300000, guid: 0012f3657989e6d4b833f93956b2c2a2, type: 3}
   eveningbgm: {fileID: 8300000, guid: 9f04767331a22304ba6a180fefadd076, type: 3}
   nightbgm: {fileID: 8300000, guid: 0012f3657989e6d4b833f93956b2c2a2, type: 3}
+  rerollSound: {fileID: 8300000, guid: f3626bde78a38c348b9a68fe932a5151, type: 3}
   isOn: 0
 --- !u!1 &3431539316160016430
 GameObject:

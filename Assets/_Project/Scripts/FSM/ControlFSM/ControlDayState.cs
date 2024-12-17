@@ -5,17 +5,20 @@ using UnityEngine;
 public class ControlDayState : ControlState
 {
     private Character targetCharacter = null;  // 선택된 캐릭터
-    private float range = 9.2f;  // 범위 설정
+    private float range = 6.7f;  // 범위 설정
     public override void OnClickScreen(RaycastHit2D hit)
     {
         if (hit.collider.TryGetComponent<Character>(out var character))
         {
+
             if (character == GameManager.instance.userCharacter)
                 character.OnVisibleRange();
-            else if (Vector3.Distance(character.transform.position, GameManager.instance.userCharacter.transform.position) < 9.0f)
+            else if (Vector3.Distance(character.transform.position, GameManager.instance.userCharacter.transform.position) < 6.7f)
             {
                 if (character.characterType != eCharacterType.npc && character.IsState<CharacterStopState>()) return;
+
                 targetCharacter = character;
+                GameManager.instance.OnTargetSelect(character);
                 switch (character.tag)
                 {/*
                     case "Bank":
@@ -54,7 +57,7 @@ public class ControlDayState : ControlState
                         break;
                     default:
                         {
-                            GameManager.instance.OnTargetSelect(character);
+                          //  GameManager.instance.OnTargetSelect(character);
 
                         }
                         break;
