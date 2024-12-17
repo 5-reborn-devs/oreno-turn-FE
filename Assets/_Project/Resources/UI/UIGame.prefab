@@ -5034,10 +5034,10 @@ MonoBehaviour:
   nightImage: {fileID: 6472712752701498224}
   nightOrb: {fileID: 0}
   audioSource: {fileID: 3354476378604112124}
-  daybgm: {fileID: 8300000, guid: 0012f3657989e6d4b833f93956b2c2a2, type: 3}
+  daybgm: {fileID: 8300000, guid: 67f810711b0a640408fa8dec1a8b37cb, type: 3}
   eveningbgm: {fileID: 8300000, guid: 9f04767331a22304ba6a180fefadd076, type: 3}
-  nightbgm: {fileID: 8300000, guid: 0012f3657989e6d4b833f93956b2c2a2, type: 3}
-  rerollSound: {fileID: 8300000, guid: f3626bde78a38c348b9a68fe932a5151, type: 3}
+  nightbgm: {fileID: 8300000, guid: 5e2ab83944960d4419c20346624c83eb, type: 3}
+  rerollSound: {fileID: 8300000, guid: fb862475d064649489620de0fff772de, type: 3}
   isOn: 0
 --- !u!1 &3431539316160016430
 GameObject:
