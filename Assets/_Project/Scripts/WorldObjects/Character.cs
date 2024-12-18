@@ -132,7 +132,10 @@ public class Character : FSMController<CharacterState, CharacterFSM, CharacterDa
     {
         selectCircle.SetActive(!selectCircle.activeInHierarchy);
     }
-
+    public void SelectFalse()
+    {
+        selectCircle.SetActive(false);
+    }
     public void OnVisibleRange()
     {
         range.SetActive(!range.activeInHierarchy);
