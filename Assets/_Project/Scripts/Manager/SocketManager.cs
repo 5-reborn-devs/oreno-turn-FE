@@ -18,6 +18,11 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
     public int level = 1;
     public bool isAnimationPlaying = false;
 
+    // ?ì„±??ì¶”ê? 
+    public SocketManager() { 
+        // ?ì„±???´ìš©???„ìš”???°ë¼ ì´ˆê¸°?”í•©?ˆë‹¤. 
+    }
+
     public void LoginResponse(GamePacket gamePacket)
     {
         var response = gamePacket.LoginResponse;
@@ -112,7 +117,7 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         var response = gamePacket.GamePrepareResponse;
         if(response.FailCode != 0)
         {
-            UIManager.ShowAlert(response.FailCode.ToString(), "¿À·ù");
+            UIManager.ShowAlert(response.FailCode.ToString(), "ï¿½ï¿½ï¿½ï¿½");
             Debug.Log("GamePrepareResponse Failcode : " + response.FailCode.ToString());
         }
     }
@@ -133,14 +138,14 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
     public void GameServerSwitchNotification(GamePacket gamePacket)
     {
         var response = gamePacket.GameServerSwitchNotification;
-        // °ÔÀÓ ¼­¹ö·Î ¿¬°á
-        string gameServerIp = response.Ip;  // °ÔÀÓ ¼­¹ö IP (¼­¹ö¿¡¼­ ¹ŞÀº µ¥ÀÌÅÍ)
-        int gameServerPort = (int)response.Port;  // °ÔÀÓ ¼­¹ö Port (¼­¹ö¿¡¼­ ¹ŞÀº µ¥ÀÌÅÍ)
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        string gameServerIp = response.Ip;  // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ IP (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
+        int gameServerPort = (int)response.Port;  // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Port (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
 
-        // °ÔÀÓ ¼­¹ö·Î ¿¬°á
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         SocketManager.instance.ConnectToGameServer(gameServerIp, gameServerPort, () =>
         {
-            Debug.Log("°ÔÀÓ ¼­¹ö¿¡ ¿¬°áµÇ¾ú½À´Ï´Ù!");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½!");
         });
     }
 
@@ -149,7 +154,7 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         var response = gamePacket.GameStartResponse;
         if (response.FailCode != 0)
         {
-            UIManager.ShowAlert(response.FailCode.ToString(), "¿À·ù");
+            UIManager.ShowAlert(response.FailCode.ToString(), "ï¿½ï¿½ï¿½ï¿½");
             Debug.Log("GameStartResponse Failcode : " + response.FailCode.ToString());
         }
     }
@@ -207,6 +212,7 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
     public void UseCardResponse(GamePacket gamePacket)
     {
         var response = gamePacket.UseCardResponse;
+        GameManager.instance.OnUseCardResponse(response.Success);
         if (response.Success)
         {
             if (UIManager.IsOpened<PopupDeck>())
@@ -214,6 +220,7 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
             if (UIManager.IsOpened<PopupBattle>())
                 UIManager.Hide<PopupBattle>();
             UIGame.instance.SetSelectCard(null);
+            
             //GameManager.instance.targetCharacter.OnSelect(); // Ä«ï¿½å›§ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ true ï¿½ï¿½ï¿½ï¿½ falseï¿½ï¿½ ï¿½Ù²ï¿½
             //GameManager.instance.targetCharacter = null; // falseï¿½ï¿½ï¿½ï¿½ -> ï¿½Ù½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ò¶ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½ ï¿½ï¿½ï¿½Ø¼ï¿½ nullï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½                                                          
         }
@@ -230,7 +237,7 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
 
         var use = DataManager.instance.users.Find(obj => obj.id == response.UserId);
         var target = DataManager.instance.users.Find(obj => obj.id == response.TargetUserId);
-        var text = string.Format(response.TargetUserId != 0 ? "{0}À¯Àú°¡ {1}Ä«µå¸¦ »ç¿ëÇß½À´Ï´Ù." : "{0}À¯Àú°¡ {1}Ä«µå¸¦ {2}À¯Àú¿¡°Ô »ç¿ëÇß½À´Ï´Ù.",
+        var text = string.Format(response.TargetUserId != 0 ? "{0}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ {1}Ä«ï¿½å¸¦ ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿?" : "{0}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ {1}Ä«ï¿½å¸¦ {2}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿?",
             use.nickname, response.CardType.GetCardData().displayName, target.nickname);
         UIGame.instance.SetNotice(text);
         if(response.UserId == UserInfo.myInfo.id && card.cardType == CardType.Bbang)
@@ -253,7 +260,7 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         var response = gamePacket.UseCardNotification;
         var use = DataManager.instance.users.Find(obj => obj.id == response.UserId);
         var target = DataManager.instance.users.Find(obj => obj.id == response.TargetUserId);
-        var text = string.Format(response.TargetUserId != 0 ? "{0}À¯Àú°¡ {1}Ä«µå¸¦ »ç¿ëÇß½À´Ï´Ù." : "{0}À¯Àú°¡ {1}Ä«µå¸¦ {2}À¯Àú¿¡°Ô »ç¿ëÇß½À´Ï´Ù.",
+        var text = string.Format(response.TargetUserId != 0 ? "{0}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ {1}Ä«ï¿½å¸¦ ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿?" : "{0}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ {1}Ä«ï¿½å¸¦ {2}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿?",
             use.nickname, response.CardType.GetCardData().displayName, target.nickname);
         UIGame.instance.SetNotice(text);
     }
@@ -272,19 +279,19 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         {
             ui = await UIManager.Show<PopupPleaMarket>();
         }
-        if (!ui.isInitCards)
+        // if (!ui.isInitCards)
             ui.SetCards(response.CardTypes);
-        if (response.CardTypes.Count > response.PickIndex.Count)
+        // if (response.CardTypes.Count > response.PickIndex.Count)
             ui.OnSelectedCard(response.PickIndex);
-        else
-        {
-            UIManager.Hide<PopupPleaMarket>();
-            for (int i = 0; i < DataManager.instance.users.Count; i++)
-            {
-                var targetCharacter = GameManager.instance.characters[DataManager.instance.users[i].id];
-                targetCharacter.OnChangeState<CharacterIdleState>();
-            }
-        }
+        // else
+        // {
+        //     UIManager.Hide<PopupPleaMarket>();
+        //     for (int i = 0; i < DataManager.instance.users.Count; i++)
+        //     {
+        //         var targetCharacter = GameManager.instance.characters[DataManager.instance.users[i].id];
+        //         targetCharacter.OnChangeState<CharacterIdleState>();
+        //     }
+        // }
     }
 
     public async void EveningDistributionNotification(GamePacket gamePacket) { 
@@ -339,8 +346,8 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
             {
                 if (type == 0 || userId == 0)
                 {
-                    packet.ReactionRequest = new C2SReactionRequest();
-                    packet.ReactionRequest.ReactionType = (ReactionType)type;
+                    // packet.ReactionRequest = new C2SReactionRequest();
+                    // packet.ReactionRequest.ReactionType = (ReactionType)type;
                 }
                 else
                 {
@@ -637,13 +644,13 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         }
     }
 
-    // ÆĞ ¸®·Ñ
+    // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public void RerollResponse(GamePacket gamePacket)
     {
         var response = gamePacket.RerollResponse;
         if (response.Success)
         {
-            // Reroll ¼º°ø È­¸é¿¡ Ä«µå¸¦ ´Ù½Ã ¶ç¾îÁà¾ßÇÔ 
+            // Reroll ï¿½ï¿½ï¿½ï¿½ È­ï¿½é¿¡ Ä«ï¿½å¸¦ ï¿½Ù½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
             Debug.Log("Reroll Active!");
         }
     }

@@ -626,7 +626,7 @@ GameObject:
   - component: {fileID: 8274568985187514604}
   m_Layer: 8
   m_Name: Character
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -678,10 +678,11 @@ MonoBehaviour:
   death: {fileID: 8170090263784952139}
   collider: {fileID: 3714171359014208965}
   stop: {fileID: 2090902085308468881}
-  speed: 6
+  speed: 4.5
   dir: {x: 0, y: 0}
   isInside: 0
   targetPosition: {x: 0, y: 0}
+  attackRange: 5
 --- !u!114 &6595829264007912307
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -768,7 +769,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
@@ -782,7 +783,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.3
-  m_Speed: 7
+  m_Speed: 4.5
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120

@@ -164,11 +164,11 @@ public class CardManager : UIListBase<Card>
         if (GameManager.instance.userCharacter.IsState<CharacterIdleState>() ||
             GameManager.instance.userCharacter.IsState<CharacterWalkState>())
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1)) SelectCard(0);
-            if (Input.GetKeyDown(KeyCode.Alpha2)) SelectCard(1);
-            if (Input.GetKeyDown(KeyCode.Alpha3)) SelectCard(2);
-            if (Input.GetKeyDown(KeyCode.Alpha4)) SelectCard(3);
-            if (Input.GetKeyDown(KeyCode.Alpha5)) SelectCard(4);
+            if (Input.GetKeyDown(KeyCode.Q)) SelectCard(0);
+            if (Input.GetKeyDown(KeyCode.W)) SelectCard(1);
+            if (Input.GetKeyDown(KeyCode.E)) SelectCard(2);
+            if (Input.GetKeyDown(KeyCode.R)) SelectCard(3);
+            if (Input.GetKeyDown(KeyCode.T)) SelectCard(4);
 
             if (Input.GetKeyDown(KeyCode.Space) && selectedCard != -1)
             {

@@ -9,7 +9,8 @@ public class PopupRoomCreate : UIBase
 {
     [SerializeField] private TMP_InputField roomName;
     [SerializeField] private TMP_Dropdown count;
-
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip clickSound;
     public override void Opened(object[] param)
     {
         var roomNameSample = new List<string>() { "³Ê¸¸ ¿À¸é °í!", "°³³äÀÖ´Â »ç¶÷¸¸", "¾îµô ³ÑºÁ?", "Áñ°Å¿î °ÔÀÓ ÇÑÆÇ ÇÏ½¯?", "»§¾ß! »§¾ß!" };
@@ -18,11 +19,18 @@ public class PopupRoomCreate : UIBase
 
     public override void HideDirect()
     {
+        ClickSound();
         UIManager.Hide<PopupRoomCreate>();
+    }
+
+    public void ClickSound()
+    {
+        audioSource.PlayOneShot(clickSound);
     }
 
     public void OnClickCreate()
     {
+        ClickSound();
         if (SocketManager.instance.isConnected)
         {
             GamePacket packet = new GamePacket();
@@ -37,7 +45,8 @@ public class PopupRoomCreate : UIBase
 
     public void OnRoomCreateResult(bool isSuccess, RoomData roomData)
     {
-        if(isSuccess)
+        ClickSound();
+        if (isSuccess)
         {
             UIManager.Show<UIRoom>(roomData);
             HideDirect();
