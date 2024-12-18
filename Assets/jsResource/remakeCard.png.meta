@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: ae0fe83c6e1ba9e46ad397d18672fcf6
+guid: e3c6f356abfbc43378a13effe90c36e9
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -762855302440336126
-    second: yeeynsy_0
+      213: -5236392943372952599
+    second: remakeCard_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,30 +96,17 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: yeeynsy_0
+      name: remakeCard_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 294
-        height: 294
+        x: 4
+        y: 4
+        width: 122
+        height: 172
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 205450be42bc965f0800000000000000
-      internalID: -762855302440336126
+      spriteID: 9eb94e19c589457b0800000000000000
+      internalID: -5236392943372952599
       vertices: []
       indices: 
       edges: []
@@ -148,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      yeeynsy_0: -762855302440336126
+      remakeCard_0: -5236392943372952599
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
