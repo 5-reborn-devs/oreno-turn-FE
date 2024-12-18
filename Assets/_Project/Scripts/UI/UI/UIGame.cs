@@ -32,6 +32,7 @@ public class UIGame : UIBase
     [SerializeField] public Image dayImage; 
     [SerializeField] public Image eveningImage; 
     [SerializeField] public Image nightImage;
+    [SerializeField] public Image hitImage;
     [SerializeField] private GameObject nightOrb;
     [SerializeField] public AudioSource audioSource;
     [SerializeField] public AudioClip daybgm;

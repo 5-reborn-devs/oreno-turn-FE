@@ -11,6 +11,7 @@ public class Card : UIListItem
 	[SerializeField] Image thumbnail;
     [SerializeField] TMP_Text cardName;
     [SerializeField] TMP_Text cardDesc;
+    [SerializeField] TMP_Text Mana;
 	[SerializeField] private GameObject select;
     [SerializeField] private GameObject back;
 
@@ -29,6 +30,7 @@ public class Card : UIListItem
         thumbnail.sprite = await ResourceManager.instance.LoadAsset<Sprite>(cardData.rcode, eAddressableType.Thumbnail);
         cardName.text = cardData.displayName;
         cardDesc.text = cardData.description;
+        Mana.text = cardData.Mana;
     }
 
     public async void Init(CardDataSO cardData, UnityAction<CardDataSO> callback)
@@ -39,6 +41,7 @@ public class Card : UIListItem
         thumbnail.sprite = await ResourceManager.instance.LoadAsset<Sprite>(cardData.rcode, eAddressableType.Thumbnail);
         cardName.text = cardData.displayName;
         cardDesc.text = cardData.description;
+        Mana.text = cardData.Mana;
     }
 
     public void Init(int idx, UnityAction<Card> callback)
@@ -58,6 +61,7 @@ public class Card : UIListItem
         thumbnail.sprite = await ResourceManager.instance.LoadAsset<Sprite>(cardData.rcode, eAddressableType.Thumbnail);
         cardName.text = cardData.displayName;
         cardDesc.text = cardData.description;
+        Mana.text = cardData.Mana;
     }
 
 
@@ -69,6 +73,7 @@ public class Card : UIListItem
         thumbnail.sprite = await ResourceManager.instance.LoadAsset<Sprite>(cardData.rcode, eAddressableType.Thumbnail);
         cardName.text = cardData.displayName;
         cardDesc.text = cardData.description;
+        Mana.text = cardData.Mana;
     }
 
     public void SetCardIndex(int index)
