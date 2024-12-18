@@ -22,8 +22,10 @@ public class UserInfoSlot : UIListItem
     [SerializeField] private GameObject death;
     [SerializeField] private List<GameObject> mpSlots;
     [SerializeField] private List<GameObject> mpGauges;
+    [SerializeField] public Image hitImage;
     public AudioSource audioSoucre;
     public AudioClip hitSound;
+    public float fadeDuration = 0.5f; // 페이드 인/아웃 시간
 
     public int previousHp = 50; // 여기에다가 이전 HP 저장 // 처음에는 hp 초기값 50
     public int idx;
@@ -33,6 +35,18 @@ public class UserInfoSlot : UIListItem
     // 디버그 로그 추가 
     //Debug.Log($"Init Slot: {nickname.text}, Index: {index}");
 
+    void Start()
+    {
+        // 초기 alpha 값을 0으로 설정 (투명) 
+        SetAlpha(0f);
+    }
+    // Alpha 값을 설정하는 함수 
+    void SetAlpha(float alpha)
+    {
+        Color color = hitImage.color;
+        color.a = alpha;
+        hitImage.color = color;
+    }
 
     public async Task Init(UserInfo userinfo, int index, UnityAction<int> callback)
     {
@@ -73,8 +87,38 @@ public class UserInfoSlot : UIListItem
         if(currentHp < previousHp) // 맞았을때 검증
         {
             audioSoucre.PlayOneShot(hitSound);
+            TriggerOpacityChange();
         }
         previousHp = currentHp;
+    }
+    // 불투명도를 255로 올렸다가 다시 0으로 만드는 함수 호출 
+    public void TriggerOpacityChange()
+    {
+        Debug.Log("트리거 온");
+        StartCoroutine(ChangeAlpha());
+    }
+    IEnumerator ChangeAlpha()
+    {
+        // Alpha 값을 1로 올리기 
+        float elapsedTime = 0f;
+        while (elapsedTime < fadeDuration)
+        {
+            SetAlpha(Mathf.Lerp(0f, 1f, elapsedTime / fadeDuration));
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        SetAlpha(1f);
+        // 잠시 대기 
+        yield return new WaitForSeconds(0.1f);
+        // Alpha 값을 다시 0으로 만들기 
+        elapsedTime = 0f;
+        while (elapsedTime < fadeDuration)
+        {
+            SetAlpha(Mathf.Lerp(1f, 0f, elapsedTime / fadeDuration));
+            elapsedTime += Time.deltaTime; yield return null;
+        }
+        SetAlpha(0f);
+        Debug.Log("셋알파까지 끝남");
     }
     public async void UpdateData(UserInfo userinfo)
     {
