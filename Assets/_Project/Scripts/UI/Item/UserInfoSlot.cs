@@ -24,9 +24,11 @@ public class UserInfoSlot : UIListItem
     [SerializeField] private List<GameObject> mpGauges;
     [SerializeField] public Image hitImage;
     public float fadeDuration = 0.5f; // 페이드 인/아웃 시간
-
     public int previousHp = 50;
+    public AudioSource audioSoucre;
+    public AudioClip hitSound;
 
+    public int previousHp = 50; // 여기에다가 이전 HP 저장 // 처음에는 hp 초기값 50
     public int idx;
     public UnityAction<int> callback;
     public bool isDeath { get => death.activeInHierarchy; }
@@ -95,6 +97,12 @@ public class UserInfoSlot : UIListItem
     public void TriggerOpacityChange() { 
         Debug.Log("트리거 온");
         StartCoroutine(ChangeAlpha()); 
+        hpGauge.value = currentHpClamped / maxHp; 
+        if(currentHp < previousHp) // 맞았을때 검증
+        {
+            audioSoucre.PlayOneShot(hitSound);
+        }
+        previousHp = currentHp;
     }
 
     IEnumerator ChangeAlpha() { 

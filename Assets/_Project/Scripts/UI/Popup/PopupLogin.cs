@@ -37,6 +37,7 @@ public class PopupLogin : UIBase
 
     public override void HideDirect()
     {
+        ClickSound();
         UIManager.Hide<PopupLogin>();
     }
 
