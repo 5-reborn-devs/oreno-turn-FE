@@ -380,7 +380,6 @@ public class GameManager : MonoSingleton<GameManager>
             {
                 case "CAD00001":
                     {
-
                         if (userinfo.id == UserInfo.myInfo.id)
                         {
                             UIManager.Show<PopupBattle>(rcode, useUserInfo.id);

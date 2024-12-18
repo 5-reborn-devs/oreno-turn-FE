@@ -27,6 +27,11 @@ namespace Ironcow
 
         public T GetData<T>(string rcode) where T : BaseDataSO
         {
+            if(rcode == "CAD00000")
+            {
+                return (T)dataDics["CAD00001"];
+            }
+
             return (T)dataDics[rcode];
         }
 

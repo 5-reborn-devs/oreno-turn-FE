@@ -177,6 +177,7 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
                     }
 
                     var newBuffer = new byte[remainBuffer.Length + recvByteLength];
+                    Debug.Log("버퍼들어오는거 확인" + newBuffer);
                     Array.Copy(remainBuffer, 0, newBuffer, 0, remainBuffer.Length);
                     Array.Copy(recvBuff, 0, newBuffer, remainBuffer.Length, recvByteLength);
 
@@ -195,6 +196,11 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
                         Array.Reverse(typeBytes);
 
                         var type = (PayloadOneofCase)BitConverter.ToInt16(typeBytes);
+                        if ((int)type > 55 || (int)type < 0)
+                        {
+                            Debug.Log("너 터진거야..!");
+                            break;
+                        }
                         Debug.Log($"PacketType:{type}");
 
                         var versionLength = reader.ReadByte();
@@ -217,6 +223,7 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
                         {
                             break;
                         }
+                        Debug.Log("페이로드렌스"+payloadLength);
                         var payloadBytes = reader.ReadBytes(payloadLength);
 
                         var totalLength = 11 + versionLength + payloadLength;
