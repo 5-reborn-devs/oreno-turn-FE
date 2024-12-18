@@ -178,7 +178,7 @@ public class UIGame : UIBase
         {
             OnClickBang(); // ??? ??? ????
         }
-        if (Input.GetKeyDown(KeyCode.CapsLock))
+        if (Input.GetKeyDown(KeyCode.F))
         {
             OnClickReroll();
             audioSource.PlayOneShot(rerollSound);
