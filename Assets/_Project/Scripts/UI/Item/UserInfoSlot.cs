@@ -61,8 +61,8 @@ public class UserInfoSlot : UIListItem
             mpSlots[i].SetActive(userinfo.mp > i);
             mpGauges[i].SetActive(userinfo.mp > i);
         }
-        
-        UpdateHp(userinfo.hp,userinfo.maxHp);
+
+        UpdateHp(userinfo.hp, userinfo.maxHp);
 
         targetMark.SetActive(userinfo.roleType == eRoleType.target);
         this.index.text = (index + 1).ToString();
@@ -75,16 +75,16 @@ public class UserInfoSlot : UIListItem
         {
             equips.ForEach(obj => obj.gameObject.SetActive(false));
         }
-        if(debuffs.Count > 0)
-        { 
+        if (debuffs.Count > 0)
+        {
             debuffs.ForEach(obj => obj.gameObject.SetActive(false));
         }
     }
     public void UpdateHp(int currentHp, int maxHp)
     {
-        float currentHpClamped = Mathf.Clamp(currentHp, 0, maxHp); 
-        hpGauge.value = currentHpClamped / maxHp; 
-        if(currentHp < previousHp) // 맞았을때 검증
+        float currentHpClamped = Mathf.Clamp(currentHp, 0, maxHp);
+        hpGauge.value = currentHpClamped / maxHp;
+        if (currentHp < previousHp) // 맞았을때 검증
         {
             audioSoucre.PlayOneShot(hitSound);
             TriggerOpacityChange();
@@ -126,8 +126,8 @@ public class UserInfoSlot : UIListItem
         {
             mpGauges[i].SetActive(userinfo.mp > i);
         }
-        
-        UpdateHp(userinfo.hp,userinfo.maxHp);
+
+        UpdateHp(userinfo.hp, userinfo.maxHp);
 
         if (weapon != null)
         {

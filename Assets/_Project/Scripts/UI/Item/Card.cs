@@ -9,12 +9,11 @@ using UnityEngine.Events;
 public class Card : UIListItem
 {
 	[SerializeField] Image thumbnail;
-    [SerializeField] TMP_Text cardName;
-    [SerializeField] TMP_Text cardDesc;
-
-    [SerializeField] public TMP_Text Mana;
+  [SerializeField] TMP_Text cardName;
+  [SerializeField] TMP_Text cardDesc;
+  [SerializeField] public TMP_Text Mana;
 	[SerializeField] private GameObject select;
-    [SerializeField] private GameObject back;
+  [SerializeField] private GameObject back;
 
 	public CardDataSO cardData;
     UnityAction<int> callback;

@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 6abd1716d0249834194c46d7202e2f1a
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 195031
+  packageName: Motion Titles Pack
+  packageVersion: 1.0.6
+  assetPath: Assets/Motion Titles Pack/Editor/Scripts/InitMTP.cs
+  uploadId: 704240

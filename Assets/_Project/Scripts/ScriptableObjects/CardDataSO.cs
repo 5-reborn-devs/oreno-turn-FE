@@ -13,6 +13,7 @@ public class CardDataSO : BaseDataSO
     public bool isTargetSelect;
     public bool isTargetCardSelection;
     public string useTag;
+    public string Mana;
 
     public string Mana;
 
