@@ -49,6 +49,7 @@ GameObject:
   - component: {fileID: 249495423656306907}
   - component: {fileID: 3462097756492137853}
   - component: {fileID: 4157991062306888010}
+  - component: {fileID: 898582738609989893}
   m_Layer: 5
   m_Name: WinnerDECO
   m_TagString: Untagged
@@ -72,7 +73,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 30}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -111.79193, y: 169.59134}
+  m_AnchoredPosition: {x: 802.98706, y: 564.0001}
   m_SizeDelta: {x: 1284, y: 370.9999}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3462097756492137853
@@ -117,6 +118,21 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: victory
+--- !u!114 &898582738609989893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1086885407851149935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d36574e258a7e4b9d957b15df745cbdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startPoint: {x: 1689.797, y: 1076, z: 0}
+  endPoint: {x: 802.9871, y: 564.0001, z: 0}
+  duration: 1.5
 --- !u!1 &1677809348446381624
 GameObject:
   m_ObjectHideFlags: 0
@@ -457,7 +473,7 @@ GameObject:
   - component: {fileID: 9093372510481659334}
   - component: {fileID: 217026136341427259}
   m_Layer: 5
-  m_Name: Image (1)
+  m_Name: small image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -479,7 +495,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 30}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 586.98773, y: 185.93259}
+  m_AnchoredPosition: {x: 569, y: 42}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &9093372510481659334
@@ -1084,6 +1100,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1738970582775789131}
+  - component: {fileID: 2903109734416518707}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -1100,7 +1117,7 @@ Transform:
   m_GameObject: {fileID: 4862477770805964636}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -18.351196, y: -150.63461, z: 2.9765582}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1109,6 +1126,22 @@ Transform:
   - {fileID: 249495423656306907}
   m_Father: {fileID: 7432265523577787406}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2903109734416518707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4862477770805964636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00264db9d97af4c13a6eb16fcd9052e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bigSquare: {fileID: 5254492353656207309}
+  smallquare: {fileID: 3184576456594822728}
+  victory: {fileID: 1086885407851149935}
+  Winner: {fileID: 7913260447783727483}
 --- !u!1 &5254492353656207309
 GameObject:
   m_ObjectHideFlags: 0
@@ -1120,8 +1153,9 @@ GameObject:
   - component: {fileID: 423951140845028923}
   - component: {fileID: 1579038185848537842}
   - component: {fileID: 4493372306204058336}
+  - component: {fileID: 8889024535221546906}
   m_Layer: 5
-  m_Name: Image
+  m_Name: big image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1143,7 +1177,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 30}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 106.66522, y: 192.46762}
+  m_AnchoredPosition: {x: 924.1603, y: 537.0001}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1579038185848537842
@@ -1184,6 +1218,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8889024535221546906
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5254492353656207309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d36574e258a7e4b9d957b15df745cbdd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startPoint: {x: -2100, y: -1209, z: 0}
+  endPoint: {x: 924.1603, y: 537.0001, z: 0}
+  duration: 1.7
 --- !u!1 &5787016966814503378
 GameObject:
   m_ObjectHideFlags: 0

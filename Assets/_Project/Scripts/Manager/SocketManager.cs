@@ -138,14 +138,14 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
     public void GameServerSwitchNotification(GamePacket gamePacket)
     {
         var response = gamePacket.GameServerSwitchNotification;
-        // °ÔÀÓ ¼­¹ö·Î ¿¬°á
-        string gameServerIp = response.Ip;  // °ÔÀÓ ¼­¹ö IP (¼­¹ö¿¡¼­ ¹ÞÀº µ¥ÀÌÅÍ)
-        int gameServerPort = (int)response.Port;  // °ÔÀÓ ¼­¹ö Port (¼­¹ö¿¡¼­ ¹ÞÀº µ¥ÀÌÅÍ)
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        string gameServerIp = response.Ip;  // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ IP (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
+        int gameServerPort = (int)response.Port;  // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Port (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
 
-        // °ÔÀÓ ¼­¹ö·Î ¿¬°á
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         SocketManager.instance.ConnectToGameServer(gameServerIp, gameServerPort, () =>
         {
-            Debug.Log("°ÔÀÓ ¼­¹ö¿¡ ¿¬°áµÇ¾ú½À´Ï´Ù!");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½!");
         });
     }
 
@@ -344,8 +344,8 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
             {
                 if (type == 0 || userId == 0)
                 {
-                    packet.ReactionRequest = new C2SReactionRequest();
-                    packet.ReactionRequest.ReactionType = (ReactionType)type;
+                    // packet.ReactionRequest = new C2SReactionRequest();
+                    // packet.ReactionRequest.ReactionType = (ReactionType)type;
                 }
                 else
                 {
