@@ -79,12 +79,12 @@ public class Character : FSMController<CharacterState, CharacterFSM, CharacterDa
     {
         if (characterType == eCharacterType.playable) return;
         rig.MovePosition(pos);
-        agent.SetDestination(pos);
-        var isLeft = agent.velocity.x < 0;
+        // agent.SetDestination(pos);
+        var isLeft = pos.x < 0;
         isLeft = data.isLeft ? !isLeft : isLeft;
-        if (agent.velocity.x != 0)
+        if (pos.x != 0)
             anim.SetFlip(isLeft);
-        if (agent.velocity == Vector3.zero)
+        if (pos == Vector3.zero)
             ChangeState<CharacterIdleState>().SetElement(anim, rig, this);
         else
             ChangeState<CharacterWalkState>().SetElement(anim, rig, this);
@@ -132,7 +132,10 @@ public class Character : FSMController<CharacterState, CharacterFSM, CharacterDa
     {
         selectCircle.SetActive(!selectCircle.activeInHierarchy);
     }
-
+    public void SelectFalse()
+    {
+        selectCircle.SetActive(false);
+    }
     public void OnVisibleRange()
     {
         range.SetActive(!range.activeInHierarchy);

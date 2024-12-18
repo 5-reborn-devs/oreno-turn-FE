@@ -75,8 +75,8 @@ public class ControlNightState : ControlState
             // 선택된 캐릭터가 범위 밖에 있으면 선택 해제
             if (distance > range)
             {
-                targetCharacter.OnSelect();  // 선택 해제
-                targetCharacter = null;      // targetCharacter 초기화
+                GameManager.instance.OnTargetSelect(targetCharacter);
+                targetCharacter = null;
             }
         }
     }

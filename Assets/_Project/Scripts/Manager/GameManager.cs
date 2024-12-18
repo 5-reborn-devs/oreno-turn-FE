@@ -301,6 +301,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void OnUseCard(string rcode = "", UserInfo target = null)
     {
+        Debug.Log("실제 실제 실제 타겟 값 : " + target);
         if (!string.IsNullOrEmpty(rcode))
         {
             SendSocketUseCard(target == null ? UserInfo.myInfo : target, UserInfo.myInfo, rcode);

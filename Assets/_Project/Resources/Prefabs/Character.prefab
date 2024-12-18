@@ -682,6 +682,7 @@ MonoBehaviour:
   dir: {x: 0, y: 0}
   isInside: 0
   targetPosition: {x: 0, y: 0}
+  attackRange: 5
 --- !u!114 &6595829264007912307
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -768,7 +769,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4

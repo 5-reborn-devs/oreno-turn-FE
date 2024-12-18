@@ -23,10 +23,9 @@ public class UserInfoSlot : UIListItem
     [SerializeField] private List<GameObject> mpSlots;
     [SerializeField] private List<GameObject> mpGauges;
     [SerializeField] public Image hitImage;
-    public float fadeDuration = 0.5f; // 페이드 인/아웃 시간
-    public int previousHp = 50;
     public AudioSource audioSoucre;
     public AudioClip hitSound;
+    public float fadeDuration = 0.5f; // 페이드 인/아웃 시간
 
     public int previousHp = 50; // 여기에다가 이전 HP 저장 // 처음에는 hp 초기값 50
     public int idx;
@@ -35,17 +34,17 @@ public class UserInfoSlot : UIListItem
 
     // 디버그 로그 추가 
     //Debug.Log($"Init Slot: {nickname.text}, Index: {index}");
-
-    void Start() { 
-    // 초기 alpha 값을 0으로 설정 (투명) 
-    SetAlpha(0f); 
-    } 
-    
+    void Start()
+    {
+        // 초기 alpha 값을 0으로 설정 (투명) 
+        SetAlpha(0f);
+    }
     // Alpha 값을 설정하는 함수 
-    void SetAlpha(float alpha) { 
-        Color color = hitImage.color; 
-        color.a = alpha; 
-        hitImage.color = color; 
+    void SetAlpha(float alpha)
+    {
+        Color color = hitImage.color;
+        color.a = alpha;
+        hitImage.color = color;
     }
 
     public async Task Init(UserInfo userinfo, int index, UnityAction<int> callback)
@@ -101,10 +100,11 @@ public class UserInfoSlot : UIListItem
         if(currentHp < previousHp) // 맞았을때 검증
         {
             audioSoucre.PlayOneShot(hitSound);
+            TriggerOpacityChange();
         }
         previousHp = currentHp;
     }
-
+    
     IEnumerator ChangeAlpha() { 
     // Alpha 값을 1로 올리기 
     float elapsedTime = 0f; 
@@ -122,11 +122,7 @@ public class UserInfoSlot : UIListItem
     SetAlpha(0f); 
     Debug.Log("셋알파까지 끝남");
     }
-
-
-
-
-
+    
     public async void UpdateData(UserInfo userinfo)
     {
         for (int i = 0; i < 10; i++)
