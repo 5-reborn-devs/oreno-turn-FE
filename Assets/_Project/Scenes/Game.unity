@@ -5978,7 +5978,7 @@ Tilemap:
       - {fileID: 41560511, guid: 4873ec7fda579a0498ef9ecac487ec55, type: 3}
       - {fileID: 558084730, guid: 4873ec7fda579a0498ef9ecac487ec55, type: 3}
       - {fileID: -1816883687, guid: 4873ec7fda579a0498ef9ecac487ec55, type: 3}
-      m_AnimationSpeed: 10
+      m_AnimationSpeed: 10.000001
       m_AnimationTimeOffset: 0
       m_Flags: 0
   - first: {x: -26, y: -15, z: 0}
@@ -21645,6 +21645,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6417663927821761571, guid: 0a76ceef7b60c4ca690de9f3bdbf2028, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7486212985368260969, guid: 0a76ceef7b60c4ca690de9f3bdbf2028, type: 3}
       propertyPath: image
       value: 
@@ -21653,6 +21657,10 @@ PrefabInstance:
       propertyPath: hitBox
       value: 
       objectReference: {fileID: 970429123}
+    - target: {fileID: 7486212985368260969, guid: 0a76ceef7b60c4ca690de9f3bdbf2028, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7486212985368260969, guid: 0a76ceef7b60c4ca690de9f3bdbf2028, type: 3}
       propertyPath: particleSystem
       value: 
