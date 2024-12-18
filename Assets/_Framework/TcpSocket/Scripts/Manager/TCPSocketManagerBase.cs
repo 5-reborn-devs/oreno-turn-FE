@@ -138,7 +138,7 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
             await socket.ConnectAsync(endPoint); 
             isConnected = socket.Connected;
             Debug.Log("연결성공");
-            //OnReceive(); 
+            OnReceive(); 
             //StartCoroutine(OnSendQueue()); 
             //StartCoroutine(OnReceiveQueue());
             //StartCoroutine(Ping());

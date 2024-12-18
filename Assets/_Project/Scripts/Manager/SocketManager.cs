@@ -137,6 +137,7 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
 
     public void GameServerSwitchNotification(GamePacket gamePacket)
     {
+        Debug.Log("¼­¹ö ½ºÀ§Ä¡½Ã ¿©±â°¡ ³ª¿À³ª??");
         var response = gamePacket.GameServerSwitchNotification;
         // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         string gameServerIp = response.Ip;  // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ IP (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
@@ -145,7 +146,7 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         SocketManager.instance.ConnectToGameServer(gameServerIp, gameServerPort, () =>
         {
-            Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿?");
+            Debug.Log("½ÇÇà‰ç³ª?");
         });
     }
 

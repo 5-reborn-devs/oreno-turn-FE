@@ -24,7 +24,7 @@ public class PopupConnection : UIBase
     public void OnClickConnection()
     {
         if (string.IsNullOrEmpty(ip.text)) ip.text = "127.0.0.1";
-        if (string.IsNullOrEmpty(port.text)) port.text = "3000";
+        if (string.IsNullOrEmpty(port.text)) port.text = "9000";
         PlayerPrefs.SetString("ip", ip.text);
         PlayerPrefs.SetString("port", port.text);
         if (SocketManager.instance.isConnected)
