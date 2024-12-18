@@ -24,4 +24,5 @@ MonoBehaviour:
   isTargetSelect: 0
   isTargetCardSelection: 0
   useTag: 
+  Mana: 1
   isMarketSelected: 0

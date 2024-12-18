@@ -14,6 +14,8 @@ public class CardDataSO : BaseDataSO
     public bool isTargetCardSelection;
     public string useTag;
 
+    public string Mana;
+
     public bool isMarketSelected;
     public CardType cardType { get => (CardType)int.Parse(rcode.Substring(3, 5)); }
 }
