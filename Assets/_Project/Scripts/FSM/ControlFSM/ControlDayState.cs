@@ -6,6 +6,7 @@ public class ControlDayState : ControlState
 {
     private Character targetCharacter = null;  // 선택된 캐릭터
     private float range = 6.7f;  // 범위 설정
+
     public override void OnClickScreen(RaycastHit2D hit)
     {
         if (hit.collider.TryGetComponent<Character>(out var character))
@@ -75,8 +76,8 @@ public class ControlDayState : ControlState
             // 선택된 캐릭터가 범위 밖에 있으면 선택 해제
             if (distance > range)
             {
-                targetCharacter.OnSelect();  // 선택 해제
-                targetCharacter = null;      // targetCharacter 초기화
+                GameManager.instance.OnTargetSelect(targetCharacter);
+                targetCharacter = null;
             }
         }
     }
