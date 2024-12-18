@@ -7,17 +7,15 @@ public class StayTrigger2D : MonoBehaviour
     private bool isStaying = false; // 캐릭터가 충돌 영역에 머물고 있는지 여부
     private float stayTimer = 0.0f; // 머문 시간을 추적하는 타이머
     public SocketManager socketManager; // SocketManager 인스턴스를 저장할 변수
-
     public CircleCollider2D hitBox;
     public SpriteRenderer image;
     public ParticleSystem particleSystem;
-
-
 
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player")) // 캐릭터가 Player 태그를 가지고 있는지 확인
         {
+ 
             isStaying = true;
             stayTimer = 0.0f;
             StartCoroutine(StayCheck());
@@ -50,9 +48,11 @@ public class StayTrigger2D : MonoBehaviour
 
     void TriggerEvent()
     {
+        
         Debug.Log("트리거 발생!");
         SendReactionPacket();
         gameObject.SetActive(false);
+        
  
     }
 
