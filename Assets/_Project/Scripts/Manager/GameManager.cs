@@ -286,8 +286,10 @@ public class GameManager : MonoSingleton<GameManager>
             targetCharacter = character;
             character.OnSelect();
         }
+        Debug.Log("캐릭터값" + character);
         // UIGame의 OnClickOpponets 메서드를 호출하여 character 인자를 넘김 
         UIGame.instance.OnClickOpponents(character);
+
     }
 
     // private void UpdateUserInfoSlot(UserInfo userinfo) { 
@@ -332,7 +334,7 @@ public class GameManager : MonoSingleton<GameManager>
                     break;
                 case "CAD00025":
                     {
-                        //audioSource.PlayOneShot(HitSound);
+                        audioSource.PlayOneShot(Strength);
                     }
                     break;
                 case "CAD00026":

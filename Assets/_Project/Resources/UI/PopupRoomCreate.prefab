@@ -2004,8 +2004,8 @@ MonoBehaviour:
     isDestroyOnHide: 1
   roomName: {fileID: 4186822135867243202}
   count: {fileID: 7749191400207629454}
-  audioSource: {fileID: 0}
-  clickSound: {fileID: 0}
+  audioSource: {fileID: 8815707293243654152}
+  clickSound: {fileID: 8300000, guid: 2a04aa5614eb9424d87da2eae2a1b2f5, type: 3}
 --- !u!1 &5755594535282861608
 GameObject:
   m_ObjectHideFlags: 0

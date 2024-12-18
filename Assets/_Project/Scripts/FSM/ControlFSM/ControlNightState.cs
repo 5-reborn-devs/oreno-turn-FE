@@ -58,7 +58,6 @@ public class ControlNightState : ControlState
                     default:
                         {
                             GameManager.instance.OnTargetSelect(character);
-
                         }
                         break;
                 }

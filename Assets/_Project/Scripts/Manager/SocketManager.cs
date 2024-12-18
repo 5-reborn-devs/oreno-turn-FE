@@ -145,7 +145,7 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         SocketManager.instance.ConnectToGameServer(gameServerIp, gameServerPort, () =>
         {
-            Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½!");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿?");
         });
     }
 
@@ -237,7 +237,7 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
 
         var use = DataManager.instance.users.Find(obj => obj.id == response.UserId);
         var target = DataManager.instance.users.Find(obj => obj.id == response.TargetUserId);
-        var text = string.Format(response.TargetUserId != 0 ? "{0}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ {1}Ä«ï¿½å¸¦ ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿?" : "{0}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ {1}Ä«ï¿½å¸¦ {2}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½Ï´ï¿?",
+        var text = string.Format(response.TargetUserId != 0 ? "{0}À¯Àú°¡ {1}Ä«µå¸¦ »ç¿ëÇß½À´Ï´Ù." : "{0}À¯Àú°¡ {1}Ä«µå¸¦ {2}À¯Àú¿¡°Ô »ç¿ëÇß½À´Ï´Ù.",
             use.nickname, response.CardType.GetCardData().displayName, target.nickname);
         UIGame.instance.SetNotice(text);
         if(response.UserId == UserInfo.myInfo.id && card.cardType == CardType.Bbang)

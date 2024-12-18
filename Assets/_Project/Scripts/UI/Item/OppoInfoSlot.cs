@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 public class OppoInfoSlot : UIListItem
 {
     [SerializeField] private Image thumbnail;
-    [SerializeField] private TMP_Text nickname;
+    [SerializeField] private TMP_Text nickname2;
     [SerializeField] private Slider hpGauge;
     [SerializeField] private GameObject targetMark;
     [SerializeField] private TMP_Text index;
@@ -19,8 +19,6 @@ public class OppoInfoSlot : UIListItem
     [SerializeField] private List<Image> debuffs;
     [SerializeField] private GameObject select;
     [SerializeField] private GameObject death;
-    [SerializeField] private List<GameObject> mpSlots;
-    [SerializeField] private List<GameObject> mpGauges;
 
     public int idx;
     public UnityAction<int> callback;
@@ -35,7 +33,9 @@ public class OppoInfoSlot : UIListItem
         this.idx = index;
         this.callback = callback;
         this.currentUserInfo = userinfo; // 현재 유저 정보 저장
-        nickname.text = userinfo.nickname;
+        Debug.Log("유저인포의 닉네임"+ userinfo.nickname);
+        Debug.Log("유저인포" + userinfo);
+        nickname2.text = userinfo.nickname;
         var data = DataManager.instance.GetData<CharacterDataSO>(userinfo.selectedCharacterRcode);
         thumbnail.sprite = await ResourceManager.instance.LoadAsset<Sprite>(data.rcode, eAddressableType.Thumbnail);
         targetMark.GetComponent<Image>().sprite = await ResourceManager.instance.LoadAsset<Sprite>("role_" + userinfo.roleType.ToString(), eAddressableType.Thumbnail);
@@ -78,11 +78,6 @@ public class OppoInfoSlot : UIListItem
 
     public async void UpdateData(UserInfo userinfo)
     {
-        for (int i = 0; i < 10; i++)
-        {
-            mpGauges[i].SetActive(userinfo.mp > i);
-        }
-
         UpdateHp(userinfo.hp, userinfo.maxHp);
 
         if (weapon != null)
@@ -137,10 +132,6 @@ public class OppoInfoSlot : UIListItem
     public void SetDeath()
     {
         hpGauge.gameObject.SetActive(false);
-        for (int i = 0; i < 10; i++)
-        {
-            mpGauges[i].SetActive(false);
-        }
         death.SetActive(true);
         SetVisibleRole(true);
     }
