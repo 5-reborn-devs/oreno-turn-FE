@@ -327,6 +327,11 @@ public class GameManager : MonoSingleton<GameManager>
                         audioSource.PlayOneShot(bbangSound);
                     }
                     break;
+                case "CAD00004":
+                    {
+                        audioSource.PlayOneShot(healSound);
+                    }
+                    break;
                 case "CAD00024":
                     {
                         audioSource.PlayOneShot(Armor);

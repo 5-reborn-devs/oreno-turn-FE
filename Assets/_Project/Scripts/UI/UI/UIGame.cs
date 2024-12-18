@@ -184,8 +184,12 @@ public class UIGame : UIBase
             OnClickReroll();
             audioSource.PlayOneShot(rerollSound);
         }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            UIManager.Show<PopupSetting>();
+        }
 
-        if(isOn == true){
+        if (isOn == true){
 
         }
 

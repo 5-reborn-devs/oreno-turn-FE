@@ -282,6 +282,7 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
             }
             if(socket != null && socket.Connected)
             {
+                remainBuffer = Array.Empty<byte>();
                 Debug.Log("소켓 리시브 멈춤 다시 시작");
                 OnReceive();
             }

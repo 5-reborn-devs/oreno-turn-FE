@@ -208,7 +208,7 @@ public class UIManager : MonoSingleton<UIManager>
         {
             count++;
         }
-        if (count > 5)
+        if (count > 20)
         {
             count = 0;
             SocketManager.instance.Disconnect(false);

@@ -25,6 +25,10 @@ public class UIMain : UIListBase<ItemRoom>
             time = 0;
             OnRefreshRoomList();
         }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            UIManager.Show<PopupSetting>();
+        }
     }
 
     public void SetRoomList(List<RoomData> rooms)
