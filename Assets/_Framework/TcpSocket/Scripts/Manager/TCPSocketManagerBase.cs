@@ -166,6 +166,7 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
                 try
                 {
                     var recvByteLength = await socket.ReceiveAsync(recvBuff, SocketFlags.None); //socket.ReceiveAsync는 await로 대기 시 새로운 데이터를 받기 전까지 대기한다.
+                    Debug.Log("recvByteLength : " + recvByteLength);
                     if (!isConnected)
                     {
                         Debug.Log("Socket is disconnect");
@@ -177,9 +178,11 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
                     }
 
                     var newBuffer = new byte[remainBuffer.Length + recvByteLength];
-                    Debug.Log("버퍼들어오는거 확인" + newBuffer);
+                    Debug.Log("newBuffer : " + newBuffer);
                     Array.Copy(remainBuffer, 0, newBuffer, 0, remainBuffer.Length);
+                    Debug.Log("remainBuffer : " + remainBuffer);
                     Array.Copy(recvBuff, 0, newBuffer, remainBuffer.Length, recvByteLength);
+                    Debug.Log("remainBrecvBuffuffer : " + recvBuff);
 
                     var processedLength = 0;
                     while (processedLength < newBuffer.Length)
@@ -190,40 +193,68 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
                         }
 
                         using var stream = new MemoryStream(newBuffer, processedLength, newBuffer.Length - processedLength);
+                        Debug.Log("stream : " + stream);
                         using var reader = new BinaryReader(stream);
+                        Debug.Log("reader : " + reader);
 
                         var typeBytes = reader.ReadBytes(2);
+                        Debug.Log("typeBytes : " + typeBytes);
                         Array.Reverse(typeBytes);
 
                         var type = (PayloadOneofCase)BitConverter.ToInt16(typeBytes);
                         if ((int)type > 55 || (int)type < 0)
                         {
-                            Debug.Log("너 터진거야..!");
-                            break;
+                            Debug.Log($"너 터진거야..!{type}");
+                            remainBuffer = Array.Empty<byte>();
+
+                            
                         }
                         Debug.Log($"PacketType:{type}");
 
                         var versionLength = reader.ReadByte();
+                        Debug.Log("versionLength : " + versionLength);
                         if (newBuffer.Length - processedLength < 11 + versionLength)
                         {
                             break;
                         }
                         var versionBytes = reader.ReadBytes(versionLength);
+                        Debug.Log("versionBytes : " + versionLength);
                         var version = BitConverter.ToString(versionBytes);
+                        Debug.Log("version : " + versionLength);
 
                         var sequenceBytes = reader.ReadBytes(4);
+                        Debug.Log("sequenceBytes : " + sequenceBytes);
                         Array.Reverse(sequenceBytes);
                         var sequence = BitConverter.ToInt32(sequenceBytes);
+                        Debug.Log("sequence : " + sequence);
 
                         var payloadLengthBytes = reader.ReadBytes(4);
+                        Debug.Log("payloadLengthBytes : " + payloadLengthBytes);
+                        // 바이트 배열을 16진수 문자열로 변환하여 출력
+                        Debug.Log("Payload Length Bytes: " + BitConverter.ToString(payloadLengthBytes));
+
+                        // 바이트 배열을 ASCII 문자열로 변환 (가능하면 ASCII 문자로 해석)
+                        string payloadString = System.Text.Encoding.ASCII.GetString(payloadLengthBytes);
+                        Debug.Log("Payload as String: " + payloadString);
+
+                        // 각 바이트를 출력
+                        Debug.Log("Payload Length Bytes: ");
+                        foreach (byte b in payloadLengthBytes)
+                        {
+                            Debug.Log(b);
+                        }
+
                         Array.Reverse(payloadLengthBytes);
                         var payloadLength = BitConverter.ToInt32(payloadLengthBytes);
+                        Debug.Log("payloadLength : " + payloadLength);
+                        Debug.Log("payloadLength 전체" + BitConverter.ToInt32(payloadLengthBytes));
 
                         if (newBuffer.Length - processedLength < 11 + versionLength + payloadLength)
                         {
+                            Debug.Log("캬아아아악"+ BitConverter.ToString(newBuffer, processedLength));
+                            
                             break;
                         }
-                        Debug.Log("페이로드렌스"+payloadLength);
                         var payloadBytes = reader.ReadBytes(payloadLength);
 
                         var totalLength = 11 + versionLength + payloadLength;

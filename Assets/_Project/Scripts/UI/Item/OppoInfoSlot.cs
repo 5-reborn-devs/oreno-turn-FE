@@ -71,7 +71,6 @@ public class OppoInfoSlot : UIListItem
 
     public void UpdateHp(int currentHp, int maxHp)
     {   
-        Debug.Log("업데이트 HP 들어왔어요" + hpGauge.value);
         float currentHpClamped = Mathf.Clamp(currentHp, 0, maxHp);
         hpGauge.value = currentHpClamped / maxHp;
     }
