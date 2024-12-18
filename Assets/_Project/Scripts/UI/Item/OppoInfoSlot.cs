@@ -25,6 +25,7 @@ public class OppoInfoSlot : UIListItem
     public int idx;
     public UnityAction<int> callback;
     public UserInfo currentUserInfo;
+    public int previousHp = 0;
     public bool isDeath { get => death.activeInHierarchy; }
 
     public async Task Init(UserInfo userinfo, int index, UnityAction<int> callback)

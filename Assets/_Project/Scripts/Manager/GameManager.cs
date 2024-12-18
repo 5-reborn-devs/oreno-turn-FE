@@ -314,6 +314,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     public void OnUseCardResponse(bool response)
     {
+        Debug.Log("onUseCardResponse" + response);
         if (response)
         {
             switch (rcode1)
@@ -348,15 +349,13 @@ public class GameManager : MonoSingleton<GameManager>
                         audioSource.PlayOneShot(Mana_Rcovery);
                     }
                     break;
-                default:
-                    {
-                        audioSource.PlayOneShot(failSound);
-                    }
-                    break;
-            
             }
         }
-
+        else
+        {
+            Debug.Log("카드실패");
+            audioSource.PlayOneShot(failSound);
+        }
     }
 
     public void SendSocketUseCard(UserInfo userinfo, UserInfo useUserInfo,  string rcode)

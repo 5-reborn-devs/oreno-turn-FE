@@ -22,7 +22,10 @@ public class UserInfoSlot : UIListItem
     [SerializeField] private GameObject death;
     [SerializeField] private List<GameObject> mpSlots;
     [SerializeField] private List<GameObject> mpGauges;
+    public AudioSource audioSoucre;
+    public AudioClip hitSound;
 
+    public int previousHp = 50; // 여기에다가 이전 HP 저장 // 처음에는 hp 초기값 50
     public int idx;
     public UnityAction<int> callback;
     public bool isDeath { get => death.activeInHierarchy; }
@@ -67,6 +70,11 @@ public class UserInfoSlot : UIListItem
     {
         float currentHpClamped = Mathf.Clamp(currentHp, 0, maxHp); 
         hpGauge.value = currentHpClamped / maxHp; 
+        if(currentHp < previousHp) // 맞았을때 검증
+        {
+            audioSoucre.PlayOneShot(hitSound);
+        }
+        previousHp = currentHp;
     }
     public async void UpdateData(UserInfo userinfo)
     {
