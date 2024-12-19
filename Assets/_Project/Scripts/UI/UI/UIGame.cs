@@ -40,9 +40,10 @@ public class UIGame : UIBase
     [SerializeField] public AudioClip nightbgm;
     [SerializeField] public AudioClip rerollSound;
 
-
+    private bool isEveningPhase = false;
     private Coroutine oppoInfoSlotCoroutine;
-
+    private float rerollCooldown = 5f;
+    private float lastRerollTime = -Mathf.Infinity;
     //private MoveUpAndDown moveUpAndDown;
     private float timer = 180;
     Dictionary<long, UserInfoSlot> userslots = new Dictionary<long, UserInfoSlot>();
@@ -175,14 +176,18 @@ public class UIGame : UIBase
     }
     void Update()
     {
+        if (isEveningPhase) return;
         if (Input.GetKeyDown(KeyCode.Space) && buttonShot.interactable) // ????? ??????????? ?????????? ??????
         {
             OnClickBang(); // ??? ??? ????
         }
-        if (Input.GetKeyDown(KeyCode.F))
+        // F 키 입력 처리
+        if (Input.GetKeyDown(KeyCode.F) && Time.time >= lastRerollTime + rerollCooldown)
         {
             OnClickReroll();
             audioSource.PlayOneShot(rerollSound);
+
+            lastRerollTime = Time.time; // 마지막 실행 시간 기록
         }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -214,16 +219,19 @@ public class UIGame : UIBase
         case PhaseType.Day: 
             SetPhaseImage(dayImage);
             SetPhasebgm(daybgm);
+            isEveningPhase = false;
             break; 
         case PhaseType.Evening: 
             SetPhaseImage(eveningImage);
             SetPhasebgm(eveningbgm);
             cardManager.DisableHand(); // PhaseType.Evening일 때 hand 비활성화
+            isEveningPhase = true;
             break; 
         case PhaseType.End: 
             SetPhaseImage(nightImage);
             SetPhasebgm(nightbgm);
             cardManager.EnableHand();
+            isEveningPhase = false;
             break; 
         }
         // if (moveUpAndDown != null) { 

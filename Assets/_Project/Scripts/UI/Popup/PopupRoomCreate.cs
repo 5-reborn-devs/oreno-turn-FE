@@ -4,6 +4,7 @@ using UnityEngine;
 using Ironcow;
 using UnityEngine.UI;
 using TMPro;
+using System.Threading.Tasks;
 
 public class PopupRoomCreate : UIBase
 {
@@ -11,6 +12,7 @@ public class PopupRoomCreate : UIBase
     [SerializeField] private TMP_Dropdown count;
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip clickSound;
+
     public override void Opened(object[] param)
     {
         var roomNameSample = new List<string>() { "³Ê¸¸ ¿À¸é °í!", "°³³äÀÖ´Â »ç¶÷¸¸", "¾îµô ³ÑºÁ?", "Áñ°Å¿î °ÔÀÓ ÇÑÆÇ ÇÏ½¯?", "»§¾ß! »§¾ß!" };
@@ -43,11 +45,14 @@ public class PopupRoomCreate : UIBase
         }
     }
 
-    public void OnRoomCreateResult(bool isSuccess, RoomData roomData)
+    public async void OnRoomCreateResult(bool isSuccess, RoomData roomData)
     {
         ClickSound();
         if (isSuccess)
         {
+
+            await Task.Delay(1000);
+
             UIManager.Show<UIRoom>(roomData);
             HideDirect();
         }

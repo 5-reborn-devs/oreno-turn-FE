@@ -93,5 +93,4 @@ public class UIMain : UIListBase<ItemRoom>
             SocketManager.instance.Send(packet);
         }
     }
-
 }
