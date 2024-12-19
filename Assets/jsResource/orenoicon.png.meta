@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      orenoicon_0: -965691025899180217
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
