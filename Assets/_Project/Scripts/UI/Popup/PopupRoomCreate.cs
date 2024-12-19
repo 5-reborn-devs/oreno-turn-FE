@@ -50,11 +50,9 @@ public class PopupRoomCreate : UIBase
         ClickSound();
         if (isSuccess)
         {
-
-            await Task.Delay(1000);
-
             UIManager.Show<UIRoom>(roomData);
             HideDirect();
+            await Task.Delay(1000);
         }
     }
 }
