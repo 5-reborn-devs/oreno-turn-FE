@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: ea8b7a8ea47cb43df9596d01d19a5b23
+guid: 81cd1a728957940c5a5c5143f120a7d3
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6861333790063696222
-    second: orenomp_0
+      213: 92590625566590390
+    second: orenopower_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: orenomp_0
+      name: orenopower_0
       rect:
         serializedVersion: 2
-        x: 109
-        y: 159
-        width: 722
-        height: 682
+        x: 149
+        y: 89
+        width: 732
+        height: 822
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2a66ed55545a7c0a0800000000000000
-      internalID: -6861333790063696222
+      spriteID: 6b58d62fea2f84100800000000000000
+      internalID: 92590625566590390
       vertices: []
       indices: 
       edges: []
@@ -134,8 +134,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      orenomp_0: -6861333790063696222
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

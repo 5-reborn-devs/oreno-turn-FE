@@ -1,13 +1,25 @@
 fileFormatVersion: 2
-guid: 08ab9fc03c4bb4c2ab6a895e582db3e9
+guid: 5f9a73a03188746218f07dd884fecc74
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -347763111494890590
-    second: orenodebuff1_0
+      213: -4008411755910150581
+    second: orenodebuff2_0
   - first:
-      213: 126674146309350031
-    second: orenodebuff1_1
+      213: -8720273211487118610
+    second: orenodebuff2_1
+  - first:
+      213: -4896091504622953599
+    second: orenodebuff2_2
+  - first:
+      213: -6740666973820527507
+    second: orenodebuff2_3
+  - first:
+      213: 6285715178588802486
+    second: orenodebuff2_4
+  - first:
+      213: 1633388001257507996
+    second: orenodebuff2_5
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -103,7 +115,29 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: orenodebuff1_0
+      name: orenodebuff2_0
+      rect:
+        serializedVersion: 2
+        x: 309
+        y: 479
+        width: 62
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b46c977deb24f58c0800000000000000
+      internalID: -4008411755910150581
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: orenodebuff2_1
       rect:
         serializedVersion: 2
         x: 369
@@ -118,14 +152,58 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2abcc59ea4f7c2bf0800000000000000
-      internalID: -347763111494890590
+      spriteID: eea94f457bd5bf680800000000000000
+      internalID: -8720273211487118610
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: orenodebuff1_1
+      name: orenodebuff2_2
+      rect:
+        serializedVersion: 2
+        x: 589
+        y: 479
+        width: 62
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 18b142797b69d0cb0800000000000000
+      internalID: -4896091504622953599
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: orenodebuff2_3
+      rect:
+        serializedVersion: 2
+        x: 329
+        y: 339
+        width: 62
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d6c5834d9175472a0800000000000000
+      internalID: -6740666973820527507
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: orenodebuff2_4
       rect:
         serializedVersion: 2
         x: 409
@@ -140,8 +218,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f82aef4077902c100800000000000000
-      internalID: 126674146309350031
+      spriteID: 6bd011bd6a85b3750800000000000000
+      internalID: 6285715178588802486
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: orenodebuff2_5
+      rect:
+        serializedVersion: 2
+        x: 569
+        y: 339
+        width: 62
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9cc65babb5faa610800000000000000
+      internalID: 1633388001257507996
       vertices: []
       indices: 
       edges: []
@@ -159,9 +259,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      orenodebuff1_0: -347763111494890590
-      orenodebuff1_1: 126674146309350031
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
