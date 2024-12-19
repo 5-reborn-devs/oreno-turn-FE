@@ -81,7 +81,7 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
         }
         else
         {
-            endPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port);
+            endPoint = new IPEndPoint(IPAddress.Parse("43.202.60.191"), port);
         }
         if (useDNS)
         {
@@ -117,7 +117,7 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
         }
         else
         {
-            endPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), gameServerPort); // 扁夯 IP 林家
+            endPoint = new IPEndPoint(IPAddress.Parse("43.202.60.191"), gameServerPort); // 扁夯 IP 林家
         }
 
         Debug.Log("Tcp Ip : " + ipAddress.MapToIPv4().ToString() + ", Port : " + gameServerPort);
