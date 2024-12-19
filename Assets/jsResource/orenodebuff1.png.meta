@@ -159,7 +159,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      orenodebuff1_0: -347763111494890590
+      orenodebuff1_1: 126674146309350031
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
