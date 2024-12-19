@@ -125,29 +125,40 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
         try
         {
             // 기존 연결을 끊고 새로운 게임 서버로 연결 시도
-            if (isConnected)
+            if (isConnected)   
             {
                 Debug.Log("연결끊고 재시도");
-                //socket.Shutdown(SocketShutdown.Both);
-                //socket.Close();
+                socket.Shutdown(SocketShutdown.Both);
+                Debug.Log("1 재시도");
+                socket.Close();
+                Debug.Log("2 재시도");
+                Debug.Log("소켓이 닫혔습니다.");
                 //StopAllCoroutines();
-                socket.Disconnect(false);
             }
 
             socket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             await socket.ConnectAsync(endPoint); 
             isConnected = socket.Connected;
-            Debug.Log("연결성공");
-            OnReceive(); 
-            //StartCoroutine(OnSendQueue()); 
-            //StartCoroutine(OnReceiveQueue());
-            //StartCoroutine(Ping());
-            GamePacket packet = new GamePacket();
-            packet.VerifyTokenRequest = new C2SVerifyTokenRequest() { Token = UserInfo.myInfo.token };
-            SocketManager.instance.Send(packet);
-            callback?.Invoke();
+            if (isConnected)
+            {
+                Debug.Log("연결성공");
+                OnReceive();
+                //StartCoroutine(OnSendQueue()); 
+                //StartCoroutine(OnReceiveQueue());
+                //StartCoroutine(Ping());
+                GamePacket packet = new GamePacket();
+                packet.VerifyTokenRequest = new C2SVerifyTokenRequest() { Token = UserInfo.myInfo.token };
+                SocketManager.instance.Send(packet);
+                callback?.Invoke();
+
+            }
+            else
+            {
+                Debug.LogError("소켓 연결 실패");
+            }
 
         }
+
         catch (Exception e)
         {
             Debug.LogError("게임 서버 연결 실패: " + e.ToString());
@@ -161,7 +172,7 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
     {
         if(socket != null)
         {
-            while (socket.Connected && isConnected)
+            while (isConnected)
             {
                 try
                 {
@@ -256,11 +267,18 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
                             break;
                         }
                         var payloadBytes = reader.ReadBytes(payloadLength);
-
+                        if (payloadBytes.Length == payloadLength)
+                        {
+                            var packet = new Packet(type, version, sequence, payloadBytes);
+                            receiveQueue.Enqueue(packet);
+                            Debug.Log($"Enqueued Type: {type}|{receiveQueue.Count}");
+                        }
+                        else
+                        {
+                            Debug.LogError($"미스매치 : {payloadLength}, 페이로드 길이 {payloadBytes.Length}");
+                            break;
+                        }
                         var totalLength = 11 + versionLength + payloadLength;
-                        var packet = new Packet(type, version, sequence, payloadBytes);
-                        receiveQueue.Enqueue(packet);
-                        Debug.Log($"Enqueued Type: {type}|{receiveQueue.Count}");
 
                         processedLength += totalLength;
                     }

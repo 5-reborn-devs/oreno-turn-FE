@@ -12,7 +12,7 @@ public class PopupConnection : UIBase
 
     public override void Opened(object[] param)
     {
-        ip.text = PlayerPrefs.GetString("ip", "15.165.168.120");
+        ip.text = PlayerPrefs.GetString("ip", "43.202.60.191");
         port.text = PlayerPrefs.GetString("port", "9000");
     }
 
@@ -23,7 +23,7 @@ public class PopupConnection : UIBase
 
     public void OnClickConnection()
     {
-        if (string.IsNullOrEmpty(ip.text)) ip.text = "15.165.168.120";
+        if (string.IsNullOrEmpty(ip.text)) ip.text = "43.202.60.191";
         if (string.IsNullOrEmpty(port.text)) port.text = "9000";
         PlayerPrefs.SetString("ip", ip.text);
         PlayerPrefs.SetString("port", port.text);

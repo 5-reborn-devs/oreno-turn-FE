@@ -333,11 +333,11 @@ public void AddUserInfo(UserInfo userinfo)
     {
         await SceneManager.LoadSceneAsync("Game");
     }
-
-    public void OnClickExit()
+    public async void OnClickExit()
     {
         if (SocketManager.instance.isConnected)
         {
+            await Task.Delay(1000);
             GamePacket packet = new GamePacket();
             packet.LeaveRoomRequest = new C2SLeaveRoomRequest();
             SocketManager.instance.Send(packet);
