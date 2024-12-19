@@ -50,8 +50,8 @@ public class PopupLogin : UIBase
         ClickSound();
         if (!SocketManager.instance.isConnected)
         {
-            var ip = PlayerPrefs.GetString("ip", "127.0.0.1");
-            var port = PlayerPrefs.GetString("port", "5555");
+            var ip = PlayerPrefs.GetString("ip", "15.165.168.120");
+            var port = PlayerPrefs.GetString("port", "9000");
             SocketManager.instance.Init(ip, int.Parse(port));
             SocketManager.instance.Connect(() =>
             {
@@ -72,8 +72,8 @@ public class PopupLogin : UIBase
         ClickSound();
         if (!SocketManager.instance.isConnected)
         {
-            var ip = PlayerPrefs.GetString("ip", "127.0.0.1");
-            var port = PlayerPrefs.GetString("port", "5555");
+            var ip = PlayerPrefs.GetString("ip", "15.165.168.120");
+            var port = PlayerPrefs.GetString("port", "9000");
             SocketManager.instance.Init(ip, int.Parse(port));
             SocketManager.instance.Connect(() =>
             {
@@ -109,7 +109,7 @@ public class PopupLogin : UIBase
         ClickSound();
         if (regPassword.text != regPasswordRe.text)
         {
-            UIManager.ShowAlert("ºñ¹Ð¹øÈ£°¡ ´Ù¸¨´Ï´Ù.");
+            UIManager.ShowAlert("ï¿½ï¿½Ð¹ï¿½È£ï¿½ï¿½ ï¿½Ù¸ï¿½ï¿½Ï´ï¿½.");
             return;
         }
         GamePacket packet = new GamePacket();
@@ -157,7 +157,7 @@ public class PopupLogin : UIBase
         }
         else
         {
-            UIManager.ShowAlert("·Î±×ÀÎ ½ÇÆÐ");
+            UIManager.ShowAlert("ï¿½Î±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
         }
     }
 
@@ -178,7 +178,7 @@ public class PopupLogin : UIBase
         }
         else
         {
-            UIManager.ShowAlert("È¸¿ø°¡ÀÔ ½ÇÆÐ");
+            UIManager.ShowAlert("È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
         }
 
     }
