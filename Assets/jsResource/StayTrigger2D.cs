@@ -37,7 +37,7 @@ public class StayTrigger2D : MonoBehaviour
         while (isStaying)
         {
             stayTimer += Time.deltaTime;
-            if (stayTimer >= requiredStayTime)
+            if (stayTimer >= requiredStayTime) // 어떤한유저 가 충족했한게 맞음
             {
                 TriggerEvent();
                 yield break; // 코루틴 종료

@@ -180,14 +180,11 @@ public class UserInfoSlot : UIListItem
 
     public void SetDeath()
     {
-
         hpGauge.gameObject.SetActive(false);
         if(UserInfo.myInfo.hp <= 0){
             Debug.Log("나 주거요");
             EndShowBox();
         }
-
-
         for (int i = 0; i < 10; i++)
         {
             mpGauges[i].SetActive(false);
@@ -210,7 +207,4 @@ public class UserInfoSlot : UIListItem
             UIGame.instance.lookAtYou.gameObject.SetActive(true);
 
     }
-
-
-
 }
