@@ -188,4 +188,12 @@ public class PopupLogin : UIBase
         ClickSound();
         UIManager.Show<PopupConnection>();
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            UIManager.Show<PopupSetting>();
+        }
+    }
 }
