@@ -12,18 +12,18 @@ public class UIGame : UIBase
 {
     public static UIGame instance { get => UIManager.Get<UIGame>(); }
     [SerializeField] private TMP_Text shotCount;
-    [SerializeField] private UserInfoSlot userInfoSlot;
+    [SerializeField] public UserInfoSlot userInfoSlot;
     [SerializeField] private UserInfoSlot anotherSlotPrefab;
-    [SerializeField] private RectTransform userInfoParent;
-    [SerializeField] private TMP_Text dayInfo;
-    [SerializeField] private TMP_Text time;
+    [SerializeField] public RectTransform userInfoParent;
+    [SerializeField] public TMP_Text dayInfo;
+    [SerializeField] public TMP_Text time;
     [SerializeField] private GameObject selectCard;
     [SerializeField] private TMP_Text selectCardText;
     [SerializeField] private TMP_Text deckCount;
     [SerializeField] private Button buttonShot;
     [SerializeField] private TMP_Text noticeText;
     [SerializeField] private TMP_Text noticeLogItem;
-    [SerializeField] private GameObject noticeLog;
+    [SerializeField] public GameObject noticeLog;
     [SerializeField] private Transform noticeLogParent;
     [SerializeField] public VirtualStick stick;
     [SerializeField] private Image bombButton;
@@ -39,6 +39,12 @@ public class UIGame : UIBase
     [SerializeField] public AudioClip eveningbgm;
     [SerializeField] public AudioClip nightbgm;
     [SerializeField] public AudioClip rerollSound;
+    [SerializeField] public RectTransform minimap;
+    [SerializeField] public GameObject lookAtYou;
+    [SerializeField] public GameObject hands;
+    [SerializeField] public GameObject decklist;
+
+
 
     private bool isEveningPhase = false;
     private Coroutine oppoInfoSlotCoroutine;
@@ -224,13 +230,17 @@ public class UIGame : UIBase
         case PhaseType.Evening: 
             SetPhaseImage(eveningImage);
             SetPhasebgm(eveningbgm);
+            if(userInfoSlot.gameObject.activeSelf){
             cardManager.DisableHand(); // PhaseType.Evening일 때 hand 비활성화
+            }
             isEveningPhase = true;
             break; 
         case PhaseType.End: 
             SetPhaseImage(nightImage);
             SetPhasebgm(nightbgm);
+            if(userInfoSlot.gameObject.activeSelf){
             cardManager.EnableHand();
+            }
             isEveningPhase = false;
             break; 
         }
@@ -387,11 +397,11 @@ public class UIGame : UIBase
                 userslots[key].SetSelectVisible(isActive);
         }
     }
-    public void SetDeath(long id)
+    public async void SetDeath(long id)
     {
         if (userslots.ContainsKey(id))
-        {
-            userslots[id].SetDeath();
+        {   
+            userslots[id].SetDeath();     
         }
         else
         {

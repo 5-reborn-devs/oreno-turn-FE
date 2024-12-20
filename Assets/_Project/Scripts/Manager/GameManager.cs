@@ -195,7 +195,8 @@ public class GameManager : MonoSingleton<GameManager>
         chara.OnChangeState<CharacterStopState>();
         if (userinfo.roleType == eRoleType.target)
             chara.SetTargetMark();
-        chara.OnVisibleMinimapIcon(Util.GetDistance(myIndex, idx, DataManager.instance.users.Count) <= UserInfo.myInfo.slotRange && myIndex != idx); // ������ �Ÿ��� �ִ� ���� �����ܸ� ǥ��
+        // chara.OnVisibleMinimapIcon(Util.GetDistance(myIndex, idx, DataManager.instance.users.Count) <= UserInfo.myInfo.slotRange && myIndex != idx); // ������ �Ÿ��� �ִ� ���� �����ܸ� ǥ��
+        chara.OnVisibleMinimapIcon(true); // 미니맵에 항상 표시되도록 변경
         chara.userInfo = userinfo;
     }
 

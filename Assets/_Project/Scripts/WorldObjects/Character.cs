@@ -174,8 +174,9 @@ public class Character : FSMController<CharacterState, CharacterFSM, CharacterDa
             }
             isInside = true;
             if (userInfo != null)
-                OnVisibleMinimapIcon(Util.GetDistance(UserInfo.myInfo.index, userInfo.index, DataManager.instance.users.Count)
-                    + userInfo.slotFar <= UserInfo.myInfo.slotRange && userInfo.id != UserInfo.myInfo.id); // ������ �Ÿ��� �ִ� ���� �����ܸ� ǥ��
+                // OnVisibleMinimapIcon(Util.GetDistance(UserInfo.myInfo.index, userInfo.index, DataManager.instance.users.Count)
+                //     + userInfo.slotFar <= UserInfo.myInfo.slotRange && userInfo.id != UserInfo.myInfo.id); // ������ �Ÿ��� �ִ� ���� �����ܸ� ǥ��
+                OnVisibleMinimapIcon(true); // 미니맵에 항상 표시되도록 변경
 
         }
     }
@@ -190,8 +191,9 @@ public class Character : FSMController<CharacterState, CharacterFSM, CharacterDa
             }
             isInside = false;
             if (userInfo != null)
-                OnVisibleMinimapIcon(Util.GetDistance(UserInfo.myInfo.index, userInfo.index, DataManager.instance.users.Count)
-                    + userInfo.slotFar <= UserInfo.myInfo.slotRange && userInfo.id != UserInfo.myInfo.id); // ������ �Ÿ��� �ִ� ���� �����ܸ� ǥ��
+                // OnVisibleMinimapIcon(Util.GetDistance(UserInfo.myInfo.index, userInfo.index, DataManager.instance.users.Count)
+                //     + userInfo.slotFar <= UserInfo.myInfo.slotRange && userInfo.id != UserInfo.myInfo.id); // ������ �Ÿ��� �ִ� ���� �����ܸ� ǥ��
+                OnVisibleMinimapIcon(true); // 미니맵에 항상 표시되도록 변경
         }
     }
 

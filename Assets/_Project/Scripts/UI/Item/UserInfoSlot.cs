@@ -180,7 +180,14 @@ public class UserInfoSlot : UIListItem
 
     public void SetDeath()
     {
+
         hpGauge.gameObject.SetActive(false);
+        if(UserInfo.myInfo.hp <= 0){
+            Debug.Log("나 주거요");
+            EndShowBox();
+        }
+
+
         for (int i = 0; i < 10; i++)
         {
             mpGauges[i].SetActive(false);
@@ -188,4 +195,22 @@ public class UserInfoSlot : UIListItem
         death.SetActive(true);
         SetVisibleRole(true);
     }
+
+    public async void EndShowBox(){
+
+            UIGame.instance.minimap.localScale = new Vector3(5, 5, 1); 
+            UIGame.instance.minimap.anchoredPosition = new Vector2(-723.8423f, -403.0978f);
+            UIGame.instance.userInfoSlot.gameObject.SetActive(false);
+            UIGame.instance.time.gameObject.SetActive(false);
+            UIGame.instance.dayInfo.gameObject.SetActive(false);
+            UIGame.instance.hands.gameObject.SetActive(false);
+            UIGame.instance.userInfoParent.gameObject.SetActive(false);
+            UIGame.instance.decklist.gameObject.SetActive(false);
+            UIGame.instance.noticeLog.gameObject.SetActive(false);
+            UIGame.instance.lookAtYou.gameObject.SetActive(true);
+
+    }
+
+
+
 }
