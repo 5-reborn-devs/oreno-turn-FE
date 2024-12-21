@@ -43,7 +43,10 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
     public void RegisterResponse(GamePacket gamePacket)
     {
         var response = gamePacket.RegisterResponse;
-        UIManager.Get<PopupLogin>().OnRegisterEnd(response.Success);
+        var Success = response.Success;
+        var Message = response.Message;
+        var FailCode = response.FailCode;
+        UIManager.Get<PopupLogin>().OnRegisterEnd(Success, FailCode, Message);
     }
 
     // �� ����
@@ -117,7 +120,7 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         var response = gamePacket.GamePrepareResponse;
         if(response.FailCode != 0)
         {
-            UIManager.ShowAlert(response.FailCode.ToString(), "����");
+            UIManager.ShowAlert(response.FailCode.ToString(), "게임 준비 실패");
             Debug.Log("GamePrepareResponse Failcode : " + response.FailCode.ToString());
         }
     }
@@ -146,7 +149,7 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         // ���� ������ ����
         SocketManager.instance.ConnectToGameServer(gameServerIp, gameServerPort, () =>
         {
-            Debug.Log("�����糪?");
+            Debug.Log("게임서버로 스위치 되나?");
         });
     }
 
@@ -155,7 +158,7 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         var response = gamePacket.GameStartResponse;
         if (response.FailCode != 0)
         {
-            UIManager.ShowAlert(response.FailCode.ToString(), "����");
+            UIManager.ShowAlert(response.FailCode.ToString(), "게임 시작 실패");
             Debug.Log("GameStartResponse Failcode : " + response.FailCode.ToString());
         }
     }

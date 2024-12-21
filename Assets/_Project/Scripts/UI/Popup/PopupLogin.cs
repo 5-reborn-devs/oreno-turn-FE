@@ -161,7 +161,7 @@ public class PopupLogin : UIBase
         }
     }
 
-    public void OnRegisterEnd(bool isSuccess)
+    public void OnRegisterEnd(bool isSuccess, GlobalFailCode failCode, string message)
     {
         ClickSound();
         if (isSuccess)
@@ -176,11 +176,10 @@ public class PopupLogin : UIBase
             loginId.text = PlayerPrefs.GetString("id" + tags[0]);
             loginPassword.text = PlayerPrefs.GetString("password" + tags[0]);
         }
-        else
+     else
         {
-            UIManager.ShowAlert("회원가입 실패");
+            UIManager.ShowAlert(message);
         }
-
     }
 
     public void OnClickChangeServer()
