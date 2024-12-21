@@ -111,6 +111,9 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         if (response.Success)
         {
             UIManager.Hide<UIRoom>();
+            GamePacket packet = new GamePacket();
+            packet.SwitchRequest = new C2SSwitchRequest();
+            SocketManager.instance.Send(packet);
         }
         else
         {
@@ -158,20 +161,22 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         }
     }
     
-    public void GameServerSwitchNotification(GamePacket gamePacket)
+    public void SwitchResponse(GamePacket gamePacket)
     {
-
-        var response = gamePacket.GameServerSwitchNotification;
-        // ���� ������ ����
-        string gameServerIp = response.Ip;  // ���� ���� IP (�������� ���� ������)
-        int gameServerPort = (int)response.Port;  // ���� ���� Port (�������� ���� ������)
+        var response = gamePacket.SwitchResponse;
+        string gameServerIp = response.Ip;  
+        int gameServerPort = (int)response.Port;
         Debug.Log("IP" + gameServerIp + "Port :" + gameServerPort);
-        // ���� ������ ����
+        
         SocketManager.instance.ConnectToGameServer(gameServerIp, gameServerPort, () =>
         {
-            Debug.Log("성공했어욤");
-
+            Debug.Log("서버 연결이 정상적으로 성공 했습니다.");
         });
+    }
+
+    public void VerifyTokenResponse(GamePacket gamePacket)
+    {
+
     }
 
     public void PongResponse(GamePacket gamePacket)
