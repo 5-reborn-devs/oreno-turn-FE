@@ -43,7 +43,7 @@ public class PopupLogin : UIBase
 
     public void ClickSound()
     {       
-            audioSource.PlayOneShot(clickSound);
+       audioSource.PlayOneShot(clickSound);
     }
     public void OnClickLogin()
     {
