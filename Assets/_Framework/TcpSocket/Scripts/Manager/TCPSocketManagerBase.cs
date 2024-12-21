@@ -32,6 +32,7 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
 
     public bool isConnected;
     bool isInit = false;
+    public Coroutine pingCorutine;
     /// <summary>
     /// 리플렉션으로 해당 클래스에 있는 메소드를 Payload에 맞춰 이벤트 등록
     /// </summary>
@@ -99,7 +100,7 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
             OnReceive();
             StartCoroutine(OnSendQueue());
             StartCoroutine(OnReceiveQueue());
-            StartCoroutine(Ping());
+            pingCorutine = StartCoroutine(Ping());
             callback?.Invoke();
         }
         catch (Exception e)
@@ -133,6 +134,11 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
                 socket.Close();
                 Debug.Log("2 재시도");
                 Debug.Log("소켓이 닫혔습니다.");
+
+                if(pingCorutine != null)
+                {
+                    StopCoroutine(pingCorutine);
+                }
                 //StopAllCoroutines();
             }
 
@@ -145,7 +151,7 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
                 OnReceive();
                 //StartCoroutine(OnSendQueue()); 
                 //StartCoroutine(OnReceiveQueue());
-                //StartCoroutine(Ping());
+                pingCorutine = StartCoroutine(Ping());
                 GamePacket packet = new GamePacket();
                 packet.VerifyTokenRequest = new C2SVerifyTokenRequest() { Token = UserInfo.myInfo.token };
                 SocketManager.instance.Send(packet);
@@ -407,8 +413,13 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
         while (SocketManager.instance.isConnected)
         {
             yield return new WaitForSeconds(5);
+            long timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             GamePacket packet = new GamePacket();
-            packet.LoginResponse = new S2CLoginResponse();
+            packet.PingRequest = new C2SPingRequest() { Message = "Ping", Timestamp = timestamp };
+            SocketManager.instance.Send(packet);
+            Debug.Log("핑전송 시각 : " + timestamp);
+            //GamePacket packet = new GamePacket();
+            //packet.LoginResponse = new S2CLoginResponse();
             //SocketManager.instance.Send(packet);
         }
     }

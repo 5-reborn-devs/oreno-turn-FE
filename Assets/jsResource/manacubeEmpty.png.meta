@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      manacubeEmpty_0: 3138579581703521337
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
