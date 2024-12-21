@@ -109,7 +109,7 @@ public class PopupLogin : UIBase
         ClickSound();
         if (regPassword.text != regPasswordRe.text)
         {
-            UIManager.ShowAlert("ºñ¹Ğ¹øÈ£°¡ ´Ù¸¨´Ï´Ù.");
+            UIManager.ShowAlert("ë¹„ë°€ë²ˆí˜¸ í™•ì¸ì´ ì¼ì¹˜í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.");
             return;
         }
         GamePacket packet = new GamePacket();
@@ -144,7 +144,7 @@ public class PopupLogin : UIBase
         buttonSet.SetActive(false);
     }
 
-    public async void OnLoginEnd(bool isSuccess)
+    public async void OnLoginEnd(bool isSuccess, GlobalFailCode failCode, string message)
     {
         ClickSound();
         if (isSuccess)
@@ -157,7 +157,7 @@ public class PopupLogin : UIBase
         }
         else
         {
-            UIManager.ShowAlert("·Î±×ÀÎ ½ÇÆĞ");
+            UIManager.ShowAlert(message);
         }
     }
 
