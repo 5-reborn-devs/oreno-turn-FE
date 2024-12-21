@@ -12,8 +12,11 @@ public class PopupConnection : UIBase
 
     public override void Opened(object[] param)
     {
-        ip.text = PlayerPrefs.GetString("ip", "43.202.60.191");
-        port.text = PlayerPrefs.GetString("port", "9000");
+        PlayerPrefs.SetString("ip", "127.0.0.1");
+        PlayerPrefs.SetString("port", "9000");
+        PlayerPrefs.Save();
+        ip.text = PlayerPrefs.GetString("ip");
+        port.text = PlayerPrefs.GetString("port");
     }
 
     public override void HideDirect()
