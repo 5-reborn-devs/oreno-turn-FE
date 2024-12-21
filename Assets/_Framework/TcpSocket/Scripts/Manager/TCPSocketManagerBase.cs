@@ -128,7 +128,7 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
             // 기존 연결을 끊고 새로운 게임 서버로 연결 시도
             if (isConnected)   
             {
-                //Debug.Log("연결끊고 재시도");
+                Debug.Log("연결끊고 재시도");
                 socket.Shutdown(SocketShutdown.Both);
                 //Debug.Log("1 재시도");
                 socket.Close();

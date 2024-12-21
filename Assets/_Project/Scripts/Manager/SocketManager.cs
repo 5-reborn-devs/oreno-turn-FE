@@ -96,16 +96,16 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
     }
 
     // �� ������ 
-    private bool isGameServerSwitched = false;
+    //private bool isGameServerSwitched = false;
     public void LeaveRoomResponse(GamePacket gamePacket)
     {
         Debug.Log("LeaveRoomResponse 호출됨");
-        if (!isGameServerSwitched)
-        {
-            Debug.Log("서버 전환이 완료되지 않아 LeaveRoomResponse 대기");
-            StartCoroutine(WaitForServerSwitch(gamePacket));
-            return;
-        }
+        //if (!isGameServerSwitched)
+        //{
+        //    Debug.Log("서버 전환이 완료되지 않아 LeaveRoomResponse 대기");
+        //    StartCoroutine(WaitForServerSwitch(gamePacket));
+        //    return;
+        //}
         var response = gamePacket.LeaveRoomResponse;
         Debug.Log($"LeaveRoomResponse 성공 여부: {response.Success}, 코드: {response.FailCode}");
         if (response.Success)
@@ -118,15 +118,15 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         }
     }
 
-    private IEnumerator WaitForServerSwitch(GamePacket gamePacket)
-    {
-        while (!isGameServerSwitched)
-        {
-            yield return null;  // 서버 전환 완료 대기
-        }
+    //private IEnumerator WaitForServerSwitch(GamePacket gamePacket)
+    //{
+    //    while (!isGameServerSwitched)
+    //    {
+    //        yield return null;  // 서버 전환 완료 대기
+    //    }
 
-        LeaveRoomResponse(gamePacket);  // 다시 처리
-    }
+    //    LeaveRoomResponse(gamePacket);  // 다시 처리
+    //}
     // �� ������ �˸�
     public void LeaveRoomNotification(GamePacket gamePacket)
     {
@@ -165,11 +165,11 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         // ���� ������ ����
         string gameServerIp = response.Ip;  // ���� ���� IP (�������� ���� ������)
         int gameServerPort = (int)response.Port;  // ���� ���� Port (�������� ���� ������)
-
+        Debug.Log("IP" + gameServerIp + "Port :" + gameServerPort);
         // ���� ������ ����
         SocketManager.instance.ConnectToGameServer(gameServerIp, gameServerPort, () =>
         {
-            isGameServerSwitched = true;
+            Debug.Log("성공했어욤");
 
         });
     }
