@@ -182,12 +182,12 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
             Debug.Log("true");
             //UIManager.Show<PopupConnectionFailed>();
             //UIManager.Get<UIRoom>().OnPrepare(response.Room.Users);
-            UIManager.Show<PopupConnectionFailed>();
+            
         }
         else
         {
+            UIManager.Show<PopupConnectionFailed>();
             Debug.Log("실패");
-            
         }
         Debug.Log("클라가 pong보낸 시간" + response.Timestamp);
     }
