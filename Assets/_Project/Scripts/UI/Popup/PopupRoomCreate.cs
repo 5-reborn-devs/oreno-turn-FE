@@ -53,6 +53,9 @@ public class PopupRoomCreate : UIBase
             UIManager.Show<UIRoom>(roomData);
             HideDirect();
             await Task.Delay(1000);
+            GamePacket packet = new GamePacket();
+            packet.SwitchRequest = new C2SSwitchRequest();
+            SocketManager.instance.Send(packet);
         }
     }
 }
