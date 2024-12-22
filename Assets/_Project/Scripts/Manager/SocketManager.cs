@@ -68,6 +68,9 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         if (response.Success)
         {
             UIManager.Show<UIRoom>(response.Room);
+            GamePacket packet = new GamePacket();
+            packet.SwitchRequest = new C2SSwitchRequest();
+            SocketManager.instance.Send(packet);
         }
     }
 
@@ -186,10 +189,9 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         {
             Debug.Log("true");
             //UIManager.Show<PopupConnectionFailed>();
-            //UIManager.Get<UIRoom>().OnPrepare(response.Room.Users);
-            
+            //UIManager.Get<UIRoom>().OnPrepare(response.Room.Users);    
         }
-        else
+        else if(response.Message == "fail")
         {
             UIManager.Show<PopupConnectionFailed>();
             Debug.Log("실패");
@@ -285,7 +287,7 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
 
         var use = DataManager.instance.users.Find(obj => obj.id == response.UserId);
         var target = DataManager.instance.users.Find(obj => obj.id == response.TargetUserId);
-        var text = string.Format(response.TargetUserId != 0 ? "{0}������ {1}ī�带 ����߽��ϴ�." : "{0}������ {1}ī�带 {2}�������� ����߽��ϴ�.",
+        var text = string.Format(response.TargetUserId != 0 ? "{0}유저가 {1}카드를 사용했습니다." : "{0}유저가 {1}카드를 {2}유저에게 사용했습니다.",
             use.nickname, response.CardType.GetCardData().displayName, target.nickname);
         UIGame.instance.SetNotice(text);
         if(response.UserId == UserInfo.myInfo.id && card.cardType == CardType.Bbang)
@@ -625,7 +627,9 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
     {
         var response = gamePacket.GameEndNotification;
         GameManager.instance.OnGameEnd();
-        
+        GamePacket packet = new GamePacket();
+        packet.SwitchRequest = new C2SSwitchRequest();
+        SocketManager.instance.Send(packet);
         UIManager.Show<PopupResult>(response.Winners, response.WinType);
     }
 

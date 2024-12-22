@@ -26,8 +26,6 @@ public class PopupConnectionFailed : UIBase
     public void onClickConnectionFailed()
     {
         Debug.Log("로비화면으로");
-        UIManager.Show<PopupLogin>();
-        UIManager.Hide<PopupConnectionFailed>();
         SocketManager.instance.HearBeatOut(true);
         
     }

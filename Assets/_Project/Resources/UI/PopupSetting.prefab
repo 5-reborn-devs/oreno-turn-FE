@@ -598,9 +598,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 5795895481944283395}
         m_TargetAssemblyTypeName: PopupSetting, Assembly-CSharp
-        m_MethodName: OnExitButton
+        m_MethodName: OnClickButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

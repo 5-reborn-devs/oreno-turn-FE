@@ -502,18 +502,16 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
     }
     public void HearBeatOut(bool isReconnect = false)
     {
-        StopAllCoroutines();
+        //StopAllCoroutines();
         if (isConnected)
         {
             this.isConnected = false;
+            UIManager.Show<PopupLogin>();
+            UIManager.Hide<PopupConnectionFailed>();
             socket.Disconnect(isReconnect);
-            if (isReconnect)
-            {
-                Connect();
-            }
         }
     }
-    public IEnumerator Ping()
+    IEnumerator Ping()
     {
         while (SocketManager.instance.isConnected)
         {
