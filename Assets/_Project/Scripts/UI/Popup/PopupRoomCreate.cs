@@ -12,7 +12,8 @@ public class PopupRoomCreate : UIBase
     [SerializeField] private TMP_Dropdown count;
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip clickSound;
-
+    [SerializeField] private Button createButton;
+    public bool ButtonClicked = false;
     public override void Opened(object[] param)
     {
         var roomNameSample = new List<string>() { "너만 오면 고!", "개념있는 사람만", "어딜 넘봐?", "즐거운 게임 한판 하쉴?", "빵야! 빵야!" };
@@ -33,6 +34,12 @@ public class PopupRoomCreate : UIBase
     public void OnClickCreate()
     {
         ClickSound();
+        if (ButtonClicked)
+            return;
+
+        // 버튼 비활성화
+        ButtonClicked = true;
+        createButton.interactable = false;
         if (SocketManager.instance.isConnected)
         {
             GamePacket packet = new GamePacket();
@@ -47,7 +54,9 @@ public class PopupRoomCreate : UIBase
 
     public async void OnRoomCreateResult(bool isSuccess, RoomData roomData)
     {
+        
         ClickSound();
+
         if (isSuccess)
         {
             UIManager.Show<UIRoom>(roomData);
@@ -57,5 +66,6 @@ public class PopupRoomCreate : UIBase
             packet.SwitchRequest = new C2SSwitchRequest();
             SocketManager.instance.Send(packet);
         }
+        
     }
 }
