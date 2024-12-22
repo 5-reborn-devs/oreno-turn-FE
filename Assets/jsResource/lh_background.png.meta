@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: ae0fe83c6e1ba9e46ad397d18672fcf6
+guid: 65eec6a77afd7414eb68363a24631587
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -762855302440336126
-    second: yeeynsy_0
+      213: 7065838387283597108
+    second: lh_background_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: yeeynsy_0
+      name: lh_background_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 294
-        height: 294
+        width: 1920
+        height: 1080
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 205450be42bc965f0800000000000000
-      internalID: -762855302440336126
+      spriteID: 4379b5aa396ee0260800000000000000
+      internalID: 7065838387283597108
       vertices: []
       indices: 
       edges: []
@@ -147,8 +147,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      yeeynsy_0: -762855302440336126
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

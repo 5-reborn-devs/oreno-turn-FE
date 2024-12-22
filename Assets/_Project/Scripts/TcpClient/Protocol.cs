@@ -341,10 +341,7 @@ public enum GlobalFailCode
     [pbr::OriginalName("CREATE_ROOM_FAILED")] CreateRoomFailed = 4,
     [pbr::OriginalName("JOIN_ROOM_FAILED")] JoinRoomFailed = 5,
     [pbr::OriginalName("LEAVE_ROOM_FAILED")] LeaveRoomFailed = 6,
-    /// <summary>
-    /// 쓰고
-    /// </summary>
-    [pbr::OriginalName("REGISTER_FAILED")] RegisterFailed = 7,
+    [pbr::OriginalName("REGISTER_FAILED")] RegisterFailed = 7, // 회원가입 시 이메일 중복 검사용
     [pbr::OriginalName("ROOM_NOT_FOUND")] RoomNotFound = 8,
     [pbr::OriginalName("CHARACTER_NOT_FOUND")] CharacterNotFound = 9,
     [pbr::OriginalName("CHARACTER_STATE_ERROR")] CharacterStateError = 10,
