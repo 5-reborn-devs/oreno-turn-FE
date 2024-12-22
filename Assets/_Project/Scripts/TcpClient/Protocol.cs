@@ -338,7 +338,7 @@ public enum GlobalFailCode
     [pbr::OriginalName("CREATE_ROOM_FAILED")] CreateRoomFailed = 4,
     [pbr::OriginalName("JOIN_ROOM_FAILED")] JoinRoomFailed = 5,
     [pbr::OriginalName("LEAVE_ROOM_FAILED")] LeaveRoomFailed = 6,
-    [pbr::OriginalName("REGISTER_FAILED")] RegisterFailed = 7,
+    [pbr::OriginalName("REGISTER_FAILED")] RegisterFailed = 7, // 회원가입 시 이메일 중복 검사용
     [pbr::OriginalName("ROOM_NOT_FOUND")] RoomNotFound = 8,
     [pbr::OriginalName("CHARACTER_NOT_FOUND")] CharacterNotFound = 9,
     [pbr::OriginalName("CHARACTER_STATE_ERROR")] CharacterStateError = 10,
@@ -346,8 +346,8 @@ public enum GlobalFailCode
     [pbr::OriginalName("INVALID_ROOM_STATE")] InvalidRoomState = 12,
     [pbr::OriginalName("NOT_ROOM_OWNER")] NotRoomOwner = 13,
     [pbr::OriginalName("ALREADY_USED_BBANG")] AlreadyUsedBbang = 14,
-    [pbr::OriginalName("INVALID_PHASE")] InvalidPhase = 15,
-    [pbr::OriginalName("CHARACTER_CONTAINED")] CharacterContained = 16,
+    [pbr::OriginalName("INVALID_PHASE")] InvalidPhase = 15, // 회원가입시 닉네임 유효성 검증용
+    [pbr::OriginalName("CHARACTER_CONTAINED")] CharacterContained = 16, // 회원가입시 이메일 유효성 검증용
 }
 
 public enum WarningType
