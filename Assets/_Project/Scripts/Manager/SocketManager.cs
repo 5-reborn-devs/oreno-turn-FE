@@ -104,21 +104,44 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
     }
 
     // �� ������ 
+    private bool isGameServerSwitched = false;
     public void LeaveRoomResponse(GamePacket gamePacket)
     {
+        Debug.Log("LeaveRoomResponse 호출됨");
+        if (!isGameServerSwitched)
+        {
+            Debug.Log("서버 전환이 완료되지 않아 LeaveRoomResponse 대기");
+            StartCoroutine(WaitForServerSwitch(gamePacket));
+            return;
+        }
         var response = gamePacket.LeaveRoomResponse;
+        Debug.Log($"LeaveRoomResponse 성공 여부: {response.Success}, 코드: {response.FailCode}");
         if (response.Success)
         {
             UIManager.Hide<UIRoom>();
         }
+        else
+        {
+            Debug.LogError("LeaveRoom 실패: " + response.FailCode);
+        }
     }
 
+    private IEnumerator WaitForServerSwitch(GamePacket gamePacket)
+    {
+        while (!isGameServerSwitched)
+        {
+            yield return null;  // 서버 전환 완료 대기
+        }
+
+        LeaveRoomResponse(gamePacket);  // 다시 처리
+    }
     // �� ������ �˸�
     public void LeaveRoomNotification(GamePacket gamePacket)
     {
         var response = gamePacket.LeaveRoomNotification;
         UIManager.Get<UIRoom>().RemoveUserInfo(response.UserId);
     }
+
 
     public void GamePrepareResponse(GamePacket gamePacket)
     {
@@ -142,10 +165,10 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
             UIManager.Get<UIRoom>().OnPrepare(response.Room.Users);
         }
     }
-
+    
     public void GameServerSwitchNotification(GamePacket gamePacket)
     {
-        Debug.Log("���� ����ġ�� ���Ⱑ ������??");
+
         var response = gamePacket.GameServerSwitchNotification;
         // ���� ������ ����
         string gameServerIp = response.Ip;  // ���� ���� IP (�������� ���� ������)
@@ -155,7 +178,26 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         SocketManager.instance.ConnectToGameServer(gameServerIp, gameServerPort, () =>
         {
             Debug.Log("게임서버로 스위치 되나?");
+            isGameServerSwitched = true;
         });
+    }
+
+    public void PongResponse(GamePacket gamePacket)
+    {       
+        var response = gamePacket.PongResponse;
+        if(response.Message == "success")
+        {
+            Debug.Log("true");
+            //UIManager.Show<PopupConnectionFailed>();
+            //UIManager.Get<UIRoom>().OnPrepare(response.Room.Users);
+            
+        }
+        else
+        {
+            UIManager.Show<PopupConnectionFailed>();
+            Debug.Log("실패");
+        }
+        Debug.Log("클라가 pong보낸 시간" + response.Timestamp);
     }
 
     public void GameStartResponse(GamePacket gamePacket)

@@ -42,7 +42,6 @@ public class UIMain : UIListBase<ItemRoom>
     }
     public void OnRefreshRoomList()
     {
-        ClickSound();
         if (SocketManager.instance.isConnected)
         {
             GamePacket packet = new GamePacket();

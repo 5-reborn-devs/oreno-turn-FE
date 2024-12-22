@@ -5,7 +5,7 @@ using Ironcow;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class PopupSetting : UIBase
+public class PopupConnectionFailed : UIBase
 {
     public override void Opened(object[] param)
     {
@@ -17,15 +17,18 @@ public class PopupSetting : UIBase
         UIManager.Hide<PopupSetting>();
     }
 
-    public void OnClickButton()
+    public async void OnClickButton()
     {
         Debug.Log("게임 종료!");
         Application.Quit(); // 게임 종료
     }
 
-    public async void onClickConnectionFailed()
+    public void onClickConnectionFailed()
     {
         Debug.Log("로비화면으로");
-        await UIManager.Show<PopupLogin>();
+        UIManager.Show<PopupLogin>();
+        UIManager.Hide<PopupConnectionFailed>();
+        SocketManager.instance.HearBeatOut(true);
+        
     }
 }
