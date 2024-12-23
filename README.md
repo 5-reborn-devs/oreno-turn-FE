@@ -37,6 +37,7 @@
 ## 💻참고 링크
 - [팀 노션](https://www.notion.so/teamsparta/aa5b439a52784f428692ef6e0d40ddf0)
 - [프로젝트 브로셔](https://www.notion.so/teamsparta/ORENO-TURN-3a9173c2b5db4a9faa0bb055d0520814#15e2dc3ef5148100b380e7c14cfc2c48)
+- [시연영상 유튜브](https://www.youtube.com/watch?v=_s7O8UoN9UM)
 
 ## 👥팀 소개
 ![5reborn_notion_background](https://github.com/user-attachments/assets/15219b85-3d80-4233-a940-4d52ef45f438)
