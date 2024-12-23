@@ -11,6 +11,7 @@ using Ironcow.WebSocketPacket;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using System.IO;
+using System.Threading.Tasks;
 
 public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSocketManagerBase<T>
 {
@@ -32,6 +33,7 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
 
     public bool isConnected;
     bool isInit = false;
+    public Coroutine pingCorutine;
     /// <summary>
     /// 리플렉션으로 해당 클래스에 있는 메소드를 Payload에 맞춰 이벤트 등록
     /// </summary>
@@ -81,7 +83,7 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
         }
         else
         {
-            endPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port);
+            endPoint = new IPEndPoint(IPAddress.Parse("43.202.60.191"), port);
         }
         if (useDNS)
         {
@@ -99,12 +101,165 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
             OnReceive();
             StartCoroutine(OnSendQueue());
             StartCoroutine(OnReceiveQueue());
-            StartCoroutine(Ping());
+            pingCorutine = StartCoroutine(Ping());
             callback?.Invoke();
         }
         catch (Exception e)
         {
             Debug.Log(e.ToString());
+        }
+    }
+    //public async void ConnectToGameServer(string gameServerIp, int gameServerPort, UnityAction callback = null)
+    //{
+    //    IPEndPoint endPoint;
+    //    if (IPAddress.TryParse(gameServerIp, out IPAddress ipAddress))
+    //    {
+    //        endPoint = new IPEndPoint(ipAddress, gameServerPort);
+    //    }
+    //    else
+    //    {
+    //        endPoint = new IPEndPoint(IPAddress.Parse("43.202.60.191"), gameServerPort); // 기본 IP 주소
+    //    }
+
+    //    Debug.Log("Tcp Ip : " + ipAddress.MapToIPv4().ToString() + ", Port : " + gameServerPort);
+
+    //    try
+    //    {
+    //        // 기존 연결을 끊고 새로운 게임 서버로 연결 시도
+    //        if (isConnected)
+    //        {
+    //            Debug.Log("연결끊고 재시도");
+    //            socket.Close();
+    //            isConnected = false;
+    //            await Task.Delay(1000);
+    //            StopAllCoroutines();
+    //        }
+    //        socket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+    //        await socket.ConnectAsync(endPoint);
+    //        isConnected = socket.Connected;
+    //        StartCoroutine(OnSendQueue());
+    //        StartCoroutine(OnReceiveQueue());
+    //        StartCoroutine(Ping());
+    //        GamePacket packet = new GamePacket();
+    //        packet.VerifyTokenRequest = new C2SVerifyTokenRequest() { Token = UserInfo.myInfo.token };
+    //        SocketManager.instance.Send(packet);
+    //        callback?.Invoke();
+    //    }
+
+    //    catch (Exception e)
+    //    {
+    //        Debug.LogError("게임 서버 연결 실패: " + e.ToString());
+    //    }
+    //}
+
+    //public async void ConnectToGameServer(string gameServerIp, int gameServerPort, UnityAction callback = null)
+    //{
+    //    IPEndPoint endPoint;
+    //    if (IPAddress.TryParse(gameServerIp, out IPAddress ipAddress))
+    //    {
+    //        endPoint = new IPEndPoint(ipAddress, gameServerPort);
+    //    }
+    //    else
+    //    {
+    //        endPoint = new IPEndPoint(IPAddress.Parse("43.202.60.191"), gameServerPort); // 기본 IP 주소
+    //    }
+
+    //    Debug.Log("Tcp Ip : " + ipAddress.MapToIPv4().ToString() + ", Port : " + gameServerPort);
+
+    //    try
+    //    {
+    //        // 기존 연결을 끊고 새로운 게임 서버로 연결 시도
+    //        if (isConnected)
+    //        {
+
+    //            Debug.Log("연결끊고 재시도");
+    //            socket.Shutdown(SocketShutdown.Both); // 앤 하나만 끊는거임 송수신은 안되는데 더이상, 패킷이 사라지진 않음 처리를 할 수 있음 
+    //            socket.Close(); // 입력, 출력 2개의 통로를 다끊는거고
+    //            //isConnected = false; // 연결 상태 업데이트
+    //            //Debug.Log("2 재시도");
+    //            //Debug.Log("소켓이 닫혔습니다.");
+    //            discon
+    //            if (pingCorutine != null)
+    //            {
+    //                StopCoroutine(pingCorutine);
+    //            }
+    //            StopAllCoroutines();
+    //        }
+
+    //        socket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+    //        await socket.ConnectAsync(endPoint);
+    //        isConnected = socket.Connected;
+    //        if (isConnected)
+    //        {
+    //            Debug.Log("연결성공");
+    //            OnReceive();
+    //            //StartCoroutine(OnSendQueue()); 
+    //            //StartCoroutine(OnReceiveQueue());
+    //            pingCorutine = StartCoroutine(Ping());
+    //            GamePacket packet = new GamePacket();
+    //            packet.VerifyTokenRequest = new C2SVerifyTokenRequest() { Token = UserInfo.myInfo.token };
+    //            SocketManager.instance.Send(packet);
+    //            callback?.Invoke();
+    //        }
+    //        else
+    //        {
+    //            Debug.LogError("소켓 연결 실패");
+    //        }
+
+    //    }
+
+    //    catch (Exception e)
+    //    {
+    //        Debug.LogError("게임 서버 연결 실패: " + e.ToString());
+    //    }
+    //}
+
+    public async void ConnectToGameServer(string gameServerIp, int gameServerPort, UnityAction callback = null)
+    {
+        IPEndPoint endPoint;
+        if (IPAddress.TryParse(gameServerIp, out IPAddress ipAddress))
+        {
+            endPoint = new IPEndPoint(ipAddress, gameServerPort);
+        }
+        else
+        {
+            endPoint = new IPEndPoint(IPAddress.Parse("43.202.60.191"), gameServerPort); // 기본 IP 주소
+        }
+
+        Debug.Log("Tcp Ip : " + ipAddress.MapToIPv4().ToString() + ", Port : " + gameServerPort);
+
+        try
+        {
+            // ???? ?????? ???? ???ο? ???? ?????? ???? ???
+            if (socket.Connected)
+                if (isConnected)
+                {
+                    Debug.Log("??????? ????");
+                    //socket.Shutdown(SocketShutdown.Both);
+                    //socket.Close();
+                    //socket.Shutdown(SocketShutdown.Both);
+                    //socket.Close();
+                    //StopAllCoroutines();
+                    socket.Disconnect(false);
+                }
+
+            socket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            await socket.ConnectAsync(endPoint);
+            isConnected = socket.Connected;
+            Debug.Log("??????");
+            OnReceive();
+            //OnReceive(); 
+            //StartCoroutine(OnSendQueue()); 
+            //StartCoroutine(OnReceiveQueue());
+            //StartCoroutine(Ping());
+            GamePacket packet = new GamePacket();
+            packet.VerifyTokenRequest = new C2SVerifyTokenRequest() { Token = UserInfo.myInfo.token };
+            SocketManager.instance.Send(packet);
+            callback?.Invoke();
+        }
+        catch (Exception e)
+        {
+            Debug.LogError("게임 서버 연결 실패: " + e.ToString());
         }
     }
 
@@ -115,11 +270,12 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
     {
         if(socket != null)
         {
-            while (socket.Connected && isConnected)
+            while (isConnected)
             {
                 try
                 {
                     var recvByteLength = await socket.ReceiveAsync(recvBuff, SocketFlags.None); //socket.ReceiveAsync는 await로 대기 시 새로운 데이터를 받기 전까지 대기한다.
+                    //Debug.Log("recvByteLength : " + recvByteLength);
                     if (!isConnected)
                     {
                         Debug.Log("Socket is disconnect");
@@ -129,10 +285,12 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
                     {
                         continue;
                     }
-
                     var newBuffer = new byte[remainBuffer.Length + recvByteLength];
+                    //Debug.Log("newBuffer : " + newBuffer);
                     Array.Copy(remainBuffer, 0, newBuffer, 0, remainBuffer.Length);
+                    //Debug.Log("remainBuffer : " + remainBuffer);
                     Array.Copy(recvBuff, 0, newBuffer, remainBuffer.Length, recvByteLength);
+                    //Debug.Log("remainBrecvBuffuffer : " + recvBuff);
 
                     var processedLength = 0;
                     while (processedLength < newBuffer.Length)
@@ -143,40 +301,82 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
                         }
 
                         using var stream = new MemoryStream(newBuffer, processedLength, newBuffer.Length - processedLength);
+                        //Debug.Log("stream : " + stream);
                         using var reader = new BinaryReader(stream);
+                        //Debug.Log("reader : " + reader);
 
                         var typeBytes = reader.ReadBytes(2);
+                        //Debug.Log("typeBytes : " + typeBytes);
                         Array.Reverse(typeBytes);
 
                         var type = (PayloadOneofCase)BitConverter.ToInt16(typeBytes);
+                        if ((int)type > 58 || (int)type < 0)
+                        {
+                            Debug.Log($"PacketType..!{type}");
+                            remainBuffer = Array.Empty<byte>();
+                        }
                         Debug.Log($"PacketType:{type}");
 
                         var versionLength = reader.ReadByte();
+                        //Debug.Log("versionLength : " + versionLength);
                         if (newBuffer.Length - processedLength < 11 + versionLength)
                         {
                             break;
                         }
                         var versionBytes = reader.ReadBytes(versionLength);
+                        //Debug.Log("versionBytes : " + versionLength);
                         var version = BitConverter.ToString(versionBytes);
+                        //Debug.Log("version : " + versionLength);
 
                         var sequenceBytes = reader.ReadBytes(4);
+                        //Debug.Log("sequenceBytes : " + sequenceBytes);
                         Array.Reverse(sequenceBytes);
                         var sequence = BitConverter.ToInt32(sequenceBytes);
+                        //Debug.Log("sequence : " + sequence);
 
                         var payloadLengthBytes = reader.ReadBytes(4);
+                        //Debug.Log("payloadLengthBytes : " + payloadLengthBytes);
+                        // 바이트 배열을 16진수 문자열로 변환하여 출력
+                        //Debug.Log("Payload Length Bytes: " + BitConverter.ToString(payloadLengthBytes));
+
+                        // 바이트 배열을 ASCII 문자열로 변환 (가능하면 ASCII 문자로 해석)
+                        string payloadString = System.Text.Encoding.ASCII.GetString(payloadLengthBytes);
+                        //Debug.Log("Payload as String: " + payloadString);
+
+                        // 각 바이트를 출력
+                        //Debug.Log("Payload Length Bytes: ");
+                        foreach (byte b in payloadLengthBytes)
+                        {
+                            //Debug.Log(b);
+                        }
+
                         Array.Reverse(payloadLengthBytes);
                         var payloadLength = BitConverter.ToInt32(payloadLengthBytes);
+                        //Debug.Log("payloadLength : " + payloadLength);
+                        //Debug.Log("payloadLength 전체" + BitConverter.ToInt32(payloadLengthBytes));
 
                         if (newBuffer.Length - processedLength < 11 + versionLength + payloadLength)
                         {
+                            //Debug.Log("캬아아아악"+ BitConverter.ToString(newBuffer, processedLength));
+                            
                             break;
                         }
                         var payloadBytes = reader.ReadBytes(payloadLength);
-
+                        if (payloadBytes.Length == payloadLength)
+                        {
+                            var packet = new Packet(type, version, sequence, payloadBytes);
+                            receiveQueue.Enqueue(packet);
+                            Debug.Log($"Enqueued Type: {type}|{receiveQueue.Count}");
+                        }
+                        else
+                        {
+                            //Debug.LogError($"미스매치 : {payloadLength}, 페이로드 길이 {payloadBytes.Length}");
+                            break;
+                        }
+                        // 바이트 배열을 16진수 문자열로 변환하여 출력
+                        string hexString = BitConverter.ToString(payloadBytes);
+                       // Debug.Log("데이터: " + hexString);
                         var totalLength = 11 + versionLength + payloadLength;
-                        var packet = new Packet(type, version, sequence, payloadBytes);
-                        receiveQueue.Enqueue(packet);
-                        Debug.Log($"Enqueued Type: {type}|{receiveQueue.Count}");
 
                         processedLength += totalLength;
                     }
@@ -198,6 +398,7 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
             }
             if(socket != null && socket.Connected)
             {
+                remainBuffer = Array.Empty<byte>();
                 Debug.Log("소켓 리시브 멈춤 다시 시작");
                 OnReceive();
             }
@@ -299,14 +500,26 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
             }
         }
     }
-    public IEnumerator Ping()
+    public void HearBeatOut(bool isReconnect = false)
+    {
+        //StopAllCoroutines();
+        if (isConnected)
+        {
+            this.isConnected = false;
+            UIManager.Show<PopupLogin>();
+            UIManager.Hide<PopupConnectionFailed>();
+            socket.Disconnect(isReconnect);
+        }
+    }
+    IEnumerator Ping()
     {
         while (SocketManager.instance.isConnected)
         {
             yield return new WaitForSeconds(5);
+            long timestamp = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds;
             GamePacket packet = new GamePacket();
-            packet.LoginResponse = new S2CLoginResponse();
-            //SocketManager.instance.Send(packet);
+            packet.PingRequest = new C2SPingRequest() { Message = "Ping", Timestamp = timestamp };
+            SocketManager.instance.Send(packet);
         }
     }
 }

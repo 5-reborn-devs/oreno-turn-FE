@@ -477,8 +477,13 @@ namespace Ironcow
         }
 
         public static CardDataSO GetCardData(this CardType idx)
-        {
+        {   
+            try{
             return DataManager.instance.GetData<CardDataSO>(string.Format("CAD{0:00000}", (int)idx));
+            }catch(KeyNotFoundException){
+                Debug.LogError($"KeyNotFoundException: The given key was not present in the dictionary."); 
+                return null; // 또는 적절한 기본값을 반환
+            }
         }
 
         public static List<UserInfo> UpdateUserData(this List<UserInfo> users, RepeatedField<UserData> userdatas)

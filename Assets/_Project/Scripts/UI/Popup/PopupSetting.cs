@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Ironcow;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PopupSetting : UIBase
 {
-    [SerializeField] private Slider bgm;
-    [SerializeField] private Slider effect;
     public override void Opened(object[] param)
     {
         
@@ -18,19 +17,15 @@ public class PopupSetting : UIBase
         UIManager.Hide<PopupSetting>();
     }
 
-    public void OnChangeBgm(float value)
+    public void OnClickButton()
     {
-        AudioManager.instance.SetBgmVolume(value);
+        Debug.Log("게임 종료!");
+        Application.Quit(); // 게임 종료
     }
 
-    public void OnChangeEffect(float value)
+    public async void onClickConnectionFailed()
     {
-        AudioManager.instance.SetEffectVolume(value);
-    }
-
-    public void OnLogout()
-    {
-        DataManager.instance.OnLogout();
-        HideDirect();
+        Debug.Log("로비화면으로");
+        await UIManager.Show<PopupLogin>();
     }
 }

@@ -6,6 +6,9 @@ using UnityEngine.UI;
 using TMPro;
 using JetBrains.Annotations;
 using Google.Protobuf.Collections;
+using System.Text.RegularExpressions;
+using System;
+
 
 public class PopupPleaMarket : UIBase
 {
@@ -19,11 +22,36 @@ public class PopupPleaMarket : UIBase
     float time = 0;
     public bool isMyTurn;
 
-    public bool isInitCards { get => cards.Count > 0; }
-    public override async void Opened(object[] param)
-    {
+    public GamePacket fleaMarketNotificationData; // FleaMarketNotification 데이터를 저장할 변수 
+    public GamePacket eveningDistributionNotificationData; // EveningDistributionNotification 데이터를 저장할 변수 
 
+    [SerializeField] public GameObject objectForThreeCards;
+    [SerializeField] public GameObject objectForFiveCards;
+    [SerializeField] public GameObject objectForTwoCards;
+
+    // public bool isInitCards { get => cards.Count > 0; }
+    // public override async void Opened(object[] param)
+    // {
+
+    // } //기존
+    public bool isInitCards { get => cards.Count > 0; } 
+    public override async void Opened(object[] param) { } 
+    
+    // FleaMarketNotification 초기화 메서드 
+    public void InitFleaMarket(GamePacket gamePacket) { 
+        this.fleaMarketNotificationData = gamePacket; 
+        var response = gamePacket.FleaMarketNotification; 
+        SetCards(response.CardTypes); 
+    } 
+        
+    // EveningDistributionNotification 초기화 메서드 
+    public void InitEveningDistribution(GamePacket gamePacket) { 
+        this.eveningDistributionNotificationData = gamePacket; 
+        var response = gamePacket.EveningDistributionNotification; 
+        SetCards(response.CardType); 
     }
+
+ 
 
     public async void Init(long id)
     { 
@@ -40,22 +68,75 @@ public class PopupPleaMarket : UIBase
         }
     }
 
+    // 숫자 추출 함수 추가 
+    public int ExtractNumberFromCardType(string cardType) { 
+    // 정규식을 사용하여 숫자 부분만 추출 
+    string numberPart = Regex.Match(cardType, @"\d+").Value; return int.Parse(numberPart); }
+
+    // OnClickItem 메서드 수정 
+    // public void OnClickItem(int idx) { 
+    //     if (!isMyTurn) return; 
+    //     if (SocketManager.instance.isConnected) { 
+    //         GamePacket packet = new GamePacket(); 
+    //     // FleaMarketNotification 데이터에 따른 조건 처리 
+    //     if (fleaMarketNotificationData != null) { 
+    //         packet.FleaMarketPickRequest = new C2SFleaMarketPickRequest() { PickIndex = idx }; } 
+
+    //     // EveningDistributionNotification 데이터에 따른 조건 처리 
+    //     else if (eveningDistributionNotificationData != null) { 
+            
+    //         var response = eveningDistributionNotificationData.EveningDistributionNotification; 
+    //         packet.EveningPickRequest = new C2SEveningPickRequest() { CardType = response.CardType }; } 
+        
+    //     else { packet.FleaMarketPickRequest = new C2SFleaMarketPickRequest() { PickIndex = idx }; } 
+        
+    //     SocketManager.instance.Send(packet); StopAllCoroutines(); timer.text = ""; }
+        
+    //     else { GameManager.instance.OnSelectCard(UserInfo.myInfo, cards[idx].cardData.rcode, DataManager.instance.users.Find(obj => obj.id == id), "CAD00010"); 
+    //     } 
+    //     }
+
     public void OnClickItem(int idx)
     {
-        if (!isMyTurn) return;
+        //if (!isMyTurn) return;
         if (SocketManager.instance.isConnected)
         {
             GamePacket packet = new GamePacket();
             packet.FleaMarketPickRequest = new C2SFleaMarketPickRequest() { PickIndex = idx };
             SocketManager.instance.Send(packet);
+            Debug.Log("패킷좀 보자고" + packet);
             StopAllCoroutines();
             timer.text = "";
+            
+            // 플리마켓 팝업 닫기 
+            UIManager.Hide<PopupPleaMarket>(); 
         }
         else
         {
             GameManager.instance.OnSelectCard(UserInfo.myInfo, cards[idx].cardData.rcode, DataManager.instance.users.Find(obj => obj.id == id), "CAD00010");
         }
     }
+
+    // public void OnClickItem(int idx, string cardData) { 
+    //     if (!isMyTurn) return; if (SocketManager.instance.isConnected) { 
+    //         GamePacket packet = new GamePacket(); 
+    //         // FleaMarketNotification 데이터에 따른 조건 처리 
+    //         if (fleaMarketNotificationData != null) { packet.FleaMarketPickRequest = new C2SFleaMarketPickRequest() { PickIndex = idx }; } 
+
+    //         // EveningDistributionNotification 데이터에 따른 조건 처리 
+    //         else if (eveningDistributionNotificationData != null) { 
+    //             int cardNumber = ExtractNumberFromCardType(cardData); 
+    //             packet.EveningPickRequest = new C2SEveningPickRequest() { CardTypeNumber = cardNumber }; 
+    //             } 
+    //         else { packet.FleaMarketPickRequest = new C2SFleaMarketPickRequest() { PickIndex = idx }; } 
+
+    //         SocketManager.instance.Send(packet); StopAllCoroutines(); timer.text = ""; 
+    //         // 플리마켓 팝업 닫기 
+    //         UIManager.Hide<PopupPleaMarket>(); 
+    //         } else { 
+    //         GameManager.instance.OnSelectCard(UserInfo.myInfo, ExtractNumberFromCardType(cardData), DataManager.instance.users.Find(obj => obj.id == id), "CAD00010");
+    //         }
+    //         }
 
     public void SetNextUserTurn(UserInfo userinfo, int selectedCardIdx)
     {
@@ -82,11 +163,34 @@ public class PopupPleaMarket : UIBase
         for (int i = 0; i < cards.Count; i++)
         {
             var cardData = cards[i].GetCardData();
+            if (cardData != null) {
             var card = Instantiate(await ResourceManager.instance.LoadAsset<Card>("Card", eAddressableType.Prefabs), grid);
             card.Init(cardData, i, OnClickItem);
             this.cards.Add(card);
+            }else { Debug.LogWarning("Card data for is missing and will not be displayed."); }
         }
+        // 카드 장수에 따라 다른 오브젝트 활성화 
+        // if (cards.Count < 3) { 
+        // objectForTwoCards.SetActive(true);
+        // objectForThreeCards.SetActive(false); 
+        // objectForFiveCards.SetActive(false);
+
+        if (cards.Count == 3) { 
+        objectForTwoCards.SetActive(false);
+        objectForThreeCards.SetActive(true); 
+        objectForFiveCards.SetActive(false);
+        } else if (cards.Count > 3) { 
+        objectForTwoCards.SetActive(false);
+        objectForThreeCards.SetActive(false); 
+        objectForFiveCards.SetActive(true); 
+        } else { 
+        objectForTwoCards.SetActive(true);
+        objectForThreeCards.SetActive(false); 
+        objectForFiveCards.SetActive(false); 
+        }
+        
     }
+
 
     public void OnSelectedCard(RepeatedField<int> idxs)
     {

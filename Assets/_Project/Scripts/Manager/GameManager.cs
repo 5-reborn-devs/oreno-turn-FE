@@ -16,6 +16,16 @@ public class GameManager : MonoSingleton<GameManager>
     public Character userCharacter;
     public Character targetCharacter;
     private CardDataSO selectedCard;
+    public AudioSource audioSource;
+    public AudioClip bbangSound;
+    public AudioClip healSound;
+    public AudioClip HitSound;
+    public AudioClip Strength;
+    public AudioClip Vulnerable;
+    public AudioClip Weakened;
+    public AudioClip Mana_Rcovery;
+    public AudioClip Armor;
+    public AudioClip failSound;
     public CardDataSO SelectedCard
     {
         get => selectedCard;
@@ -44,6 +54,7 @@ public class GameManager : MonoSingleton<GameManager>
     List<Transform> spawns;
     public bool isSelectBombTarget = false;
 
+    public string rcode1;
     private void Start()
     {
         if (!SocketManager.instance.isConnected) Init();
@@ -53,19 +64,19 @@ public class GameManager : MonoSingleton<GameManager>
 
     public async void Init()
     {
-        // ī�� ���� ���� ����
+        // ī�� ���� ���� ����
         var deckDatas = DataManager.instance.GetDatas<DeckData>();
         var cards = new List<CardDataSO>();
         foreach (var deckData in deckDatas)
         {
             for (int i = 0; i < deckData.count; i++)
-            {
+            {   
                 cards.Add(DataManager.instance.GetData<CardDataSO>(deckData.targetRcode).Clone());
             }
         }
         worldDeck = new Queue<CardDataSO>(cards.Shuffle());
 
-        //���� ĳ���� ����
+        //���� ĳ���� ����
         var bounds = tilemapRenderer.bounds;
         var myIndex = DataManager.instance.users.FindIndex(obj => obj == UserInfo.myInfo); 
         spawns = new List<Transform>(spawnPoints);
@@ -77,10 +88,11 @@ public class GameManager : MonoSingleton<GameManager>
             chara.OnChangeState<CharacterStopState>();
             if (userinfo.roleType == eRoleType.target)
                 chara.SetTargetMark();
-            chara.OnVisibleMinimapIcon(Util.GetDistance(myIndex, i, DataManager.instance.users.Count) + userinfo.slotFar <= UserInfo.myInfo.slotRange && myIndex != i); // ������ �Ÿ��� �ִ� ���� �����ܸ� ǥ��
+            chara.OnVisibleMinimapIcon(Util.GetDistance(myIndex, i, DataManager.instance.users.Count) + userinfo.slotFar <= UserInfo.myInfo.slotRange && myIndex != i); // ������ �Ÿ��� �ִ� ���� �����ܸ� ǥ��
             chara.userInfo = userinfo;
             var data = DataManager.instance.GetData<CharacterDataSO>(userinfo.selectedCharacterRcode);
             userinfo.maxHp = data.health + (userinfo.roleType == eRoleType.target ? 1 : 0);
+            
             for(int j = 0; j < userinfo.hp; j++)
             {
                 OnDrawCard(userinfo);
@@ -98,40 +110,56 @@ public class GameManager : MonoSingleton<GameManager>
         isInit = true;
     }
 
+    public GameObject FindInactiveObjectByName(string name) { 
+        Transform[] allObjects = Resources.FindObjectsOfTypeAll<Transform>(); 
+        foreach (Transform obj in allObjects) { 
+            if (obj.hideFlags == HideFlags.None && obj.name == name) { 
+                return obj.gameObject; } } 
+                return null; 
+            }
+
     public void SetGameState(GameStateData gameStateData)
     {
         SetGameState(gameStateData.PhaseType, gameStateData.NextPhaseAt);
     }
 
     public async void SetGameState(PhaseType PhaseType, long NextPhaseAt)
-    { 
+    {
         if (PhaseType == PhaseType.Day)
         {
             UserInfo.myInfo.OnDayOfAfter();
             day++;
         }
-
         foreach (var key in characters.Keys)
         {
-            if (PhaseType == PhaseType.Day)
+            if (PhaseType == PhaseType.Day || PhaseType == PhaseType.End)
                 characters[key].OnChangeState<CharacterIdleState>();
             else
                 characters[key].OnChangeState<CharacterStopState>();
         }
-
         isAfternoon = PhaseType == PhaseType.Day;
         UIManager.Get<UIGame>().OnDaySetting(day, PhaseType, NextPhaseAt);
-
-        if (PhaseType == PhaseType.End)
-        {
-            if(UserInfo.myInfo.handCards.Count > UserInfo.myInfo.hp)
-                UIManager.Show<PopupRemoveCardSelection>();
-        }
-        else
-        {
-            UIManager.Hide<PopupRemoveCardSelection>();
-        }
-        
+        // if (PhaseType == PhaseType.End)
+        // {
+        //     // 비활성화된 nightOrb 오브젝트를 찾습니다
+        //     GameObject nightOrb = FindInactiveObjectByName("nightOrb");
+        //     if (nightOrb != null)
+        //     {
+        //         nightOrb.SetActive(true);
+        //         MoveUpAndDown moveUpAndDown = nightOrb.GetComponent<MoveUpAndDown>();
+        //         if (moveUpAndDown != null)
+        //         {
+        //             moveUpAndDown.SetPhase(PhaseType);
+        //             Debug.Log("MoveUpAndDown 컴포넌트의 SetPhase 호출 완료");
+        //         }
+        //         else { Debug.LogError("MoveUpAndDown 컴포넌트를 찾을 수 없습니다."); }
+        //     }
+        //     else { Debug.LogError("nightOrb 오브젝트를 찾을 수 없습니다."); }
+        // }
+        // else
+        // {
+        //     // UIManager.Hide<PopupRemoveCardSelection>();
+        // }
         isPlaying = true;
         UIGame.instance.SetDeckCount();
     }
@@ -167,7 +195,8 @@ public class GameManager : MonoSingleton<GameManager>
         chara.OnChangeState<CharacterStopState>();
         if (userinfo.roleType == eRoleType.target)
             chara.SetTargetMark();
-        chara.OnVisibleMinimapIcon(Util.GetDistance(myIndex, idx, DataManager.instance.users.Count) <= UserInfo.myInfo.slotRange && myIndex != idx); // ������ �Ÿ��� �ִ� ���� �����ܸ� ǥ��
+        // chara.OnVisibleMinimapIcon(Util.GetDistance(myIndex, idx, DataManager.instance.users.Count) <= UserInfo.myInfo.slotRange && myIndex != idx); // ������ �Ÿ��� �ִ� ���� �����ܸ� ǥ��
+        chara.OnVisibleMinimapIcon(true); // 미니맵에 항상 표시되도록 변경
         chara.userInfo = userinfo;
     }
 
@@ -182,6 +211,15 @@ public class GameManager : MonoSingleton<GameManager>
     }
 
     public void SetPleaMarketCards()
+    {
+        for (int i = 0; i < DataManager.instance.users.Count; i++)
+        {
+            pleaMarketCards.Add(worldDeck.Dequeue());
+        }
+    }
+
+        //진수: 일단 복제
+        public void SetEveningDrawCards()
     {
         for (int i = 0; i < DataManager.instance.users.Count; i++)
         {
@@ -236,7 +274,7 @@ public class GameManager : MonoSingleton<GameManager>
     }
 
     public void OnTargetSelect(Character character)
-    {
+    {   
         if (targetCharacter == character)
         {
             character.OnSelect();
@@ -249,23 +287,89 @@ public class GameManager : MonoSingleton<GameManager>
             targetCharacter = character;
             character.OnSelect();
         }
+        Debug.Log("캐릭터값" + character);
+        // UIGame의 OnClickOpponets 메서드를 호출하여 character 인자를 넘김 
+        UIGame.instance.OnClickOpponents(character);
+
     }
+
+    // private void UpdateUserInfoSlot(UserInfo userinfo) { 
+    //     if (userinfo != null) { 
+    //         int idx = DataManager.instance.users.FindIndex(obj => obj.id == userinfo.id); 
+    //         if (idx >= 0 && idx < userInfoSlots.Count) { 
+    //             userInfoSlots[idx].UpdateData(userinfo); 
+    //             userInfoSlots[idx].SetSelectVisible(true); } 
+    //             } 
+    //         }
 
     public void OnUseCard(string rcode = "", UserInfo target = null)
     {
+        Debug.Log("실제 실제 실제 타겟 값 : " + target);
         if (!string.IsNullOrEmpty(rcode))
         {
             SendSocketUseCard(target == null ? UserInfo.myInfo : target, UserInfo.myInfo, rcode);
         }
-        else if(targetCharacter != null && SelectedCard != null)
+        else if (SelectedCard != null)
         {
             UserInfo.myInfo.handCards.Remove(SelectedCard);
-            SendSocketUseCard(targetCharacter.userInfo, UserInfo.myInfo, SelectedCard.rcode);
+            SendSocketUseCard(targetCharacter?.userInfo, UserInfo.myInfo, SelectedCard.rcode);
+        }
+    }
+
+    public void OnUseCardResponse(bool response)
+    {
+        Debug.Log("onUseCardResponse" + response);
+        if (response)
+        {
+            switch (rcode1)
+            {
+                case "CAD00001":
+                    {
+                        audioSource.PlayOneShot(bbangSound);
+                    }
+                    break;
+                case "CAD00004":
+                    {
+                        audioSource.PlayOneShot(healSound);
+                    }
+                    break;
+                case "CAD00024":
+                    {
+                        audioSource.PlayOneShot(Armor);
+                    }
+                    break;
+                case "CAD00025":
+                    {
+                        audioSource.PlayOneShot(Strength);
+                    }
+                    break;
+                case "CAD00026":
+                    {
+                        audioSource.PlayOneShot(Vulnerable);
+                    }
+                    break;
+                case "CAD00027":
+                    {
+                        audioSource.PlayOneShot(Weakened);
+                    }
+                    break;
+                case "CAD00028":
+                    {
+                        audioSource.PlayOneShot(Mana_Rcovery);
+                    }
+                    break;
+            }
+        }
+        else
+        {
+            Debug.Log("카드실패");
+            audioSource.PlayOneShot(failSound);
         }
     }
 
     public void SendSocketUseCard(UserInfo userinfo, UserInfo useUserInfo,  string rcode)
     {
+        rcode1 = rcode;
         var card = DataManager.instance.GetData<CardDataSO>(rcode);
         if (!string.IsNullOrEmpty(card.useTag) && card.useTag != targetCharacter.tag) return;
         if (SocketManager.instance.isConnected)
@@ -273,8 +377,8 @@ public class GameManager : MonoSingleton<GameManager>
             var cardIdx = useUserInfo.handCards.FindIndex(obj => obj.rcode == rcode);
             GamePacket packet = new GamePacket();
             //packet.UseCardRequest = new C2SUseCardRequest() { CardType = cardIdx, TargetUserId = userinfo == null ? "" : userinfo.id };
-            packet.UseCardRequest = new C2SUseCardRequest() { CardType = card.cardType, TargetUserId = userinfo == null ? 0 : userinfo.id };
-            SocketManager.instance.Send(packet);
+            packet.UseCardRequest = new C2SUseCardRequest() { CardType = card.cardType, TargetUserId = userinfo == null ? useUserInfo.id : userinfo.id };
+            SocketManager.instance.Send(packet);  
         }
         else
         {
@@ -285,17 +389,26 @@ public class GameManager : MonoSingleton<GameManager>
                         if (userinfo.id == UserInfo.myInfo.id)
                         {
                             UIManager.Show<PopupBattle>(rcode, useUserInfo.id);
+
+                            // 빵야 쏜 사람 소리
                         }
                         else
                         {
+
                             var defCard = userinfo.handCards.Find(obj => obj.rcode == card.defCard);
                             if (defCard != null)
                             {
+
                                 userinfo.handCards.Remove(defCard);
                             }
                             else
                             {
+
+                                audioSource.PlayOneShot(HitSound);
+                                // 카드 효과음 설정 해주면 될듯
                                 userinfo.hp--;
+                                //userinfo.hp = userinfo.hp - 5;
+                                // 여기서 피격 소리 재생
                             }
                         }
                     }
@@ -500,7 +613,7 @@ public class GameManager : MonoSingleton<GameManager>
                 }
                 break;
             case "CAD00010":
-                {
+                {   //진수: 실질적 클라이언트 카드 수급 구문 라인 
                     var card = pleaMarketCards.Find(obj => obj.rcode == rcode);
                     userinfo.AddHandCard(card);
                     var index = DataManager.instance.users.IndexOf(useUserInfo);
@@ -539,6 +652,33 @@ public class GameManager : MonoSingleton<GameManager>
     public void UnselectCard()
     {
         selectedCard = null;
+    }
+
+    public class UserCharacter : MonoBehaviour
+    {
+        public float speed = 5f; // �̵� �ӵ�
+
+        private void Update()
+        {
+            if (targetPosition.HasValue)
+            {
+                Vector3 direction = (targetPosition.Value - transform.position).normalized;
+                transform.position += direction * speed * Time.deltaTime;
+
+                // ��ǥ ��ġ�� �����ϸ� ����
+                if (Vector3.Distance(transform.position, targetPosition.Value) < 0.1f)
+                {
+                    targetPosition = null;
+                }
+            }
+        }
+
+        private Vector3? targetPosition;
+
+        public void MoveToPosition(Vector3 position)
+        {
+            targetPosition = position;
+        }
     }
 
 }

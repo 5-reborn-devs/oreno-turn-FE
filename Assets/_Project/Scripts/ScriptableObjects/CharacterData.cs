@@ -7,5 +7,6 @@ using Ironcow;
 public class CharacterDataSO : BaseDataSO
 {
     public int health;
+    public int Mp;
     public bool isLeft;
 }

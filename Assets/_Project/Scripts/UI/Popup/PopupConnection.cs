@@ -12,8 +12,12 @@ public class PopupConnection : UIBase
 
     public override void Opened(object[] param)
     {
-        ip.text = PlayerPrefs.GetString("ip", "");
-        port.text = PlayerPrefs.GetString("port", "");
+        PlayerPrefs.DeleteAll();
+        PlayerPrefs.SetString("ip", "3.34.13.74");
+        PlayerPrefs.SetString("port", "9000");
+        PlayerPrefs.Save();
+        ip.text = PlayerPrefs.GetString("ip");
+        port.text = PlayerPrefs.GetString("port");
     }
 
     public override void HideDirect()
@@ -23,8 +27,8 @@ public class PopupConnection : UIBase
 
     public void OnClickConnection()
     {
-        if (string.IsNullOrEmpty(ip.text)) ip.text = "127.0.0.1";
-        if (string.IsNullOrEmpty(port.text)) port.text = "3000";
+        if (string.IsNullOrEmpty(ip.text)) ip.text = "43.202.60.191";
+        if (string.IsNullOrEmpty(port.text)) port.text = "9000";
         PlayerPrefs.SetString("ip", ip.text);
         PlayerPrefs.SetString("port", port.text);
         if (SocketManager.instance.isConnected)

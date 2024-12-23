@@ -6,13 +6,13 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Events;
 using System.Threading.Tasks;
+using System;
 
 public class UserInfoSlot : UIListItem
 {
     [SerializeField] private Image thumbnail;
     [SerializeField] private TMP_Text nickname;
-    [SerializeField] private List<GameObject> hpSlots;
-    [SerializeField] private List<GameObject> hpGauges;
+    [SerializeField] private Slider hpGauge;
     [SerializeField] private GameObject targetMark;
     [SerializeField] private TMP_Text index;
     [SerializeField] private Image weapon;
@@ -20,10 +20,33 @@ public class UserInfoSlot : UIListItem
     [SerializeField] private List<Image> debuffs;
     [SerializeField] private GameObject select;
     [SerializeField] private GameObject death;
+    [SerializeField] private List<GameObject> mpSlots;
+    [SerializeField] private List<GameObject> mpGauges;
+    [SerializeField] public Image hitImage;
+    public AudioSource audioSoucre;
+    public AudioClip hitSound;
+    public float fadeDuration = 0.5f; // 페이드 인/아웃 시간
 
+    public int previousHp = 50; // 여기에다가 이전 HP 저장 // 처음에는 hp 초기값 50
     public int idx;
     public UnityAction<int> callback;
     public bool isDeath { get => death.activeInHierarchy; }
+
+    // 디버그 로그 추가 
+    //Debug.Log($"Init Slot: {nickname.text}, Index: {index}");
+
+    void Start()
+    {
+        // 초기 alpha 값을 0으로 설정 (투명) 
+        SetAlpha(0f);
+    }
+    // Alpha 값을 설정하는 함수 
+    void SetAlpha(float alpha)
+    {
+        Color color = hitImage.color;
+        color.a = alpha;
+        hitImage.color = color;
+    }
 
     public async Task Init(UserInfo userinfo, int index, UnityAction<int> callback)
     {
@@ -33,11 +56,14 @@ public class UserInfoSlot : UIListItem
         var data = DataManager.instance.GetData<CharacterDataSO>(userinfo.selectedCharacterRcode);
         thumbnail.sprite = await ResourceManager.instance.LoadAsset<Sprite>(data.rcode, eAddressableType.Thumbnail);
         targetMark.GetComponent<Image>().sprite = await ResourceManager.instance.LoadAsset<Sprite>("role_" + userinfo.roleType.ToString(), eAddressableType.Thumbnail);
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 10; i++)
         {
-            hpSlots[i].SetActive(userinfo.hp > i);
-            hpGauges[i].SetActive(userinfo.hp > i);
+            mpSlots[i].SetActive(userinfo.mp > i);
+            mpGauges[i].SetActive(userinfo.mp > i);
         }
+
+        UpdateHp(userinfo.hp, userinfo.maxHp);
+
         targetMark.SetActive(userinfo.roleType == eRoleType.target);
         this.index.text = (index + 1).ToString();
         gameObject.SetActive(true);
@@ -49,18 +75,60 @@ public class UserInfoSlot : UIListItem
         {
             equips.ForEach(obj => obj.gameObject.SetActive(false));
         }
-        if(debuffs.Count > 0)
-        { 
+        if (debuffs.Count > 0)
+        {
             debuffs.ForEach(obj => obj.gameObject.SetActive(false));
         }
     }
-
+    public void UpdateHp(int currentHp, int maxHp)
+    {
+        float currentHpClamped = Mathf.Clamp(currentHp, 0, maxHp);
+        hpGauge.value = currentHpClamped / maxHp;
+        if (currentHp < previousHp) // 맞았을때 검증
+        {
+            audioSoucre.PlayOneShot(hitSound);
+            TriggerOpacityChange();
+        }
+        previousHp = currentHp;
+    }
+    // 불투명도를 255로 올렸다가 다시 0으로 만드는 함수 호출 
+    public void TriggerOpacityChange()
+    {
+        Debug.Log("트리거 온");
+        StartCoroutine(ChangeAlpha());
+    }
+    IEnumerator ChangeAlpha()
+    {
+        // Alpha 값을 1로 올리기 
+        float elapsedTime = 0f;
+        while (elapsedTime < fadeDuration)
+        {
+            SetAlpha(Mathf.Lerp(0f, 1f, elapsedTime / fadeDuration));
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        SetAlpha(1f);
+        // 잠시 대기 
+        yield return new WaitForSeconds(0.1f);
+        // Alpha 값을 다시 0으로 만들기 
+        elapsedTime = 0f;
+        while (elapsedTime < fadeDuration)
+        {
+            SetAlpha(Mathf.Lerp(1f, 0f, elapsedTime / fadeDuration));
+            elapsedTime += Time.deltaTime; yield return null;
+        }
+        SetAlpha(0f);
+        Debug.Log("셋알파까지 끝남");
+    }
     public async void UpdateData(UserInfo userinfo)
     {
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 10; i++)
         {
-            hpGauges[i].SetActive(userinfo.hp > i);
+            mpGauges[i].SetActive(userinfo.mp > i);
         }
+
+        UpdateHp(userinfo.hp, userinfo.maxHp);
+
         if (weapon != null)
         {
             weapon.gameObject.SetActive(userinfo.weapon != null);
@@ -112,11 +180,31 @@ public class UserInfoSlot : UIListItem
 
     public void SetDeath()
     {
-        for (int i = 0; i < 5; i++)
+        hpGauge.gameObject.SetActive(false);
+        if(UserInfo.myInfo.hp <= 0){
+            Debug.Log("나 주거요");
+            EndShowBox();
+        }
+        for (int i = 0; i < 10; i++)
         {
-            hpGauges[i].SetActive(false);
+            mpGauges[i].SetActive(false);
         }
         death.SetActive(true);
         SetVisibleRole(true);
+    }
+
+    public async void EndShowBox(){
+
+            UIGame.instance.minimap.localScale = new Vector3(5, 5, 1); 
+            UIGame.instance.minimap.anchoredPosition = new Vector2(-723.8423f, -403.0978f);
+            UIGame.instance.userInfoSlot.gameObject.SetActive(false);
+            UIGame.instance.time.gameObject.SetActive(false);
+            UIGame.instance.dayInfo.gameObject.SetActive(false);
+            UIGame.instance.hands.gameObject.SetActive(false);
+            UIGame.instance.userInfoParent.gameObject.SetActive(false);
+            UIGame.instance.decklist.gameObject.SetActive(false);
+            UIGame.instance.noticeLog.gameObject.SetActive(false);
+            UIGame.instance.lookAtYou.gameObject.SetActive(true);
+
     }
 }

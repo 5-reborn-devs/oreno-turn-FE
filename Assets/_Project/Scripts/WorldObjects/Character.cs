@@ -23,7 +23,7 @@ public class Character : FSMController<CharacterState, CharacterFSM, CharacterDa
     [SerializeField] private CircleCollider2D collider;
     [SerializeField] public GameObject stop;
 
-    [SerializeField] private float speed = 3;
+    [SerializeField] private float speed = 4.5f;
 
     [HideInInspector] public UserInfo userInfo;
 
@@ -31,6 +31,9 @@ public class Character : FSMController<CharacterState, CharacterFSM, CharacterDa
     public Vector2 dir;
     public float Speed { get => speed; }
     public bool isInside;
+    public Vector2 targetPosition; // ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ì½º ï¿½ï¿½Ç¥ ï¿½ß°ï¿½ï¿½ï¿½ ï¿½ï¿½
+
+    public float attackRange = 5f;
 
     private void Awake()
     {
@@ -75,13 +78,13 @@ public class Character : FSMController<CharacterState, CharacterFSM, CharacterDa
     public void SetMovePosition(Vector3 pos)
     {
         if (characterType == eCharacterType.playable) return;
-        //rig.MovePosition(pos);
-        agent.SetDestination(pos);
-        var isLeft = agent.velocity.x < 0;
+        rig.MovePosition(pos);
+        // agent.SetDestination(pos);
+        var isLeft = pos.x < 0;
         isLeft = data.isLeft ? !isLeft : isLeft;
-        if (agent.velocity.x != 0)
+        if (pos.x != 0)
             anim.SetFlip(isLeft);
-        if (agent.velocity == Vector3.zero)
+        if (pos == Vector3.zero)
             ChangeState<CharacterIdleState>().SetElement(anim, rig, this);
         else
             ChangeState<CharacterWalkState>().SetElement(anim, rig, this);
@@ -96,7 +99,15 @@ public class Character : FSMController<CharacterState, CharacterFSM, CharacterDa
 
     public void OnChangeState<T>() where T : CharacterState
     {
-        ChangeState<T>().SetElement(anim, rig, this);
+        if (states.ContainsKey(typeof(T).Name))
+        {
+            ChangeState<T>()?.SetElement(anim, rig, this);
+        }
+        else
+        {
+            ChangeState<T>()?.SetElement(anim, rig, this);
+        }
+        
     }
 
     public bool IsState<T>()
@@ -121,24 +132,37 @@ public class Character : FSMController<CharacterState, CharacterFSM, CharacterDa
     {
         selectCircle.SetActive(!selectCircle.activeInHierarchy);
     }
-
+    public void SelectFalse()
+    {
+        selectCircle.SetActive(false);
+    }
     public void OnVisibleRange()
     {
         range.SetActive(!range.activeInHierarchy);
     }
 
-    float syncFrame = 0;
-    public void MoveCharacter(Vector2 dir)
+    public void MoveCharacter(Vector2 Vecotr2tranPos)
     {
         if (fsm.IsState<CharacterStopState>() || fsm.IsState<CharacterPrisonState>() || fsm.IsState<CharacterDeathState>()) return;
+        // Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½Ç¥ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+        Vector2 currentPos = GameManager.instance.userCharacter.transform.position; // ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ 
+
+
+        this.targetPosition = Vecotr2tranPos; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ character.targetPosition ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ï¿½ï¿½
+        //ï¿½ï¿½ï¿½ï¿½È­ï¿½ï¿½ dir ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 20,13  1,1 ï¿½ï¿½ï¿½ï¿½ï¿½Ì³ï¿½ ï¿½ï¿½ï¿½Ï´ï¿½ï¿½Ì³ï¿½ ï¿½Â»ï¿½ï¿½ï¿½Ì³ï¿½ ï¿½ï¿½ï¿½Ï´ï¿½ï¿½Ì³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë¼ï¿½ï¿½Ö°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý´Ï´ï¿½.
+        Vector2 dir = new Vector2(Vecotr2tranPos.x - currentPos.x, Vecotr2tranPos.y - currentPos.y).normalized; 
         this.dir = dir;
         var isLeft = dir.x < 0;
         isLeft = data.isLeft ? !isLeft : isLeft;
         if (dir.x != 0)
             anim.SetFlip(isLeft);
-        if (dir == Vector2.zero) ChangeState<CharacterIdleState>().SetElement(anim, rig, this);
-        else ChangeState<CharacterWalkState>().SetElement(anim, rig, this);
+        if (dir == Vector2.zero) ChangeState<CharacterIdleState>().SetElement(anim, rig, this); // ï¿½ï¿½ï¿½ï¿½
+        else
+        {
+            ChangeState<CharacterWalkState>().SetElement(anim, rig, this); // ï¿½È´ï¿½
+        }
     }
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -150,8 +174,9 @@ public class Character : FSMController<CharacterState, CharacterFSM, CharacterDa
             }
             isInside = true;
             if (userInfo != null)
-                OnVisibleMinimapIcon(Util.GetDistance(UserInfo.myInfo.index, userInfo.index, DataManager.instance.users.Count)
-                    + userInfo.slotFar <= UserInfo.myInfo.slotRange && userInfo.id != UserInfo.myInfo.id); // °¡´ÉÇÑ °Å¸®¿¡ ÀÖ´Â À¯Àú ¾ÆÀÌÄÜ¸¸ Ç¥½Ã
+                // OnVisibleMinimapIcon(Util.GetDistance(UserInfo.myInfo.index, userInfo.index, DataManager.instance.users.Count)
+                //     + userInfo.slotFar <= UserInfo.myInfo.slotRange && userInfo.id != UserInfo.myInfo.id); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ü¸ï¿½ Ç¥ï¿½ï¿½
+                OnVisibleMinimapIcon(true); // ë¯¸ë‹ˆë§µì— í•­ìƒ í‘œì‹œë˜ë„ë¡ ë³€ê²½
 
         }
     }
@@ -166,8 +191,9 @@ public class Character : FSMController<CharacterState, CharacterFSM, CharacterDa
             }
             isInside = false;
             if (userInfo != null)
-                OnVisibleMinimapIcon(Util.GetDistance(UserInfo.myInfo.index, userInfo.index, DataManager.instance.users.Count)
-                    + userInfo.slotFar <= UserInfo.myInfo.slotRange && userInfo.id != UserInfo.myInfo.id); // °¡´ÉÇÑ °Å¸®¿¡ ÀÖ´Â À¯Àú ¾ÆÀÌÄÜ¸¸ Ç¥½Ã
+                // OnVisibleMinimapIcon(Util.GetDistance(UserInfo.myInfo.index, userInfo.index, DataManager.instance.users.Count)
+                //     + userInfo.slotFar <= UserInfo.myInfo.slotRange && userInfo.id != UserInfo.myInfo.id); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Å¸ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ü¸ï¿½ Ç¥ï¿½ï¿½
+                OnVisibleMinimapIcon(true); // ë¯¸ë‹ˆë§µì— í•­ìƒ í‘œì‹œë˜ë„ë¡ ë³€ê²½
         }
     }
 
@@ -183,6 +209,13 @@ public class Character : FSMController<CharacterState, CharacterFSM, CharacterDa
         }
     }
 
+    public bool IsTargetInRange(Vector2 targetPosition)
+    {
+        // íƒ€ê²Ÿê³¼ì˜ ê±°ë¦¬ë¥¼ ê³„ì‚°í•˜ì—¬ ì‚¬ì •ê±°ë¦¬ ë‚´ì— ìžˆëŠ”ì§€ í™•ì¸
+        float distance = Vector2.Distance(transform.position, targetPosition);
+        return distance <= attackRange;
+    }
+
     private void Update()
     {
         if(fsm != null)
@@ -190,7 +223,8 @@ public class Character : FSMController<CharacterState, CharacterFSM, CharacterDa
     }
 
     public async void SetDeath()
-    {
+    {   
+        // GameManager.instance.characters.Remove(id);
         death.SetActive(true);
         collider.enabled = false;
         targetMark.SetActive(true);
@@ -204,6 +238,6 @@ public class Character : FSMController<CharacterState, CharacterFSM, CharacterDa
         if (!IsState<CharacterDeathState>())
             return base.ChangeState<T>();
         else
-            return currentState == null ? null : (T)currentState;
+            return null;
     }
 }

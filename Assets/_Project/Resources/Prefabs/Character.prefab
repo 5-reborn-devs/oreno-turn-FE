@@ -550,7 +550,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6512819015095306320}
@@ -626,7 +626,7 @@ GameObject:
   - component: {fileID: 8274568985187514604}
   m_Layer: 8
   m_Name: Character
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -678,9 +678,11 @@ MonoBehaviour:
   death: {fileID: 8170090263784952139}
   collider: {fileID: 3714171359014208965}
   stop: {fileID: 2090902085308468881}
-  speed: 3
+  speed: 4.5
   dir: {x: 0, y: 0}
   isInside: 0
+  targetPosition: {x: 0, y: 0}
+  attackRange: 5
 --- !u!114 &6595829264007912307
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -767,7 +769,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
@@ -778,10 +780,10 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7822708395715656810}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.3
-  m_Speed: 7
+  m_Speed: 4.5
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120

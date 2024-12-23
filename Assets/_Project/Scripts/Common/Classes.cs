@@ -3,12 +3,16 @@
 using Google.Protobuf.Collections;
 using Ironcow;
 using System.Collections.Generic;
+using UnityEngine;
+using System;
 
 public partial class UserInfo
 {
     public long id;
     public string nickname;
     public int coin;
+    public string token;
+
     public string selectedCharacterRcode { get => characterData.GetRcode(); set => characterData.CharacterType = (CharacterType)int.Parse(value.Substring(3, 5)); }
     public eRoleType roleType { get => (eRoleType)characterData.RoleType; set => characterData.RoleType = (RoleType)value; }
     public CharacterData characterData = new CharacterData();
@@ -18,7 +22,10 @@ public partial class UserInfo
     public List<CardDataSO> debuffs = new List<CardDataSO>();
     public int handcardCount { get => characterData.HandCardsCount; }
     public int hp { get => characterData.Hp; set => characterData.Hp = value; }
+
     public int maxHp;
+    public int mp { get => characterData.Mp; set => characterData.Mp = value; }
+    public int maxMp;
 
     public bool isStelth { get => equips.Find(obj => obj.rcode == "CAD00020") != null; }
     public bool isRaider { get => equips.Find(obj => obj.rcode == "CAD00018") != null; }
@@ -39,10 +46,12 @@ public partial class UserInfo
 
     public bool isShotPossible { get => shotCount < bbangCount; }
 
+    public bool isRerollPossible { get => true; }
+
     public int index { get => DataManager.instance.users.FindIndex(obj => obj.id == id); }
 
-    static List<string> firstName = new List<string>() { "¹ßºü¸¥", "½ÅÁßÇÑ", "°³±¸Áø", "¸ÚÀïÀÌ", "±Í¿©¿î", "ÇÚ¼¶ÇÑ", "¸ÀÀÖ´Â", "Àç¹Õ´Â" };
-    static List<string> lastName = new List<string>() { "Á¦ÀÌÁö", "ÄÉÅäÇÇ", "ÇÇÄ«Ãò", "¸¶ÀÚ¿ë", "¸ð·¡¼ºµ¥½º", "¶óÀÌ¾ð", "»ó¾î±º", "¸£ÅºÀÌ", "°ÅºÏ¼ÕÀÌ´ç" };
+    static List<string> firstName = new List<string>() { "ï¿½ßºï¿½ï¿½ï¿½", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", "ï¿½Í¿ï¿½ï¿½ï¿½", "ï¿½Ú¼ï¿½ï¿½ï¿½", "ï¿½ï¿½ï¿½Ö´ï¿½", "ï¿½ï¿½Õ´ï¿½" };
+    static List<string> lastName = new List<string>() { "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½", "ï¿½ï¿½Ä«ï¿½ï¿½", "ï¿½ï¿½ï¿½Ú¿ï¿½", "ï¿½ð·¡¼ï¿½ï¿½ï¿½ï¿½ï¿½", "ï¿½ï¿½ï¿½Ì¾ï¿½", "ï¿½ï¿½î±º", "ï¿½ï¿½Åºï¿½ï¿½", "ï¿½ÅºÏ¼ï¿½ï¿½Ì´ï¿½" };
 
     public UserInfo()
     {
@@ -57,6 +66,7 @@ public partial class UserInfo
         if (characterData != null)
         {
             this.maxHp = userData.Character.Hp;
+            this.maxMp = userData.Character.Mp;
             foreach (var card in userData.Character.HandCards)
             {
                 for (int i = 0; i < card.Count; i++)
@@ -101,6 +111,7 @@ public partial class UserInfo
             handCards.Clear();
             equips.Clear();
             debuffs.Clear();
+            weapon = null; // ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­ ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
             foreach (var card in userData.Character.HandCards)
             {
                 for (int i = 0; i < card.Count; i++)
@@ -171,7 +182,7 @@ public partial class UserInfo
 
     public CardDataSO OnUseCard(CardDataSO card)
     {
-        switch(card.type)
+        switch (card.type)
         {
             case eCardType.active:
                 {
