@@ -128,12 +128,13 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
             // 기존 연결을 끊고 새로운 게임 서버로 연결 시도
             if (isConnected)   
             {
-                Debug.Log("연결끊고 재시도");
+                //Debug.Log("연결끊고 재시도");
                 socket.Shutdown(SocketShutdown.Both);
-                Debug.Log("1 재시도");
+                //Debug.Log("1 재시도");
                 socket.Close();
-                Debug.Log("2 재시도");
-                Debug.Log("소켓이 닫혔습니다.");
+                //isConnected = false; // 연결 상태 업데이트
+                //Debug.Log("2 재시도");
+                //Debug.Log("소켓이 닫혔습니다.");
 
                 if(pingCorutine != null)
                 {
@@ -148,7 +149,7 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
             if (isConnected)
             {
                 Debug.Log("연결성공");
-                OnReceive();
+                //OnReceive();
                 //StartCoroutine(OnSendQueue()); 
                 //StartCoroutine(OnReceiveQueue());
                 pingCorutine = StartCoroutine(Ping());
@@ -183,7 +184,7 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
                 try
                 {
                     var recvByteLength = await socket.ReceiveAsync(recvBuff, SocketFlags.None); //socket.ReceiveAsync는 await로 대기 시 새로운 데이터를 받기 전까지 대기한다.
-                    Debug.Log("recvByteLength : " + recvByteLength);
+                    //Debug.Log("recvByteLength : " + recvByteLength);
                     if (!isConnected)
                     {
                         Debug.Log("Socket is disconnect");
@@ -193,13 +194,12 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
                     {
                         continue;
                     }
-
                     var newBuffer = new byte[remainBuffer.Length + recvByteLength];
-                    Debug.Log("newBuffer : " + newBuffer);
+                    //Debug.Log("newBuffer : " + newBuffer);
                     Array.Copy(remainBuffer, 0, newBuffer, 0, remainBuffer.Length);
-                    Debug.Log("remainBuffer : " + remainBuffer);
+                    //Debug.Log("remainBuffer : " + remainBuffer);
                     Array.Copy(recvBuff, 0, newBuffer, remainBuffer.Length, recvByteLength);
-                    Debug.Log("remainBrecvBuffuffer : " + recvBuff);
+                    //Debug.Log("remainBrecvBuffuffer : " + recvBuff);
 
                     var processedLength = 0;
                     while (processedLength < newBuffer.Length)
@@ -210,65 +210,63 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
                         }
 
                         using var stream = new MemoryStream(newBuffer, processedLength, newBuffer.Length - processedLength);
-                        Debug.Log("stream : " + stream);
+                        //Debug.Log("stream : " + stream);
                         using var reader = new BinaryReader(stream);
-                        Debug.Log("reader : " + reader);
+                        //Debug.Log("reader : " + reader);
 
                         var typeBytes = reader.ReadBytes(2);
-                        Debug.Log("typeBytes : " + typeBytes);
+                        //Debug.Log("typeBytes : " + typeBytes);
                         Array.Reverse(typeBytes);
 
                         var type = (PayloadOneofCase)BitConverter.ToInt16(typeBytes);
-                        if ((int)type > 55 || (int)type < 0)
+                        if ((int)type > 58 || (int)type < 0)
                         {
-                            Debug.Log($"너 터진거야..!{type}");
+                            Debug.Log($"PacketType..!{type}");
                             remainBuffer = Array.Empty<byte>();
-
-                            
                         }
                         Debug.Log($"PacketType:{type}");
 
                         var versionLength = reader.ReadByte();
-                        Debug.Log("versionLength : " + versionLength);
+                        //Debug.Log("versionLength : " + versionLength);
                         if (newBuffer.Length - processedLength < 11 + versionLength)
                         {
                             break;
                         }
                         var versionBytes = reader.ReadBytes(versionLength);
-                        Debug.Log("versionBytes : " + versionLength);
+                        //Debug.Log("versionBytes : " + versionLength);
                         var version = BitConverter.ToString(versionBytes);
-                        Debug.Log("version : " + versionLength);
+                        //Debug.Log("version : " + versionLength);
 
                         var sequenceBytes = reader.ReadBytes(4);
-                        Debug.Log("sequenceBytes : " + sequenceBytes);
+                        //Debug.Log("sequenceBytes : " + sequenceBytes);
                         Array.Reverse(sequenceBytes);
                         var sequence = BitConverter.ToInt32(sequenceBytes);
-                        Debug.Log("sequence : " + sequence);
+                        //Debug.Log("sequence : " + sequence);
 
                         var payloadLengthBytes = reader.ReadBytes(4);
-                        Debug.Log("payloadLengthBytes : " + payloadLengthBytes);
+                        //Debug.Log("payloadLengthBytes : " + payloadLengthBytes);
                         // 바이트 배열을 16진수 문자열로 변환하여 출력
-                        Debug.Log("Payload Length Bytes: " + BitConverter.ToString(payloadLengthBytes));
+                        //Debug.Log("Payload Length Bytes: " + BitConverter.ToString(payloadLengthBytes));
 
                         // 바이트 배열을 ASCII 문자열로 변환 (가능하면 ASCII 문자로 해석)
                         string payloadString = System.Text.Encoding.ASCII.GetString(payloadLengthBytes);
-                        Debug.Log("Payload as String: " + payloadString);
+                        //Debug.Log("Payload as String: " + payloadString);
 
                         // 각 바이트를 출력
-                        Debug.Log("Payload Length Bytes: ");
+                        //Debug.Log("Payload Length Bytes: ");
                         foreach (byte b in payloadLengthBytes)
                         {
-                            Debug.Log(b);
+                            //Debug.Log(b);
                         }
 
                         Array.Reverse(payloadLengthBytes);
                         var payloadLength = BitConverter.ToInt32(payloadLengthBytes);
-                        Debug.Log("payloadLength : " + payloadLength);
-                        Debug.Log("payloadLength 전체" + BitConverter.ToInt32(payloadLengthBytes));
+                        //Debug.Log("payloadLength : " + payloadLength);
+                        //Debug.Log("payloadLength 전체" + BitConverter.ToInt32(payloadLengthBytes));
 
                         if (newBuffer.Length - processedLength < 11 + versionLength + payloadLength)
                         {
-                            Debug.Log("캬아아아악"+ BitConverter.ToString(newBuffer, processedLength));
+                            //Debug.Log("캬아아아악"+ BitConverter.ToString(newBuffer, processedLength));
                             
                             break;
                         }
@@ -281,9 +279,12 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
                         }
                         else
                         {
-                            Debug.LogError($"미스매치 : {payloadLength}, 페이로드 길이 {payloadBytes.Length}");
+                            //Debug.LogError($"미스매치 : {payloadLength}, 페이로드 길이 {payloadBytes.Length}");
                             break;
                         }
+                        // 바이트 배열을 16진수 문자열로 변환하여 출력
+                        string hexString = BitConverter.ToString(payloadBytes);
+                       // Debug.Log("데이터: " + hexString);
                         var totalLength = 11 + versionLength + payloadLength;
 
                         processedLength += totalLength;
@@ -408,19 +409,28 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
             }
         }
     }
+    public void HearBeatOut(bool isReconnect = false)
+    {
+        StopAllCoroutines();
+        if (isConnected)
+        {
+            this.isConnected = false;
+            socket.Disconnect(isReconnect);
+            if (isReconnect)
+            {
+                Connect();
+            }
+        }
+    }
     public IEnumerator Ping()
     {
         while (SocketManager.instance.isConnected)
         {
             yield return new WaitForSeconds(5);
-            long timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            long timestamp = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalMilliseconds;
             GamePacket packet = new GamePacket();
             packet.PingRequest = new C2SPingRequest() { Message = "Ping", Timestamp = timestamp };
             SocketManager.instance.Send(packet);
-            Debug.Log("핑전송 시각 : " + timestamp);
-            //GamePacket packet = new GamePacket();
-            //packet.LoginResponse = new S2CLoginResponse();
-            //SocketManager.instance.Send(packet);
         }
     }
 }
