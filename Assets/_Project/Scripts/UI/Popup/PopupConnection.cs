@@ -13,7 +13,7 @@ public class PopupConnection : UIBase
     public override void Opened(object[] param)
     {
         PlayerPrefs.DeleteAll();
-        PlayerPrefs.SetString("ip", "127.0.0.1");
+        PlayerPrefs.SetString("ip", "3.34.13.74");
         PlayerPrefs.SetString("port", "9000");
         PlayerPrefs.Save();
         ip.text = PlayerPrefs.GetString("ip");

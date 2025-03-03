@@ -44,6 +44,7 @@
 ## 💻참고 링크
 - [팀 노션](https://emphasized-cap-049.notion.site/1aafa1cd2713806aaaa5f95bf5822690)
 - [프로젝트 브로셔](https://emphasized-cap-049.notion.site/ORENO-TURN-1aafa1cd2713801c8822d3fba6b6b6e0)
+- [시연영상 유튜브](https://www.youtube.com/watch?v=_s7O8UoN9UM)
 
 ## 👥팀 소개
 ![5reborn_notion_background](https://github.com/user-attachments/assets/15219b85-3d80-4233-a940-4d52ef45f438)

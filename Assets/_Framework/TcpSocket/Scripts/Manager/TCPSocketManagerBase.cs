@@ -11,6 +11,7 @@ using Ironcow.WebSocketPacket;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using System.IO;
+using System.Threading.Tasks;
 
 public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSocketManagerBase<T>
 {
@@ -108,6 +109,110 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
             Debug.Log(e.ToString());
         }
     }
+    //public async void ConnectToGameServer(string gameServerIp, int gameServerPort, UnityAction callback = null)
+    //{
+    //    IPEndPoint endPoint;
+    //    if (IPAddress.TryParse(gameServerIp, out IPAddress ipAddress))
+    //    {
+    //        endPoint = new IPEndPoint(ipAddress, gameServerPort);
+    //    }
+    //    else
+    //    {
+    //        endPoint = new IPEndPoint(IPAddress.Parse("43.202.60.191"), gameServerPort); // 기본 IP 주소
+    //    }
+
+    //    Debug.Log("Tcp Ip : " + ipAddress.MapToIPv4().ToString() + ", Port : " + gameServerPort);
+
+    //    try
+    //    {
+    //        // 기존 연결을 끊고 새로운 게임 서버로 연결 시도
+    //        if (isConnected)
+    //        {
+    //            Debug.Log("연결끊고 재시도");
+    //            socket.Close();
+    //            isConnected = false;
+    //            await Task.Delay(1000);
+    //            StopAllCoroutines();
+    //        }
+    //        socket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+    //        await socket.ConnectAsync(endPoint);
+    //        isConnected = socket.Connected;
+    //        StartCoroutine(OnSendQueue());
+    //        StartCoroutine(OnReceiveQueue());
+    //        StartCoroutine(Ping());
+    //        GamePacket packet = new GamePacket();
+    //        packet.VerifyTokenRequest = new C2SVerifyTokenRequest() { Token = UserInfo.myInfo.token };
+    //        SocketManager.instance.Send(packet);
+    //        callback?.Invoke();
+    //    }
+
+    //    catch (Exception e)
+    //    {
+    //        Debug.LogError("게임 서버 연결 실패: " + e.ToString());
+    //    }
+    //}
+
+    //public async void ConnectToGameServer(string gameServerIp, int gameServerPort, UnityAction callback = null)
+    //{
+    //    IPEndPoint endPoint;
+    //    if (IPAddress.TryParse(gameServerIp, out IPAddress ipAddress))
+    //    {
+    //        endPoint = new IPEndPoint(ipAddress, gameServerPort);
+    //    }
+    //    else
+    //    {
+    //        endPoint = new IPEndPoint(IPAddress.Parse("43.202.60.191"), gameServerPort); // 기본 IP 주소
+    //    }
+
+    //    Debug.Log("Tcp Ip : " + ipAddress.MapToIPv4().ToString() + ", Port : " + gameServerPort);
+
+    //    try
+    //    {
+    //        // 기존 연결을 끊고 새로운 게임 서버로 연결 시도
+    //        if (isConnected)
+    //        {
+
+    //            Debug.Log("연결끊고 재시도");
+    //            socket.Shutdown(SocketShutdown.Both); // 앤 하나만 끊는거임 송수신은 안되는데 더이상, 패킷이 사라지진 않음 처리를 할 수 있음 
+    //            socket.Close(); // 입력, 출력 2개의 통로를 다끊는거고
+    //            //isConnected = false; // 연결 상태 업데이트
+    //            //Debug.Log("2 재시도");
+    //            //Debug.Log("소켓이 닫혔습니다.");
+    //            discon
+    //            if (pingCorutine != null)
+    //            {
+    //                StopCoroutine(pingCorutine);
+    //            }
+    //            StopAllCoroutines();
+    //        }
+
+    //        socket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+    //        await socket.ConnectAsync(endPoint);
+    //        isConnected = socket.Connected;
+    //        if (isConnected)
+    //        {
+    //            Debug.Log("연결성공");
+    //            OnReceive();
+    //            //StartCoroutine(OnSendQueue()); 
+    //            //StartCoroutine(OnReceiveQueue());
+    //            pingCorutine = StartCoroutine(Ping());
+    //            GamePacket packet = new GamePacket();
+    //            packet.VerifyTokenRequest = new C2SVerifyTokenRequest() { Token = UserInfo.myInfo.token };
+    //            SocketManager.instance.Send(packet);
+    //            callback?.Invoke();
+    //        }
+    //        else
+    //        {
+    //            Debug.LogError("소켓 연결 실패");
+    //        }
+
+    //    }
+
+    //    catch (Exception e)
+    //    {
+    //        Debug.LogError("게임 서버 연결 실패: " + e.ToString());
+    //    }
+    //}
 
     public async void ConnectToGameServer(string gameServerIp, int gameServerPort, UnityAction callback = null)
     {
@@ -125,47 +230,33 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
 
         try
         {
-            // 기존 연결을 끊고 새로운 게임 서버로 연결 시도
-            if (isConnected)   
-            {
-                //Debug.Log("연결끊고 재시도");
-                socket.Shutdown(SocketShutdown.Both);
-                //Debug.Log("1 재시도");
-                socket.Close();
-                //isConnected = false; // 연결 상태 업데이트
-                //Debug.Log("2 재시도");
-                //Debug.Log("소켓이 닫혔습니다.");
-
-                if(pingCorutine != null)
+            // ???? ?????? ???? ???ο? ???? ?????? ???? ???
+            if (socket.Connected)
+                if (isConnected)
                 {
-                    StopCoroutine(pingCorutine);
+                    Debug.Log("??????? ????");
+                    //socket.Shutdown(SocketShutdown.Both);
+                    //socket.Close();
+                    //socket.Shutdown(SocketShutdown.Both);
+                    //socket.Close();
+                    //StopAllCoroutines();
+                    socket.Disconnect(false);
                 }
-                //StopAllCoroutines();
-            }
 
             socket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            await socket.ConnectAsync(endPoint); 
+            await socket.ConnectAsync(endPoint);
             isConnected = socket.Connected;
-            if (isConnected)
-            {
-                Debug.Log("연결성공");
-                //OnReceive();
-                //StartCoroutine(OnSendQueue()); 
-                //StartCoroutine(OnReceiveQueue());
-                pingCorutine = StartCoroutine(Ping());
-                GamePacket packet = new GamePacket();
-                packet.VerifyTokenRequest = new C2SVerifyTokenRequest() { Token = UserInfo.myInfo.token };
-                SocketManager.instance.Send(packet);
-                callback?.Invoke();
-
-            }
-            else
-            {
-                Debug.LogError("소켓 연결 실패");
-            }
-
+            Debug.Log("??????");
+            OnReceive();
+            //OnReceive(); 
+            //StartCoroutine(OnSendQueue()); 
+            //StartCoroutine(OnReceiveQueue());
+            //StartCoroutine(Ping());
+            GamePacket packet = new GamePacket();
+            packet.VerifyTokenRequest = new C2SVerifyTokenRequest() { Token = UserInfo.myInfo.token };
+            SocketManager.instance.Send(packet);
+            callback?.Invoke();
         }
-
         catch (Exception e)
         {
             Debug.LogError("게임 서버 연결 실패: " + e.ToString());
@@ -411,18 +502,16 @@ public abstract class TCPSocketManagerBase<T> : MonoSingleton<T> where T : TCPSo
     }
     public void HearBeatOut(bool isReconnect = false)
     {
-        StopAllCoroutines();
+        //StopAllCoroutines();
         if (isConnected)
         {
             this.isConnected = false;
+            UIManager.Show<PopupLogin>();
+            UIManager.Hide<PopupConnectionFailed>();
             socket.Disconnect(isReconnect);
-            if (isReconnect)
-            {
-                Connect();
-            }
         }
     }
-    public IEnumerator Ping()
+    IEnumerator Ping()
     {
         while (SocketManager.instance.isConnected)
         {

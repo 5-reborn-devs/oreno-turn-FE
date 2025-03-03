@@ -76,6 +76,9 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         if (response.Success)
         {
             UIManager.Show<UIRoom>(response.Room);
+            GamePacket packet = new GamePacket();
+            packet.SwitchRequest = new C2SSwitchRequest();
+            SocketManager.instance.Send(packet);
         }
     }
 
@@ -104,21 +107,24 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
     }
 
     // �� ������ 
-    private bool isGameServerSwitched = false;
+    //private bool isGameServerSwitched = false;
     public void LeaveRoomResponse(GamePacket gamePacket)
     {
         Debug.Log("LeaveRoomResponse 호출됨");
-        if (!isGameServerSwitched)
-        {
-            Debug.Log("서버 전환이 완료되지 않아 LeaveRoomResponse 대기");
-            StartCoroutine(WaitForServerSwitch(gamePacket));
-            return;
-        }
+        //if (!isGameServerSwitched)
+        //{
+        //    Debug.Log("서버 전환이 완료되지 않아 LeaveRoomResponse 대기");
+        //    StartCoroutine(WaitForServerSwitch(gamePacket));
+        //    return;
+        //}
         var response = gamePacket.LeaveRoomResponse;
         Debug.Log($"LeaveRoomResponse 성공 여부: {response.Success}, 코드: {response.FailCode}");
         if (response.Success)
         {
             UIManager.Hide<UIRoom>();
+            GamePacket packet = new GamePacket();
+            packet.SwitchRequest = new C2SSwitchRequest();
+            SocketManager.instance.Send(packet);
         }
         else
         {
@@ -126,15 +132,15 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         }
     }
 
-    private IEnumerator WaitForServerSwitch(GamePacket gamePacket)
-    {
-        while (!isGameServerSwitched)
-        {
-            yield return null;  // 서버 전환 완료 대기
-        }
+    //private IEnumerator WaitForServerSwitch(GamePacket gamePacket)
+    //{
+    //    while (!isGameServerSwitched)
+    //    {
+    //        yield return null;  // 서버 전환 완료 대기
+    //    }
 
-        LeaveRoomResponse(gamePacket);  // 다시 처리
-    }
+    //    LeaveRoomResponse(gamePacket);  // 다시 처리
+    //}
     // �� ������ �˸�
     public void LeaveRoomNotification(GamePacket gamePacket)
     {
@@ -166,20 +172,22 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         }
     }
     
-    public void GameServerSwitchNotification(GamePacket gamePacket)
+    public void SwitchResponse(GamePacket gamePacket)
     {
-
-        var response = gamePacket.GameServerSwitchNotification;
-        // ���� ������ ����
-        string gameServerIp = response.Ip;  // ���� ���� IP (�������� ���� ������)
-        int gameServerPort = (int)response.Port;  // ���� ���� Port (�������� ���� ������)
-
-        // ���� ������ ����
+        var response = gamePacket.SwitchResponse;
+        string gameServerIp = response.Ip;  
+        int gameServerPort = (int)response.Port;
+        Debug.Log("IP" + gameServerIp + "Port :" + gameServerPort);
+        
         SocketManager.instance.ConnectToGameServer(gameServerIp, gameServerPort, () =>
         {
-            Debug.Log("게임서버로 스위치 되나?");
-            isGameServerSwitched = true;
+            Debug.Log("서버 연결이 정상적으로 성공 했습니다.");
         });
+    }
+
+    public void VerifyTokenResponse(GamePacket gamePacket)
+    {
+
     }
 
     public void PongResponse(GamePacket gamePacket)
@@ -189,10 +197,9 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
         {
             Debug.Log("true");
             //UIManager.Show<PopupConnectionFailed>();
-            //UIManager.Get<UIRoom>().OnPrepare(response.Room.Users);
-            
+            //UIManager.Get<UIRoom>().OnPrepare(response.Room.Users);    
         }
-        else
+        else if(response.Message == "fail")
         {
             UIManager.Show<PopupConnectionFailed>();
             Debug.Log("실패");
@@ -288,7 +295,7 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
 
         var use = DataManager.instance.users.Find(obj => obj.id == response.UserId);
         var target = DataManager.instance.users.Find(obj => obj.id == response.TargetUserId);
-        var text = string.Format(response.TargetUserId != 0 ? "{0}������ {1}ī�带 ����߽��ϴ�." : "{0}������ {1}ī�带 {2}�������� ����߽��ϴ�.",
+        var text = string.Format(response.TargetUserId != 0 ? "{0}유저가 {1}카드를 사용했습니다." : "{0}유저가 {1}카드를 {2}유저에게 사용했습니다.",
             use.nickname, response.CardType.GetCardData().displayName, target.nickname);
         UIGame.instance.SetNotice(text);
         if (response.UserId == UserInfo.myInfo.id && card.cardType == CardType.Bbang)
@@ -630,7 +637,9 @@ public class SocketManager : TCPSocketManagerBase<SocketManager>
     {
         var response = gamePacket.GameEndNotification;
         GameManager.instance.OnGameEnd();
-
+        GamePacket packet = new GamePacket();
+        packet.SwitchRequest = new C2SSwitchRequest();
+        SocketManager.instance.Send(packet);
         UIManager.Show<PopupResult>(response.Winners, response.WinType);
     }
 
