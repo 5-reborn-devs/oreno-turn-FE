@@ -38,12 +38,12 @@
 </br>
 
 ## 🚧트러블슈팅
-- [HAproxy - 서버 분산 문제](https://www.notion.so/teamsparta/HAproxy-e0b7ccd3c7c5446c8916b60a46fc98e2) </br>
-- [페이즈 업데이트 - 드리프트 문제](https://www.notion.so/teamsparta/c3265cdb46d643c8ad7afc1ae6586b4d)
+- [HAproxy - 서버 분산 문제](https://emphasized-cap-049.notion.site/HAproxy-1aafa1cd2713817e8367fe4393bda371) </br>
+- [페이즈 업데이트 - 드리프트 문제](https://emphasized-cap-049.notion.site/1aafa1cd271381868856d5bb07054da0)
 
 ## 💻참고 링크
-- [팀 노션](https://www.notion.so/teamsparta/aa5b439a52784f428692ef6e0d40ddf0)
-- [프로젝트 브로셔](https://www.notion.so/teamsparta/ORENO-TURN-3a9173c2b5db4a9faa0bb055d0520814#15e2dc3ef5148100b380e7c14cfc2c48)
+- [팀 노션](https://emphasized-cap-049.notion.site/1aafa1cd2713806aaaa5f95bf5822690)
+- [프로젝트 브로셔](https://emphasized-cap-049.notion.site/ORENO-TURN-1aafa1cd2713801c8822d3fba6b6b6e0)
 
 ## 👥팀 소개
 ![5reborn_notion_background](https://github.com/user-attachments/assets/15219b85-3d80-4233-a940-4d52ef45f438)
